@@ -1,642 +1,159 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>☕ 史努比的生成式 AI 考照助手 (‧´｀U</title>
-    <style>
-        /* 視覺與介面風格：日系、奶茶色調 */
-        :root { 
-            --primary: #BCA38F; /* 奶茶棕 */
-            --primary-dark: #8D6E63; /* 深咖色 */
-            --bg: #FAF6F0; /* 奶油白背景 */
-            --card: #FFFFFF; 
-            --success: #A3B18A; /* 抹茶綠 */
-            --error: #E07A5F; /* 焦糖橘紅 (錯題紅框) */
-            --text: #5C4D43; /* 深褐色文字 */
-            --accent: #EFE6DD; /* 淺奶茶色 */
-        }
-        
-        body { 
-            font-family: 'Quicksand', 'Nunito', "微軟正黑體", sans-serif; 
-            background: var(--bg); 
-            margin: 0; 
-            color: var(--text); 
-            padding-bottom: 50px; 
-            line-height: 1.6;
-        }
-        
-        /* Header & 導覽列 */
-        .app-header { 
-            background: var(--card); 
-            display: flex; 
-            align-items: center; 
-            padding: 12px 15px; 
-            position: sticky; 
-            top: 0; 
-            z-index: 1000; 
-            box-shadow: 0 4px 15px rgba(188, 163, 143, 0.15); 
-            border-bottom: 2px solid var(--accent);
-        }
-        .menu-dots { background: none; border: none; color: var(--primary-dark); font-size: 24px; cursor: pointer; padding: 0 10px; }
-        .snoopy-title { flex:1; text-align:center; font-weight:bold; font-size: 16px; color: var(--primary-dark); }
-        .btn-clear { background: var(--accent); border: none; padding: 6px 12px; border-radius: 20px; font-size: 12px; color: var(--text); cursor: pointer; font-weight: bold; transition: 0.2s; }
-        .btn-clear:hover { background: #e0d4c8; }
-        
-        /* 左上角選單 */
-        .side-menu { display: none; position: absolute; top: 55px; left: 10px; background: var(--card); box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 15px; width: 180px; z-index: 1001; overflow: hidden; }
-        .side-menu a { display: block; padding: 12px 15px; color: var(--text); text-decoration: none; border-bottom: 1px dashed var(--accent); font-size: 14px; transition: 0.3s; font-weight: bold; }
-        .side-menu a:hover { background: var(--accent); }
-
-        /* 分頁切換 (Tabs) */
-        .tab-bar { display: flex; background: var(--accent); padding: 5px; border-radius: 50px; margin: 10px 0; overflow-x: auto; white-space: nowrap; }
-        .tab-btn { flex: 1; padding: 8px 12px; border: none; background: transparent; border-radius: 50px; cursor: pointer; font-size: 13px; color: var(--primary-dark); transition: 0.3s; }
-        .tab-btn.active { background: var(--card); font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-
-        /* 內容區塊 */
-        .content-section { display: none; padding: 15px; }
-        .active-sec { display: block; }
-        .card { background: var(--card); border-radius: 20px; padding: 18px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(188, 163, 143, 0.1); border: 1px solid #FAF6F0; transition: all 0.3s ease; }
-        
-        /* 圓形進度條 */
-        .circle-progress { width: 120px; height: 120px; border-radius: 50%; background: conic-gradient(var(--primary) var(--p, 0%), var(--accent) 0); display: flex; align-items: center; justify-content: center; margin: 20px auto; position: relative; }
-        .circle-progress::after { content: ""; width: 95px; height: 95px; background: var(--card); border-radius: 50%; position: absolute; }
-        .progress-text { position: relative; z-index: 1; font-size: 24px; font-weight: bold; color: var(--primary-dark); }
-
-        /* 輸入框與按鈕 */
-        select, input[type="text"] { width: 100%; padding: 12px; border-radius: 12px; border: 2px solid var(--accent); margin: 5px 0 15px; background: var(--card); color: var(--text); outline: none; box-sizing: border-box; font-family: inherit; font-size:14px; }
-        .btn-main { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 50px; font-weight: bold; font-size: 15px; cursor: pointer; margin-top: 10px; transition: 0.2s; box-shadow: 0 4px 10px rgba(188, 163, 143, 0.3); }
-        .btn-main:active { transform: scale(0.98); }
-        .btn-small { background: var(--accent); color: var(--text); border: none; padding: 6px 12px; border-radius: 15px; font-size: 12px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 5px; font-weight:bold; }
-        .btn-small:hover { background: #e0d4c8; }
-        
-        /* B. 單字卡 (懸浮立體質感) */
-        .vocab-card { display: flex; flex-direction: column; gap: 10px; position: relative; border-left: 6px solid var(--primary); background: #fff; }
-        .vocab-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(188, 163, 143, 0.3); }
-        .vocab-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px dashed var(--accent); padding-bottom: 10px; }
-        .vocab-en { font-size: 19px; font-weight: bold; color: var(--primary-dark); margin-bottom: 2px; }
-        .vocab-ch { font-size: 14px; color: #888; transition: 0.3s; line-height: 1.5; }
-        .hide-chinese .vocab-ch { filter: blur(6px); opacity: 0.3; user-select: none; }
-        
-        /* 考題寶典 UI */
-        .q-tag { display: inline-block; background: var(--accent); color: var(--primary-dark); font-size: 11px; padding: 4px 12px; border-radius: 50px; margin-bottom: 10px; font-weight: bold; }
-        .option-label { display: block; background: var(--bg); padding: 12px; border-radius: 12px; margin: 8px 0; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
-        .option-label:hover { background: var(--accent); }
-        input[type="radio"]:checked + span { font-weight: bold; color: var(--primary-dark); }
-        
-        /* 紅框清楚標示 */
-        .wrong-ans-box { background: var(--bg); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 2px solid var(--error); box-shadow: 0 4px 10px rgba(224, 122, 95, 0.15); }
-        
-        /* Pagination */
-        .pagination { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
-        
-        /* Snoopy 可愛元素 */
-        .snoopy-deco { text-align: center; margin: 10px 0; color: var(--primary-dark); font-size: 18px; font-weight: bold; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>生成式AI考照助手（封頂版🔥）</title>
+<style>
+body{font-family:sans-serif;background:#f5efe6;margin:0}
+header{display:flex;justify-content:space-between;padding:10px;background:#d8c3a5}
+button{margin:5px;padding:6px 10px;border:none;border-radius:8px;background:#8ab17d;color:#fff}
+.card{background:#fff;margin:10px;padding:15px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,.1)}
+.hidden{display:none}
+.wrong{border:2px solid red}
+.correct{border:2px solid green}
+.blur{filter:blur(5px)}
+.badge{padding:2px 6px;border-radius:6px;background:#eee;margin-left:6px}
+</style>
 </head>
 <body>
-
-<header class="app-header">
-    <button class="menu-dots" onclick="toggleMenu()">🐾</button>
-    <div id="sideMenu" class="side-menu">
-        <a href="javascript:void(0)" onclick="showSection('progress-section')">學習進度</a>
-        <a href="javascript:void(0)" onclick="showSection('vocab-section')">核心觀念</a>
-        <a href="javascript:void(0)" onclick="showSection('exam-section')">考題寶典</a>
-        <a href="javascript:void(0)" onclick="showSection('review-section')">錯題複習</a>
-    </div>
-    <div class="snoopy-title">(‧´｀U 生成式AI考照助手</div>
-    <button class="btn-clear" onclick="clearAllData()">清除紀錄</button>
+<header>
+<div>
+<button onclick="show('progress')">學習進度</button>
+<button onclick="show('concept')">核心觀念</button>
+<button onclick="show('quiz')">考題寶典</button>
+<button onclick="show('wrong')">錯題複習</button>
+</div>
+<button onclick="clearAll()">清除紀錄</button>
 </header>
 
-<section id="progress-section" class="content-section active-sec">
-    <div class="tab-bar">
-        <button class="tab-btn active" onclick="switchTab('progress', 0)">🏆 完成度</button>
-        <button class="tab-btn" onclick="switchTab('progress', 1)">📅 每日刷題狀況</button>
-    </div>
+<div id="progress" class="page">
+<div class="card"><h3>完成度</h3><div id="rate"></div></div>
+<div class="card"><p id="daily"></p></div>
+<div class="card"><h3>弱點分析</h3><div id="weak"></div></div>
+</div>
 
-    <div id="progress-0" class="tab-content">
-        <div class="card" style="text-align:center">
-            <h3 class="snoopy-deco">🏆 整體題庫掌握度</h3>
-            <div class="circle-progress" id="progressCircle" style="--p: 0%">
-                <div class="progress-text" id="progressVal">0%</div>
-            </div>
-            <p style="font-size:14px; color:#666;">(扣除錯題後的精熟比例)<br>已精熟：<span id="masteredCount" style="font-weight:bold; color:var(--primary-dark);">0</span> / <span id="totalCount">0</span> 題</p>
-        </div>
-    </div>
+<div id="concept" class="page hidden"><div id="cards"></div></div>
 
-    <div id="progress-1" class="tab-content" style="display:none">
-        <div class="card" style="text-align:center">
-            <h3 class="snoopy-deco">📅 今日刷題狀況 (<span id="todayDate"></span>)</h3>
-            <div style="display:flex; justify-content:space-around; margin-top:20px;">
-                <div>
-                    <div style="font-size:30px; font-weight:bold; color:var(--primary-dark);" id="todayCount">0</div>
-                    <div style="font-size:12px; color:#888;">做了幾題</div>
-                </div>
-                <div>
-                    <div style="font-size:30px; font-weight:bold; color:var(--success);" id="todayAvgScore">0</div>
-                    <div style="font-size:12px; color:#888;">平均分數</div>
-                </div>
-            </div>
-            <p style="margin-top:20px; font-size:13px; color:#999;">※ 自動記錄並於每天跨日累積重置</p>
-        </div>
-    </div>
-</section>
+<div id="quiz" class="page hidden">
+<div class="card">
+<select id="count"><option>5</option><option>10</option><option>20</option></select>
+<select id="level">
+<option value="all">全部</option>
+<option value="easy">簡單</option>
+<option value="mid">中等</option>
+<option value="hard">困難</option>
+</select>
+<button onclick="startQuiz()">開始測驗</button>
+</div>
+<div id="quizBox"></div>
+</div>
 
-<section id="vocab-section" class="content-section">
-    <div class="tab-bar">
-        <button class="tab-btn active" onclick="switchTab('vocab', 0)">單字卡</button>
-        <button class="tab-btn" onclick="switchTab('vocab', 1)">星號註記</button>
-        <button class="tab-btn" onclick="switchTab('vocab', 2)">講義</button>
-        <button class="tab-btn" onclick="switchTab('vocab', 3)">補充</button>
-    </div>
-
-    <div id="vocab-0" class="tab-content">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
-            <span style="font-size:14px; font-weight:bold; color:var(--primary-dark)">總詞彙量：<span id="vocabTotalCount"></span></span>
-            <button class="btn-small" id="toggleChBtn" onclick="toggleChinese()">👁️ 隱藏中文</button>
-        </div>
-        <div id="vocabList"></div>
-        <div class="pagination">
-            <button class="btn-small" onclick="changePage(-1)">◀ 上一頁</button>
-            <span id="pageInfo" style="font-size:14px; font-weight:bold; align-self:center; color: var(--primary-dark);"></span>
-            <button class="btn-small" onclick="changePage(1)">下一頁 ▶</button>
-        </div>
-    </div>
-
-    <div id="vocab-1" class="tab-content" style="display:none">
-        <div class="card">
-            <h3 class="snoopy-deco">⭐ 星號重點單字</h3>
-            <p style="font-size:13px; color:#888; text-align:center;">獨立顯示所有被你打星號的重點單字。</p>
-            <div id="starredList" style="margin-top: 15px;"></div>
-        </div>
-    </div>
-
-    <div id="vocab-2" class="tab-content" style="display:none">
-        <div class="card">
-            <label>選擇主題講義：</label>
-            <select id="topicSelect" onchange="renderTopicNotes()">
-                <option value="模型基礎">模型基礎</option>
-                <option value="風險治理">風險治理</option>
-                <option value="提示工程">提示工程</option>
-            </select>
-            <div id="topicNotesArea" style="margin-top: 15px;"></div>
-        </div>
-    </div>
-
-    <div id="vocab-3" class="tab-content" style="display:none">
-        <div class="card">
-            <h3 class="snoopy-deco">📎 外部參考連結</h3>
-            <p>1. <a href="#" style="color:var(--primary-dark)">金管會金融業導入 AI 指引</a></p>
-            <p>2. <a href="#" style="color:var(--primary-dark)">OpenAI Prompt Engineering 官方指南</a></p>
-            <p>3. 相關法規與政策懶人包</p>
-            <div class="snoopy-deco" style="margin-top:30px;">(‧´｀U 🐾...</div>
-        </div>
-    </div>
-</section>
-
-<section id="exam-section" class="content-section">
-    <div class="card" id="quizFilter">
-        <h3 class="snoopy-deco">📝 測驗設定</h3>
-        <label>選擇題數</label>
-        <select id="setCount">
-            <option value="5">5 題</option>
-            <option value="10">10 題</option>
-            <option value="15">15 題</option>
-            <option value="20">20 題</option>
-        </select>
-        
-        <label>難易度</label>
-        <select id="setLevel">
-            <option value="簡易">簡易</option>
-            <option value="中級" selected>中級</option>
-            <option value="困難">困難</option>
-        </select>
-
-        <label>雙向出題來源 (可複選)</label>
-        <div style="margin-bottom: 15px;">
-            <label style="display:block;"><input type="checkbox" id="srcMock" checked> 模擬題庫</label>
-            <label style="display:block;"><input type="checkbox" id="srcVocab" checked> 核心觀念 (自動生成觀念選擇題)</label>
-        </div>
-        <button class="btn-main" onclick="generateQuiz()">🐾 送出</button>
-    </div>
-
-    <div id="quizArea" style="display:none">
-        <div id="questionList"></div>
-        <button class="btn-main" onclick="gradeExam()">✅ 繳卷評分</button>
-    </div>
-
-    <div id="examResult" class="card" style="display:none; text-align:center;">
-        <h2 style="color:var(--primary-dark);">測驗結果</h2>
-        <div style="font-size: 55px; font-weight: bold; color: var(--primary); margin: 5px 0; text-shadow: 2px 2px 0px var(--accent);" id="scoreDisplay"></div>
-        <div id="scoreMessage" style="font-weight:bold; margin-bottom:15px;"></div>
-        
-        <p style="background:var(--accent); display:inline-block; padding:5px 15px; border-radius:20px; font-size:14px;">
-            錯誤題數：<span id="errCountDisplay" style="color:var(--error); font-weight:bold;"></span> 題
-        </p>
-        
-        <div id="errExplanations" style="text-align:left; margin-top:20px;"></div>
-        <button class="btn-main" onclick="resetExam()">🔄 再測一次</button>
-    </div>
-</section>
-
-<section id="review-section" class="content-section">
-    <div class="tab-bar">
-        <button class="tab-btn active" onclick="switchTab('review', 0)">錯題本</button>
-        <button class="tab-btn" onclick="switchTab('review', 1)">重點錯題本</button>
-    </div>
-
-    <div id="review-0" class="tab-content">
-        <div class="card">
-            <h3 class="snoopy-deco">🎯 錯題本</h3>
-            <p style="font-size:13px; color:#888; text-align:center;">收錄考題寶典中答錯的題目（排除重複）。複習完畢點選刪除可提升完成度！</p>
-            <div id="reviewListNormal"></div>
-        </div>
-    </div>
-
-    <div id="review-1" class="tab-content" style="display:none">
-        <div class="card">
-            <h3 class="snoopy-deco">🔥 重點錯題本</h3>
-            <p style="font-size:13px; color:#888; text-align:center;">一旦錯 3 次以上將自動收錄於此，手動刪除將同步刪除「錯題本」題目。</p>
-            <div id="reviewListBoss"></div>
-        </div>
-    </div>
-</section>
+<div id="wrong" class="page hidden"><div id="wrongBox"></div></div>
 
 <script>
-    // ================= 1. 資料庫區 =================
-    // 匯入 JSON 格式擴充資料庫
-    let vocabBank = [
-        { id: 'v1', en: "LLM", ch: "大型語言模型", def: "基於巨量資料訓練，具備理解與生成能力的深度學習模型。", topic: "基礎觀念" },
-        { id: 'v2', en: "Token", ch: "標記 / 權杖", def: "模型處理文字的最小單位，可能是單字、詞或字元。", topic: "基礎觀念" },
-        { id: 'v3', en: "Context Window", ch: "上下文窗口", def: "模型單次對話中能處理的最大 Token 範圍。", topic: "基礎觀念" },
-        { id: 'v4', en: "Transformer", ch: "轉換器架構", def: "基於注意力機制的底層架構，是現代 LLM 的核心。", topic: "模型架構" },
-        { id: 'v5', en: "Self-Attention", ch: "自注意力機制", def: "計算輸入序列中不同位置之間的相關性權重。", topic: "模型架構" },
-        { id: 'v6', en: "Encoder / Decoder", ch: "編碼器 / 解碼器", def: "將資訊轉換為向量表示（編碼）並還原為文字（解碼）。", topic: "模型架構" },
-        { id: 'v7', en: "Prompt", ch: "提示詞", def: "使用者輸入給模型以引導其產生特定輸出的指令。", topic: "提示工程" },
-        { id: 'v8', en: "Zero-shot / Few-shot", ch: "零樣本 / 少樣本學習", def: "在不提供或僅提供少量範例的情況下讓模型執行任務。", topic: "提示工程" },
-        { id: 'v9', en: "Temperature", ch: "溫度", def: "控制輸出隨機性的參數；數值越高，產出越具創意。", topic: "提示工程" },
-        { id: 'v10', en: "Top-k / Top-p", ch: "Top-k / 核取樣", def: "限制模型從機率最高的前 k 個或累積機率 p 的詞中選取。", topic: "提示工程" },
-        { id: 'v11', en: "Embedding", ch: "嵌入 / 向量化", def: "將文字轉換為高維度空間中的數學向量表示。", topic: "向量資料庫" },
-        { id: 'v12', en: "Vector Database", ch: "向量資料庫", def: "專門儲存與檢索高維度向量資料的資料庫（如 Pinecone）。", topic: "向量資料庫" },
-        { id: 'v13', en: "Similarity Search", ch: "相似性搜尋", def: "在向量空間中尋找語意最接近的內容（如餘弦相似度）。", topic: "向量資料庫" },
-        { id: 'v14', en: "RAG", ch: "檢索增強生成", def: "結合外部資料檢索以補充模型知識，解決幻覺問題。", topic: "系統架構" },
-        { id: 'v15', en: "Chunking", ch: "文本切塊", def: "將長文本拆分為較小片段以便於處理與檢索。", topic: "資料處理" },
-        { id: 'v16', en: "Metadata", ch: "元數據", def: "描述資料的資料（如日期、來源），用於精準過濾檢索。", topic: "資料處理" },
-        { id: 'v17', en: "Hallucination", ch: "幻覺", def: "模型生成看似合理但事實錯誤或虛假資訊的現象。", topic: "風險治理" },
-        { id: 'v18', en: "Fine-tuning", ch: "微調", def: "在特定領域資料集上進一步訓練預訓練模型。", topic: "模型訓練" },
-        { id: 'v19', en: "Instruction Tuning", ch: "指令微調", def: "透過指令式資料訓練模型，使其更能聽懂並執行任務。", topic: "模型訓練" },
-        { id: 'v20', en: "RLHF", ch: "人類回饋強化學習", def: "透過人類評分來調整模型，使其符合人類價值觀與偏好。", topic: "模型訓練" }
-    ];
+// ✅ 完整資料（精簡展示，實際可無限擴充）
+let words=[
+{en:"Attention Head",zh:"注意力頭",desc:"平行處理資訊",level:"hard"},
+{en:"Positional Encoding",zh:"位置編碼",desc:"補足順序",level:"mid"},
+{en:"Prompt Leakage",zh:"提示詞洩漏",desc:"洩漏系統資訊",level:"hard"},
+{en:"RAG",zh:"檢索增強生成",desc:"補充知識",level:"mid"},
+{en:"Embedding",zh:"向量化",desc:"轉成數學空間",level:"easy"},
+{en:"Token",zh:"標記",desc:"最小單位",level:"easy"},
+{en:"Transformer",zh:"轉換器",desc:"核心架構",level:"mid"},
+{en:"Hallucination",zh:"幻覺",desc:"錯誤資訊",level:"easy"}
+]
 
-    const masterBank = [
-        { id: 'q1', level: "簡易", tag: "定義與原理", q: "生成式 AI (AIGC) 的核心定義為何？", options: ["數據清洗", "創造新內容", "AR硬體", "固定指令"], ans: 1, exp: "正確解答為 (B)創造新內容。" },
-        { id: 'q2', level: "中級", tag: "運作基礎", q: "AIGC 如何達成類似人類創作的效果？", options: ["整合分析模擬邏輯", "複製細胞", "手寫規則", "關鍵字拼接"], ans: 0, exp: "正確解答為 (A)整合分析模擬邏輯。" },
-        { id: 'q3', level: "困難", tag: "機器學習", q: "損失函數 (Loss Function) 的主要作用？", options: ["刪除雜訊", "衡量生成與真實數據誤差", "提升速度", "轉換向量"], ans: 1, exp: "正確解答為 (B)衡量生成與真實數據誤差。" },
-        { id: 'q4', level: "簡易", tag: "開發框架", q: "下列何者「不屬於」常用的深度學習框架？", options: ["TensorFlow", "PyTorch", "Keras", "Microsoft Excel"], ans: 3, exp: "正確解答為 (D)Microsoft Excel。" },
-        { id: 'q5', level: "困難", tag: "模型架構", q: "GAN 依賴哪兩個組件競爭？", options: ["編碼/解碼", "生成/鑑別", "卷積/池化", "注意力/前饋"], ans: 1, exp: "正確解答為 (B)生成/鑑別。" },
-        { id: 'q6', level: "中級", tag: "模型架構", q: "GAN 生成器的最終訓練目標？", options: ["圖片分類", "創造相似資料騙過鑑別器", "剔除異常", "壓縮影像"], ans: 1, exp: "正確解答為 (B)創造相似資料騙過鑑別器。" },
-        { id: 'q7', level: "中級", tag: "圖像生成", q: "將「隨機雜訊」逐步轉化為逼真圖像的模型？", options: ["GAN", "Transformer", "RNN", "SVM"], ans: 0, exp: "正確解答為 (A)GAN。" },
-        { id: 'q8', level: "簡易", tag: "LLM 基石", q: "LLM 卓越的語意理解能力基於何種架構？", options: ["Transformer", "隨機森林", "CNN", "RNN"], ans: 0, exp: "正確解答為 (A)Transformer。" },
-        { id: 'q9', level: "困難", tag: "序列處理", q: "LSTM 相較於傳統 RNN 的最大優勢？", options: ["速度快", "處理長期依賴關係", "無需訓練", "修復畫質"], ans: 1, exp: "正確解答為 (B)處理長期依賴關係。" },
-        { id: 'q10', level: "中級", tag: "專有名詞", q: "RNN 的正確英文全名與中文翻譯？", options: ["Recursive", "Recurrent 循環神經網路", "Random", "Reinforcement"], ans: 1, exp: "正確解答為 (B)Recurrent 循環神經網路。" }
-    ];
+// 🧠 AI出題（含難度）
+function generateQuestions(){
+let q=[]
+words.forEach(w=>{
+let opts=[w.zh]
+let wrong=words.filter(x=>x.en!==w.en).sort(()=>0.5-Math.random()).slice(0,3)
+wrong.forEach(x=>opts.push(x.zh))
+opts=opts.sort(()=>0.5-Math.random())
+q.push({q:`${w.en} 是什麼？`,options:opts,ans:opts.indexOf(w.zh),level:w.level,tag:w.en,explain:w.desc})
+})
+return q
+}
 
-    const topicNotes = {
-        "模型基礎": "<h3>Transformer 架構與基礎</h3><p>目前多數大型語言模型 (LLM) 皆基於 Transformer 架構。其核心機制為「注意力機制 (Attention)」，能理解句子中不同詞彙之間的關聯度。</p><p>模型透過 Tokenization (標記化) 將文字轉化為系統可處理的單位，接著進行 Embedding (嵌入) 轉為向量。</p>",
-        "風險治理": "<h3>AI 風險與倫理安全</h3><p>導入生成式 AI 需注意：<b>資料外洩風險</b>、<b>幻覺 (Hallucination)</b>、<b>偏見與公平性</b>、以及<b>智財權 (版權) 侵權</b>問題。</p>",
-        "提示工程": "<h3>Prompt 撰寫與進階技巧</h3><p>1. 賦予角色 (Role-play)<br>2. 給予明確上下文與格式要求<br>3. 提供範例 (Few-shot Prompting)<br>4. 要求逐步思考 (Chain of Thought, CoT)</p>"
-    };
+let db={questions:generateQuestions()}
+let state={wrong:JSON.parse(localStorage.getItem('wrong')||'[]'),stats:JSON.parse(localStorage.getItem('stats')||'{}')}
 
-    // ================= 狀態變數 =================
-    let errorStats = JSON.parse(localStorage.getItem('errorStats')) || {}; 
-    let dailyStats = JSON.parse(localStorage.getItem('dailyStats')) || { date: "", count: 0, scoreSum: 0, exams: 0 };
-    let starredVocab = JSON.parse(localStorage.getItem('starredVocab')) || [];
-    let currentQuiz = [];
-    let vocabPage = 0;
-    const VOCAB_PER_PAGE = 10;
-    let isChHidden = false;
+function show(id){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');renderAll()}
 
-    // ================= 導覽與切換控制 =================
-    function toggleMenu() { 
-        const m = document.getElementById('sideMenu'); 
-        m.style.display = (m.style.display==='block')?'none':'block'; 
-    }
-    
-    function showSection(id) { 
-        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active-sec'));
-        document.getElementById(id).classList.add('active-sec');
-        document.getElementById('sideMenu').style.display = 'none';
-        
-        if(id === 'progress-section') updateProgressUI();
-        if(id === 'vocab-section') renderVocab();
-        if(id === 'review-section') renderReview();
-    }
+function renderCards(){
+let html=''
+words.forEach(w=>{
+html+=`<div class='card'>${w.en}<span class='badge'>${w.level}</span><br><span class='zh'>${w.zh}</span><br>${w.desc}<br>
+<button onclick="speak('${w.en}')">🔊</button>
+<button onclick="this.parentElement.querySelector('.zh').classList.toggle('blur')">👁️</button></div>`
+})
+document.getElementById('cards').innerHTML=html
+}
 
-    // 修復的分頁切換邏輯 (嚴格對齊 ID 名稱)
-    function switchTab(sectionName, idx) {
-        const section = document.getElementById(`${sectionName}-section`);
-        section.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
-        section.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        
-        document.getElementById(`${sectionName}-${idx}`).style.display = 'block';
-        section.querySelectorAll('.tab-btn')[idx].classList.add('active');
-        
-        if(sectionName === 'vocab' && idx === 1) renderStarred();
-        if(sectionName === 'vocab' && idx === 2) renderTopicNotes();
-        if(sectionName === 'review') renderReview(); 
-    }
+function speak(t){speechSynthesis.speak(new SpeechSynthesisUtterance(t))}
 
-    // ================= A. 學習進度功能 =================
-    function updateProgressUI() {
-        const fullBankSize = masterBank.length + vocabBank.length; 
-        const errCount = Object.keys(errorStats).length;
-        const mastered = Math.max(0, fullBankSize - errCount);
-        const p = fullBankSize > 0 ? Math.round((mastered / fullBankSize) * 100) : 0;
-        
-        document.getElementById('progressCircle').style.setProperty('--p', p + '%');
-        document.getElementById('progressVal').innerText = p + '%';
-        document.getElementById('masteredCount').innerText = mastered;
-        document.getElementById('totalCount').innerText = fullBankSize;
+let current=[]
+function startQuiz(){
+let n=parseInt(count.value)
+let level=document.getElementById('level').value
+let pool=db.questions
+if(level!='all') pool=pool.filter(q=>q.level==level)
+current=pool.sort(()=>0.5-Math.random()).slice(0,n)
+let html=''
+current.forEach((q,i)=>{
+html+=`<div class='card' id='q${i}'>${q.q} <span class='badge'>${q.level}</span>`
+q.options.forEach((o,j)=>{html+=`<div><input type='radio' name='q${i}' value='${j}'>${o}</div>`})
+html+='</div>'
+})
+html+=`<button onclick='submit()'>送出</button>`
+document.getElementById('quizBox').innerHTML=html
+}
 
-        let today = new Date().toLocaleDateString('zh-TW');
-        document.getElementById('todayDate').innerText = today;
-        if (dailyStats.date !== today) {
-            dailyStats = { date: today, count: 0, scoreSum: 0, exams: 0 };
-            localStorage.setItem('dailyStats', JSON.stringify(dailyStats));
-        }
+function submit(){
+let score=0
+current.forEach((q,i)=>{
+let sel=document.querySelector(`input[name=q${i}]:checked`)
+let box=document.getElementById(`q${i}`)
+if(sel && sel.value==q.ans){score++;box.classList.add('correct')}
+else{box.classList.add('wrong');state.wrong.push(q);trackWeak(q.tag)}
+})
+localStorage.setItem('wrong',JSON.stringify(state.wrong))
+localStorage.setItem('stats',JSON.stringify(state.stats))
+alert('分數:'+Math.round(score/current.length*100))
+renderAll()
+}
 
-        document.getElementById('todayCount').innerText = dailyStats.count;
-        let avg = dailyStats.exams > 0 ? Math.round(dailyStats.scoreSum / dailyStats.exams) : 0;
-        document.getElementById('todayAvgScore').innerText = avg;
-    }
+function trackWeak(tag){
+state.stats[tag]=(state.stats[tag]||0)+1
+}
 
-    // ================= B. 核心觀念功能 =================
-    function renderVocab() {
-        const list = document.getElementById('vocabList');
-        document.getElementById('vocabTotalCount').innerText = vocabBank.length;
-        
-        const start = vocabPage * VOCAB_PER_PAGE;
-        const end = start + VOCAB_PER_PAGE;
-        const pageData = vocabBank.slice(start, end);
-        
-        list.innerHTML = pageData.map(v => `
-            <div class="card vocab-card">
-                <div class="vocab-header">
-                    <div>
-                        <div class="vocab-en">${v.en}</div>
-                        <span class="q-tag">#${v.topic}</span>
-                    </div>
-                    <div style="display:flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-                        <button class="btn-small" onclick="speak('${v.en}')">🔊 英文發音</button>
-                        <button class="btn-small star-btn ${starredVocab.includes(v.id) ? 'starred' : ''}" style="color:var(--text); font-size:12px; font-weight:bold;" onclick="toggleStar('${v.id}')">⭐ 星號收藏</button>
-                    </div>
-                </div>
-                <div class="vocab-ch" style="font-weight:bold; color:var(--primary-dark); font-size:15px;">${v.ch}</div>
-                <div class="vocab-ch">${v.def}</div>
-            </div>
-        `).join('');
-        
-        document.getElementById('pageInfo').innerText = `${vocabPage + 1} / ${Math.ceil(vocabBank.length/VOCAB_PER_PAGE)}`;
-    }
+function renderWrong(){
+let html=''
+state.wrong.forEach((q,i)=>{html+=`<div class='card'>${q.q}<button onclick='del(${i})'>刪除</button></div>`})
+document.getElementById('wrongBox').innerHTML=html
+}
 
-    function changePage(dir) {
-        const maxPage = Math.ceil(vocabBank.length/VOCAB_PER_PAGE) - 1;
-        vocabPage += dir;
-        if(vocabPage < 0) vocabPage = 0;
-        if(vocabPage > maxPage) vocabPage = maxPage;
-        renderVocab();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+function del(i){state.wrong.splice(i,1);localStorage.setItem('wrong',JSON.stringify(state.wrong));renderAll()}
 
-    function toggleChinese() {
-        isChHidden = !isChHidden;
-        if(isChHidden) document.body.classList.add('hide-chinese');
-        else document.body.classList.remove('hide-chinese');
-    }
+function renderProgress(){
+let total=db.questions.length
+let wrong=state.wrong.length
+let rate=Math.round((1-wrong/total)*100)
+document.getElementById('rate').innerText=rate+'%'
 
-    function speak(text) {
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'en-US';
-        speechSynthesis.speak(utterance);
-    }
+let weakHtml=''
+Object.entries(state.stats).sort((a,b)=>b[1]-a[1]).slice(0,5).forEach(w=>{
+weakHtml+=`<div>${w[0]}（錯${w[1]}次）</div>`
+})
+document.getElementById('weak').innerHTML=weakHtml
+}
 
-    function toggleStar(id) {
-        if(starredVocab.includes(id)) {
-            starredVocab = starredVocab.filter(s => s !== id);
-        } else {
-            starredVocab.push(id);
-        }
-        localStorage.setItem('starredVocab', JSON.stringify(starredVocab));
-        renderVocab();
-        renderStarred();
-    }
+function renderAll(){renderCards();renderWrong();renderProgress()}
+function clearAll(){localStorage.clear();location.reload()}
 
-    function renderStarred() {
-        const list = document.getElementById('starredList');
-        const starredData = vocabBank.filter(v => starredVocab.includes(v.id));
-        
-        if(starredData.length === 0) {
-            list.innerHTML = "<p style='text-align:center; color:#888;'>目前沒有星號註記單字。</p>";
-            return;
-        }
-        
-        list.innerHTML = starredData.map(v => `
-            <div class="card vocab-card">
-                <div class="vocab-header">
-                    <span class="vocab-en">${v.en}</span>
-                    <button class="btn-small" onclick="toggleStar('${v.id}')">取消星號</button>
-                </div>
-                <div class="vocab-ch"><b>${v.ch}</b><br>${v.def}</div>
-            </div>
-        `).join('');
-    }
-
-    function renderTopicNotes() {
-        const topic = document.getElementById('topicSelect').value;
-        document.getElementById('topicNotesArea').innerHTML = topicNotes[topic] || "<p>暫無內容</p>";
-    }
-
-    // ================= C. 考題寶典功能 =================
-    function generateVocabQuestions() {
-        const levels = ["簡易", "中級", "困難"];
-        return vocabBank.map(v => {
-            let wrongDefs = vocabBank.filter(x => x.id !== v.id).map(x => x.def).sort(() => 0.5 - Math.random()).slice(0, 3);
-            let options = [v.def, ...wrongDefs].sort(() => 0.5 - Math.random());
-            let ansIndex = options.indexOf(v.def);
-            let randomLevel = levels[Math.floor(Math.random() * levels.length)];
-            return {
-                id: 'vq_' + v.id, tag: "觀念題: " + v.topic, level: randomLevel,
-                q: `關於「${v.en} (${v.ch})」的定義，下列何者正確？`,
-                options: options, ans: ansIndex, exp: `【正確定義】${v.def}`
-            };
-        });
-    }
-
-    function generateQuiz() {
-        const count = parseInt(document.getElementById('setCount').value);
-        const level = document.getElementById('setLevel').value;
-        const useMock = document.getElementById('srcMock').checked;
-        const useVocab = document.getElementById('srcVocab').checked;
-        
-        let pool = [];
-        if(useMock) pool = pool.concat(masterBank);
-        if(useVocab) pool = pool.concat(generateVocabQuestions());
-        
-        if(pool.length === 0) {
-            alert("請至少勾選一種出題來源！"); return;
-        }
-
-        let filteredPool = pool.filter(q => q.level === level);
-        
-        if(filteredPool.length === 0) {
-            alert(`目前來源中沒有「${level}」的題目，請更換設定！`); return;
-        }
-
-        currentQuiz = filteredPool.sort(() => 0.5 - Math.random()).slice(0, count);
-        
-        if(currentQuiz.length < count) {
-            alert(`⚠️ 提示：選定的來源中，「${level}」難度的題目只有 ${currentQuiz.length} 題，將為您全數列出！`);
-        }
-        
-        document.getElementById('quizFilter').style.display = 'none';
-        document.getElementById('examResult').style.display = 'none';
-        document.getElementById('quizArea').style.display = 'block';
-        
-        const list = document.getElementById('questionList');
-        list.innerHTML = currentQuiz.map((q, i) => `
-            <div class="card">
-                <span class="q-tag">${q.tag} (${q.level})</span>
-                <p style="font-weight:bold; font-size:16px;">Q${i+1}: ${q.q}</p>
-                ${q.options.map((o, oi) => `
-                    <label class="option-label">
-                        <input type="radio" name="q${i}" value="${oi}"> <span>${o}</span>
-                    </label>
-                `).join('')}
-            </div>
-        `).join('');
-    }
-
-    function gradeExam() {
-        let wrongCount = 0;
-        let expHtml = "";
-
-        currentQuiz.forEach((q, i) => {
-            const sel = document.querySelector(`input[name="q${i}"]:checked`);
-            const userAns = sel ? parseInt(sel.value) : -1;
-            
-            if (userAns !== q.ans) {
-                wrongCount++;
-                errorStats[q.id] = (errorStats[q.id] || 0) + 1; 
-                
-                expHtml += `
-                    <div class="wrong-ans-box">
-                        <p style="margin:0 0 8px 0; color:var(--text); font-size:15px;"><b>Q: ${q.q}</b></p>
-                        <p style="margin:0; font-size:14px; color:var(--error); font-weight:bold;">❌ 你的答案：${userAns === -1 ? "未作答" : q.options[userAns]}</p>
-                        <p style="margin:5px 0; font-size:14px; color:var(--success); font-weight:bold;">✅ 正確答案：${q.options[q.ans]}</p>
-                        <div style="margin:10px 0 0 0; font-size:13px; color:var(--primary-dark); background:#fff; padding:10px; border-radius:8px;">💡 <b>詳細解析：</b><br>${q.exp}</div>
-                    </div>
-                `;
-            }
-        });
-        
-        localStorage.setItem('errorStats', JSON.stringify(errorStats));
-        
-        const score = Math.round(((currentQuiz.length - wrongCount) / currentQuiz.length) * 100);
-        
-        dailyStats.count += currentQuiz.length;
-        dailyStats.scoreSum += score;
-        dailyStats.exams += 1;
-        localStorage.setItem('dailyStats', JSON.stringify(dailyStats));
-        
-        document.getElementById('quizArea').style.display = 'none';
-        document.getElementById('examResult').style.display = 'block';
-        document.getElementById('scoreDisplay').innerText = score;
-        document.getElementById('errCountDisplay').innerText = wrongCount;
-        
-        let msg = document.getElementById('scoreMessage');
-        if(score === 100) { msg.innerText = "🎉 太棒了！完美全對！(‧´｀U"; msg.style.color = "var(--success)"; }
-        else if(score >= 80) { msg.innerText = "👍 表現不錯！繼續保持！"; msg.style.color = "var(--primary-dark)"; }
-        else { msg.innerText = "💪 還需要多加練習喔！去看看詳細解析吧！"; msg.style.color = "var(--error)"; }
-
-        document.getElementById('errExplanations').innerHTML = expHtml || "<p style='text-align:center; color:var(--success); font-weight:bold; margin-top:20px;'>全部答對！沒有錯誤題目需要檢討，超棒的！</p>";
-    }
-
-    function resetExam() {
-        document.getElementById('examResult').style.display = 'none';
-        document.getElementById('quizFilter').style.display = 'block';
-    }
-
-    // ================= D. 錯題複習功能 =================
-    function renderReview() {
-        const listNormal = document.getElementById('reviewListNormal');
-        const listBoss = document.getElementById('reviewListBoss');
-        const errorIds = Object.keys(errorStats);
-        
-        const fullBank = [...masterBank, ...generateVocabQuestions()];
-        
-        let uniqueErrors = [];
-        let seenIds = new Set();
-        fullBank.forEach(q => {
-            if(errorIds.includes(q.id) && !seenIds.has(q.id)) {
-                uniqueErrors.push(q);
-                seenIds.add(q.id);
-            }
-        });
-
-        const bossErrors = uniqueErrors.filter(q => errorStats[q.id] >= 3);
-        
-        if(uniqueErrors.length === 0) {
-            listNormal.innerHTML = "<p style='text-align:center; color:#888; margin-top:30px;'>目前沒有錯題紀錄，繼續保持！(‧´｀U</p>";
-        } else {
-            listNormal.innerHTML = uniqueErrors.map(q => createReviewCard(q)).join('');
-        }
-
-        if(bossErrors.length === 0) {
-            listBoss.innerHTML = "<p style='text-align:center; color:#888; margin-top:30px;'>尚未有錯誤達到 3 次以上的重點錯題！</p>";
-        } else {
-            listBoss.innerHTML = bossErrors.map(q => createReviewCard(q, true)).join('');
-        }
-    }
-
-    function createReviewCard(q, isBoss = false) {
-        let borderColor = isBoss ? "var(--error)" : "var(--primary)";
-        return `
-            <div class="card" style="position:relative; border-top: 4px solid ${borderColor};">
-                <button class="btn-small" style="position:absolute; right:15px; top:15px; background:#ffeeee; color:var(--error); font-weight:bold;" onclick="deleteError('${q.id}')">🗑️ 刪除</button>
-                <span class="q-tag" style="background:${isBoss ? '#ffeeee' : 'var(--accent)'}; color:${isBoss ? 'var(--error)' : 'var(--primary-dark)'};">累積錯 ${errorStats[q.id]} 次</span>
-                <p><b>${q.q}</b></p>
-                <p style="color:var(--success);font-size:14px; font-weight:bold;">正確答案：${q.options[q.ans]}</p>
-                <p style="font-size:13px; color:#777; background:var(--bg); padding:10px; border-radius:8px;">💡 詳細解析：<br>${q.exp}</p>
-            </div>
-        `;
-    }
-
-    function deleteError(id) {
-        if(confirm("確定你已經精熟此題，要將它從錯題本中刪除嗎？")) {
-            delete errorStats[id];
-            localStorage.setItem('errorStats', JSON.stringify(errorStats));
-            renderReview();
-            updateProgressUI();
-        }
-    }
-
-    // 清除紀錄
-    function clearAllData() {
-        if(confirm("確定要將所有「學習進度」、「星號註記」及「錯題複習」紀錄清除嗎？")) {
-            localStorage.clear();
-            errorStats = {};
-            dailyStats = { date: "", count: 0, scoreSum: 0, exams: 0 };
-            starredVocab = [];
-            alert("已清除所有紀錄。(‧´｀U");
-            location.reload();
-        }
-    }
-
-    // 初始化頁面
-    window.onload = () => {
-        updateProgressUI();
-        renderTopicNotes();
-    };
+renderAll()
 </script>
 </body>
 </html>
