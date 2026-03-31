@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>☕ 史努比的生成式 AI 考照助手</title>
+    <title>☕ 史努比的生成式 AI 考照助手 (‧´｀U</title>
     <style>
         /* 視覺與介面風格：日系、奶茶色調 */
         :root { 
@@ -109,7 +109,7 @@
         <a href="javascript:void(0)" onclick="showSection('exam-section')">考題寶典</a>
         <a href="javascript:void(0)" onclick="showSection('review-section')">錯題複習</a>
     </div>
-    <div class="snoopy-title">生成式AI考照助手</div>
+    <div class="snoopy-title">(‧´｀U 生成式AI考照助手</div>
     <button class="btn-clear" onclick="clearAllData()">清除紀錄</button>
 </header>
 
@@ -194,7 +194,7 @@
             <p>1. <a href="#" style="color:var(--primary-dark)">金管會金融業導入 AI 指引</a></p>
             <p>2. <a href="#" style="color:var(--primary-dark)">OpenAI Prompt Engineering 官方指南</a></p>
             <p>3. 相關法規與政策懶人包</p>
-            <div class="snoopy-deco" style="margin-top:30px;">🐾...</div>
+            <div class="snoopy-deco" style="margin-top:30px;">(‧´｀U 🐾...</div>
         </div>
     </div>
 </section>
@@ -270,6 +270,7 @@
 <script>
     // ================= 1. 資料庫區 (100 個單字、27 題考題) =================
     let vocabBank = [
+        // --- 基礎與應用 (50題) ---
         { id: 'v1', en: "LLM", ch: "大型語言模型", def: "基於巨量資料訓練，具備理解與生成能力的深度學習模型。", topic: "基礎觀念" },
         { id: 'v2', en: "Token", ch: "標記 / 權杖", def: "模型處理文字的最小單位，可能是單字、詞或字元。", topic: "基礎觀念" },
         { id: 'v3', en: "Context Window", ch: "上下文窗口", def: "模型單次對話中能處理的最大 Token 範圍。", topic: "基礎觀念" },
@@ -320,6 +321,7 @@
         { id: 'v48', en: "Usage Quota", ch: "使用額度", def: "系統設定的調用次數或流量上限。", topic: "應用開發" },
         { id: 'v49', en: "Rate Limit", ch: "速率限制", def: "單位時間內允許發送的最大請求數，用以保護系統。", topic: "應用開發" },
         { id: 'v50', en: "Governance", ch: "治理", def: "針對 AI 的政策、標準與流程進行全面管理。", topic: "風險治理" },
+        // --- 高階技術與觀念 (50題) ---
         { id: 'v51', en: "Attention Head", ch: "注意力頭", def: "Transformer 中平行處理不同子空間資訊的組件。", topic: "進階觀念" },
         { id: 'v52', en: "Positional Encoding", ch: "位置編碼", def: "為 Token 加入序列位置資訊，解決模型無順序感問題。", topic: "進階觀念" },
         { id: 'v53', en: "Long-context Degradation", ch: "長文本效能衰減", def: "隨著上下文增加，模型對早期資訊的提取能力下降。", topic: "進階觀念" },
@@ -351,7 +353,7 @@
         { id: 'v79', en: "Speech-to-Text (ASR)", ch: "自動語音辨識", def: "將語音波形轉換為對應文字的技術。", topic: "進階觀念" },
         { id: 'v80', en: "Text-to-Speech (TTS)", ch: "文字轉語音", def: "將文字序列轉換為自然語音合成的技術。", topic: "進階觀念" },
         { id: 'v81', en: "Data Lineage", ch: "資料血緣", def: "追蹤資料從來源、處理到最終應用於模型的路徑。", topic: "進階觀念" },
-        { id: 'v82', en: "Access Control", ch: "存取控制", def: "管理誰有權限存取特定的模型、資料 or API。", topic: "進階觀念" },
+        { id: 'v82', en: "Access Control", ch: "存取控制", def: "管理誰有權限存取特定的模型、資料或 API。", topic: "進階觀念" },
         { id: 'v83', en: "Zero Trust Architecture", ch: "零信任架構", def: "對所有存取請求進行持續驗證，不因身在內網就信任。", topic: "進階觀念" },
         { id: 'v84', en: "Model Registry", ch: "模型註冊表", def: "統一管理、追蹤與儲存不同版本模型檔案的中心倉庫。", topic: "進階觀念" },
         { id: 'v85', en: "Canary Deployment", ch: "金絲雀部署", def: "先將新模型推送給一小部分使用者測試，確認穩定再全開。", topic: "進階觀念" },
@@ -432,11 +434,34 @@
                 <tr><td>儲存與檢索</td><td>Pinecone / FAISS</td><td>語意檢索核心 (向量資料庫)</td></tr>
             </table>
         `,
-        "風險治理": `<h3>⚖️ 法規與 AI 治理知識點</h3><p>此處保留您原始的法規細節內容...</p>`,
-        "提示工程": `<h3>🚀 進階技術</h3><p>此處保留您原始的提示工程技術內容...</p>`
+        "風險治理": `
+            <h3>⚖️ 法規與 AI 治理知識點</h3>
+            <table>
+                <tr><th>項目</th><th>細節解析</th></tr>
+                <tr><td><b>GDPR 罰款上限</b></td><td>最高 2,000 萬歐元或全球年營業額 4% (取其高者)。</td></tr>
+                <tr><td><b>GDPR 洩漏通報</b></td><td>知悉後 72 小時內。</td></tr>
+                <tr><td><b>AI 治理問責</b></td><td>(Accountability) 確保有人對 AI 決策負責，需具備可解釋性。</td></tr>
+                <tr><td><b>資料前處理</b></td><td>面對缺漏值，最不適當的做法是「全數刪除整列」。</td></tr>
+            </table>
+            <p style="margin-top:10px; font-size:14px;">導入生成式 AI 需嚴格注意：<b>資料外洩風險</b>、<b>幻覺 (Hallucination)</b>、<b>偏見與公平性</b>、以及<b>智財權 (版權) 侵權</b>問題。</p>
+        `,
+        "提示工程": `
+            <h3>🚀 進階技術與多模態</h3>
+            <table>
+                <tr><th>考點名稱</th><th>技術細節與應用價值</th></tr>
+                <tr><td><b>Query Transformation</b></td><td>使用 HyDE 將模糊問題轉換為精準檢索詞，提升資料完整度。</td></tr>
+                <tr><td><b>Reranking (再排序)</b></td><td>使用 Cross-encoder 重新評分檢索片段，大幅提升精準度。</td></tr>
+                <tr><td><b>Recursive Retrieval</b></td><td>針對長表或非結構化數據採遞迴檢索。</td></tr>
+                <tr><td><b>Cross-modal Attention</b></td><td>讓模型學習文字與圖像像素的關聯，實現「對圖說話」。</td></tr>
+                <tr><td><b>Image Patching</b></td><td>圖像進入模型前會被切成固定大小的方塊並轉為 Token。</td></tr>
+                <tr><td><b>PII Masking</b></td><td>自動遮蔽身分證字號等資訊，符合資安合規。</td></tr>
+                <tr><td><b>Prompt Firewall</b></td><td>部署於輸入端，即時攔截注入攻擊或越獄。</td></tr>
+                <tr><td><b>Context Caching</b></td><td>針對系統指令進行快取，降低 API 延遲與成本。</td></tr>
+            </table>
+        `
     };
 
-    // ================= 應用邏輯 =================
+    // ================= 狀態變數 =================
     let errorStats = JSON.parse(localStorage.getItem('errorStats')) || {}; 
     let dailyStats = JSON.parse(localStorage.getItem('dailyStats')) || { date: "", count: 0, scoreSum: 0, exams: 0 };
     let starredVocab = JSON.parse(localStorage.getItem('starredVocab')) || [];
@@ -445,12 +470,17 @@
     const VOCAB_PER_PAGE = 10;
     let isChHidden = false;
 
-    function toggleMenu() { const m = document.getElementById('sideMenu'); m.style.display = (m.style.display==='block')?'none':'block'; }
+    // ================= 導覽與切換控制 =================
+    function toggleMenu() { 
+        const m = document.getElementById('sideMenu'); 
+        m.style.display = (m.style.display==='block')?'none':'block'; 
+    }
     
     function showSection(id) { 
         document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active-sec'));
         document.getElementById(id).classList.add('active-sec');
         document.getElementById('sideMenu').style.display = 'none';
+        
         if(id === 'progress-section') updateProgressUI();
         if(id === 'vocab-section') renderVocab();
         if(id === 'review-section') renderReview();
@@ -460,12 +490,16 @@
         const section = document.getElementById(`${sectionName}-section`);
         section.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
         section.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        
         document.getElementById(`${sectionName}-${idx}`).style.display = 'block';
         section.querySelectorAll('.tab-btn')[idx].classList.add('active');
+        
         if(sectionName === 'vocab' && idx === 1) renderStarred();
         if(sectionName === 'vocab' && idx === 2) renderTopicNotes();
+        if(sectionName === 'review') renderReview(); 
     }
 
+    // ================= A. 學習進度功能 =================
     function updateProgressUI() {
         const fullBankSize = masterBank.length + vocabBank.length; 
         const errCount = Object.keys(errorStats).length;
@@ -479,111 +513,283 @@
 
         let today = new Date().toLocaleDateString('zh-TW');
         document.getElementById('todayDate').innerText = today;
+        if (dailyStats.date !== today) {
+            dailyStats = { date: today, count: 0, scoreSum: 0, exams: 0 };
+            localStorage.setItem('dailyStats', JSON.stringify(dailyStats));
+        }
+
         document.getElementById('todayCount').innerText = dailyStats.count;
-        document.getElementById('todayAvgScore').innerText = dailyStats.exams > 0 ? Math.round(dailyStats.scoreSum / dailyStats.exams) : 0;
+        let avg = dailyStats.exams > 0 ? Math.round(dailyStats.scoreSum / dailyStats.exams) : 0;
+        document.getElementById('todayAvgScore').innerText = avg;
     }
 
+    // ================= B. 核心觀念功能 =================
     function renderVocab() {
         const list = document.getElementById('vocabList');
         document.getElementById('vocabTotalCount').innerText = vocabBank.length;
+        
         const start = vocabPage * VOCAB_PER_PAGE;
-        const pageData = vocabBank.slice(start, start + VOCAB_PER_PAGE);
+        const end = start + VOCAB_PER_PAGE;
+        const pageData = vocabBank.slice(start, end);
+        
         list.innerHTML = pageData.map(v => `
             <div class="card vocab-card">
-                <div style="display:flex; justify-content:space-between">
-                    <div><span class="q-tag">#${v.topic}</span><div class="vocab-en">${v.en}</div></div>
-                    <button class="btn-small" onclick="toggleStar('${v.id}')">${starredVocab.includes(v.id)?'★':'☆'}</button>
+                <div class="vocab-header">
+                    <div>
+                        <div class="vocab-en">${v.en}</div>
+                        <span class="q-tag">#${v.topic}</span>
+                    </div>
+                    <div style="display:flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                        <button class="btn-small" onclick="speak('${v.en}')">🔊 英文發音</button>
+                        <button class="btn-small star-btn ${starredVocab.includes(v.id) ? 'starred' : ''}" style="color:var(--text); font-size:12px; font-weight:bold;" onclick="toggleStar('${v.id}')">⭐ 星號收藏</button>
+                    </div>
                 </div>
-                <div class="vocab-ch" style="font-weight:bold">${v.ch}</div>
+                <div class="vocab-ch" style="font-weight:bold; color:var(--primary-dark); font-size:15px;">${v.ch}</div>
                 <div class="vocab-ch">${v.def}</div>
             </div>
         `).join('');
-        document.getElementById('pageInfo').innerText = `${vocabPage + 1} / 10`;
+        
+        document.getElementById('pageInfo').innerText = `${vocabPage + 1} / ${Math.ceil(vocabBank.length/VOCAB_PER_PAGE)}`;
     }
 
-    function changePage(dir) { vocabPage = Math.max(0, Math.min(9, vocabPage + dir)); renderVocab(); window.scrollTo(0,0); }
-    function toggleChinese() { isChHidden = !isChHidden; document.body.classList.toggle('hide-chinese', isChHidden); }
+    function changePage(dir) {
+        const maxPage = Math.ceil(vocabBank.length/VOCAB_PER_PAGE) - 1;
+        vocabPage += dir;
+        if(vocabPage < 0) vocabPage = 0;
+        if(vocabPage > maxPage) vocabPage = maxPage;
+        renderVocab();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleChinese() {
+        isChHidden = !isChHidden;
+        if(isChHidden) document.body.classList.add('hide-chinese');
+        else document.body.classList.remove('hide-chinese');
+    }
+
+    function speak(text) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+        speechSynthesis.speak(utterance);
+    }
+
     function toggleStar(id) {
-        if(starredVocab.includes(id)) starredVocab = starredVocab.filter(s => s !== id); else starredVocab.push(id);
-        localStorage.setItem('starredVocab', JSON.stringify(starredVocab)); renderVocab(); renderStarred();
+        if(starredVocab.includes(id)) {
+            starredVocab = starredVocab.filter(s => s !== id);
+        } else {
+            starredVocab.push(id);
+        }
+        localStorage.setItem('starredVocab', JSON.stringify(starredVocab));
+        renderVocab();
+        renderStarred();
     }
+
     function renderStarred() {
-        document.getElementById('starredList').innerHTML = vocabBank.filter(v => starredVocab.includes(v.id)).map(v => `<div class="card"><b>${v.en}</b>: ${v.ch}</div>`).join('') || "目前無標記單字。";
+        const list = document.getElementById('starredList');
+        const starredData = vocabBank.filter(v => starredVocab.includes(v.id));
+        
+        if(starredData.length === 0) {
+            list.innerHTML = "<p style='text-align:center; color:#888;'>目前沒有星號註記單字。</p>";
+            return;
+        }
+        
+        list.innerHTML = starredData.map(v => `
+            <div class="card vocab-card">
+                <div class="vocab-header">
+                    <span class="vocab-en">${v.en}</span>
+                    <button class="btn-small" onclick="toggleStar('${v.id}')">取消星號</button>
+                </div>
+                <div class="vocab-ch"><b>${v.ch}</b><br>${v.def}</div>
+            </div>
+        `).join('');
     }
+
     function renderTopicNotes() {
         const topic = document.getElementById('topicSelect').value;
         document.getElementById('topicNotesArea').innerHTML = topicNotes[topic] || "<p>暫無內容</p>";
     }
 
+    // ================= C. 考題寶典功能 =================
+    function generateVocabQuestions() {
+        const levels = ["簡易", "中級", "困難"];
+        return vocabBank.map(v => {
+            let wrongDefs = vocabBank.filter(x => x.id !== v.id).map(x => x.def).sort(() => 0.5 - Math.random()).slice(0, 3);
+            let options = [v.def, ...wrongDefs].sort(() => 0.5 - Math.random());
+            let ansIndex = options.indexOf(v.def);
+            let randomLevel = levels[Math.floor(Math.random() * levels.length)];
+            return {
+                id: 'vq_' + v.id, tag: "觀念題: " + v.topic, level: randomLevel,
+                q: `關於「${v.en} (${v.ch})」的定義，下列何者正確？`,
+                options: options, ans: ansIndex, exp: `【正確定義】${v.def}`
+            };
+        });
+    }
+
     function generateQuiz() {
         const count = parseInt(document.getElementById('setCount').value);
         const level = document.getElementById('setLevel').value;
-        const pool = masterBank.filter(q => q.level === level);
-        currentQuiz = pool.sort(() => 0.5 - Math.random()).slice(0, count);
+        const useMock = document.getElementById('srcMock').checked;
+        const useVocab = document.getElementById('srcVocab').checked;
+        
+        let pool = [];
+        if(useMock) pool = pool.concat(masterBank);
+        if(useVocab) pool = pool.concat(generateVocabQuestions());
+        
+        if(pool.length === 0) {
+            alert("請至少勾選一種出題來源！"); return;
+        }
+
+        let filteredPool = pool.filter(q => q.level === level);
+        
+        if(filteredPool.length === 0) {
+            alert(`目前來源中沒有「${level}」的題目，請更換設定！`); return;
+        }
+
+        currentQuiz = filteredPool.sort(() => 0.5 - Math.random()).slice(0, count);
+        
+        if(currentQuiz.length < count) {
+            alert(`⚠️ 提示：選定的來源中，「${level}」難度的題目只有 ${currentQuiz.length} 題，將為您全數列出！`);
+        }
+        
         document.getElementById('quizFilter').style.display = 'none';
+        document.getElementById('examResult').style.display = 'none';
         document.getElementById('quizArea').style.display = 'block';
-        document.getElementById('questionList').innerHTML = currentQuiz.map((q, i) => `
-            <div class="card"><p><b>Q${i+1}: ${q.q}</b></p>
-            ${q.options.map((o, oi) => `<label class="option-label"><input type="radio" name="q${i}" value="${oi}"> <span>${o}</span></label>`).join('')}</div>
+        
+        const list = document.getElementById('questionList');
+        list.innerHTML = currentQuiz.map((q, i) => `
+            <div class="card">
+                <span class="q-tag">${q.tag} (${q.level})</span>
+                <p style="font-weight:bold; font-size:16px;">Q${i+1}: ${q.q}</p>
+                ${q.options.map((o, oi) => `
+                    <label class="option-label">
+                        <input type="radio" name="q${i}" value="${oi}"> <span>${o}</span>
+                    </label>
+                `).join('')}
+            </div>
         `).join('');
     }
 
     function gradeExam() {
-        let wrong = 0; let html = "";
+        let wrongCount = 0;
+        let expHtml = "";
+
         currentQuiz.forEach((q, i) => {
             const sel = document.querySelector(`input[name="q${i}"]:checked`);
-            if (!sel || parseInt(sel.value) !== q.ans) {
-                wrong++; errorStats[q.id] = (errorStats[q.id] || 0) + 1;
-                html += `<div class="wrong-ans-box"><b>${q.q}</b><br>✅ 正確答案: ${q.options[q.ans]}</div>`;
+            const userAns = sel ? parseInt(sel.value) : -1;
+            
+            if (userAns !== q.ans) {
+                wrongCount++;
+                errorStats[q.id] = (errorStats[q.id] || 0) + 1; 
+                
+                expHtml += `
+                    <div class="wrong-ans-box">
+                        <p style="margin:0 0 8px 0; color:var(--text); font-size:15px;"><b>Q: ${q.q}</b></p>
+                        <p style="margin:0; font-size:14px; color:var(--error); font-weight:bold;">❌ 你的答案：${userAns === -1 ? "未作答" : q.options[userAns]}</p>
+                        <p style="margin:5px 0; font-size:14px; color:var(--success); font-weight:bold;">✅ 正確答案：${q.options[q.ans]}</p>
+                        <div style="margin:10px 0 0 0; font-size:13px; color:var(--primary-dark); background:#fff; padding:10px; border-radius:8px;">💡 <b>詳細解析：</b><br>${q.exp}</div>
+                    </div>
+                `;
             }
         });
+        
         localStorage.setItem('errorStats', JSON.stringify(errorStats));
-        const score = Math.round(((currentQuiz.length - wrong) / currentQuiz.length) * 100);
-        dailyStats.count += currentQuiz.length; dailyStats.exams += 1; dailyStats.scoreSum += score;
+        
+        const score = Math.round(((currentQuiz.length - wrongCount) / currentQuiz.length) * 100);
+        
+        dailyStats.count += currentQuiz.length;
+        dailyStats.scoreSum += score;
+        dailyStats.exams += 1;
         localStorage.setItem('dailyStats', JSON.stringify(dailyStats));
+        
         document.getElementById('quizArea').style.display = 'none';
         document.getElementById('examResult').style.display = 'block';
-        document.getElementById('scoreDisplay').innerText = score + " 分";
-        document.getElementById('errExplanations').innerHTML = html || "全對！";
-        updateProgressUI();
+        document.getElementById('scoreDisplay').innerText = score;
+        document.getElementById('errCountDisplay').innerText = wrongCount;
+        
+        let msg = document.getElementById('scoreMessage');
+        if(score === 100) { msg.innerText = "🎉 太棒了！完美全對！(‧´｀U"; msg.style.color = "var(--success)"; }
+        else if(score >= 80) { msg.innerText = "👍 表現不錯！繼續保持！"; msg.style.color = "var(--primary-dark)"; }
+        else { msg.innerText = "💪 還需要多加練習喔！去看看詳細解析吧！"; msg.style.color = "var(--error)"; }
+
+        document.getElementById('errExplanations').innerHTML = expHtml || "<p style='text-align:center; color:var(--success); font-weight:bold; margin-top:20px;'>全部答對！沒有錯誤題目需要檢討，超棒的！</p>";
     }
 
-    function resetExam() { document.getElementById('examResult').style.display = 'none'; document.getElementById('quizFilter').style.display = 'block'; }
-    
+    function resetExam() {
+        document.getElementById('examResult').style.display = 'none';
+        document.getElementById('quizFilter').style.display = 'block';
+    }
+
+    // ================= D. 錯題複習功能 =================
     function renderReview() {
-        const ids = Object.keys(errorStats);
-        const errPool = masterBank.filter(q => ids.includes(q.id));
-        document.getElementById('reviewListNormal').innerHTML = errPool.map(q => `<div class="card"><button class="btn-small" style="float:right" onclick="deleteError('${q.id}')">🗑️</button><b>${q.q}</b> (累積錯誤: ${errorStats[q.id]} 次)</div>`).join('') || "目前無錯題紀錄。";
-    }
-    
-    function deleteError(id) { if(confirm("精熟此題並從錯題本移除？")) { delete errorStats[id]; localStorage.setItem('errorStats', JSON.stringify(errorStats)); renderReview(); updateProgressUI(); } }
+        const listNormal = document.getElementById('reviewListNormal');
+        const listBoss = document.getElementById('reviewListBoss');
+        const errorIds = Object.keys(errorStats);
+        
+        const fullBank = [...masterBank, ...generateVocabQuestions()];
+        
+        let uniqueErrors = [];
+        let seenIds = new Set();
+        fullBank.forEach(q => {
+            if(errorIds.includes(q.id) && !seenIds.has(q.id)) {
+                uniqueErrors.push(q);
+                seenIds.add(q.id);
+            }
+        });
 
-    // 優化後的清除功能：確保狀態同步重設並立即刷新 UI
-    function clearAllData() {
-        if (confirm("確定要將所有學習進度與紀錄歸零嗎？此動作無法復原。")) {
-            // 1. 徹底清空瀏覽器儲存空間
-            localStorage.clear();
+        const bossErrors = uniqueErrors.filter(q => errorStats[q.id] >= 3);
+        
+        if(uniqueErrors.length === 0) {
+            listNormal.innerHTML = "<p style='text-align:center; color:#888; margin-top:30px;'>目前沒有錯題紀錄，繼續保持！(‧´｀U</p>";
+        } else {
+            listNormal.innerHTML = uniqueErrors.map(q => createReviewCard(q)).join('');
+        }
 
-            // 2. 強制重設記憶體中的變數狀態 (這是進度條歸零的關鍵)
-            errorStats = {};
-            starredVocab = [];
-            dailyStats = { date: "", count: 0, scoreSum: 0, exams: 0 };
-
-            // 3. 立即呼叫 UI 更新函數，讓畫面上的 127/127 瞬間變回 0
-            updateProgressUI();
-
-            // 4. 針對單字分頁與星號列表進行重置渲染 (避免舊資料殘留)
-            if (typeof renderVocab === "function") renderVocab();
-            if (typeof renderStarred === "function") renderStarred();
-
-            alert("紀錄已成功清除，進度已歸零。");
-            
-            // 5. 強制重新整理頁面作為最後一道保險
-            location.reload(); 
+        if(bossErrors.length === 0) {
+            listBoss.innerHTML = "<p style='text-align:center; color:#888; margin-top:30px;'>尚未有錯誤達到 3 次以上的重點錯題！</p>";
+        } else {
+            listBoss.innerHTML = bossErrors.map(q => createReviewCard(q, true)).join('');
         }
     }
 
-    window.onload = () => { updateProgressUI(); renderTopicNotes(); };
+    function createReviewCard(q, isBoss = false) {
+        let borderColor = isBoss ? "var(--error)" : "var(--primary)";
+        return `
+            <div class="card" style="position:relative; border-top: 4px solid ${borderColor};">
+                <button class="btn-small" style="position:absolute; right:15px; top:15px; background:#ffeeee; color:var(--error); font-weight:bold;" onclick="deleteError('${q.id}')">🗑️ 刪除</button>
+                <span class="q-tag" style="background:${isBoss ? '#ffeeee' : 'var(--accent)'}; color:${isBoss ? 'var(--error)' : 'var(--primary-dark)'};">累積錯 ${errorStats[q.id]} 次</span>
+                <p><b>${q.q}</b></p>
+                <p style="color:var(--success);font-size:14px; font-weight:bold;">正確答案：${q.options[q.ans]}</p>
+                <p style="font-size:13px; color:#777; background:var(--bg); padding:10px; border-radius:8px;">💡 詳細解析：<br>${q.exp}</p>
+            </div>
+        `;
+    }
+
+    function deleteError(id) {
+        if(confirm("確定你已經精熟此題，要將它從錯題本中刪除嗎？")) {
+            delete errorStats[id];
+            localStorage.setItem('errorStats', JSON.stringify(errorStats));
+            renderReview();
+            updateProgressUI();
+        }
+    }
+
+    // 清除紀錄
+    function clearAllData() {
+        if(confirm("確定要將所有「學習進度」、「星號註記」及「錯題複習」紀錄清除嗎？")) {
+            localStorage.clear();
+            errorStats = {};
+            dailyStats = { date: "", count: 0, scoreSum: 0, exams: 0 };
+            starredVocab = [];
+            alert("已清除所有紀錄。(‧´｀U");
+            location.reload();
+        }
+    }
+
+    // 初始化頁面
+    window.onload = () => {
+        updateProgressUI();
+        renderTopicNotes();
+    };
 </script>
 </body>
 </html>
