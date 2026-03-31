@@ -3,55 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🍵 GenAI 考照助手：專業進化版</title>
+    <title>🍵 GenAI 考照全攻略：進階資料庫版</title>
     <style>
-        :root { 
-            --primary: #C19A6B; 
-            --bg: #FFFBF5; 
-            --card: #ffffff; 
-            --success: #A9B28B; 
-            --error: #D9534F; /* 警告紅 */
-            --text: #5D4037; 
-            --accent: #EFEBE9;
-        }
-
-        body { font-family: -apple-system, "微軟正黑體", sans-serif; background: var(--bg); margin: 0; color: var(--text); }
+        :root { --primary: #C19A6B; --bg: #FFFBF5; --card: #ffffff; --success: #A9B28B; --error: #D9534F; --text: #5D4037; --accent: #EFEBE9; }
+        body { font-family: -apple-system, "微軟正黑體", sans-serif; background: var(--bg); margin: 0; color: var(--text); padding-bottom: 50px; }
         
-        /* Header */
-        .app-header { background: var(--card); display: flex; align-items: center; padding: 15px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-bottom: 2px solid var(--accent); }
-        .menu-dots { background: none; border: none; color: var(--primary); font-size: 28px; cursor: pointer; padding: 0 10px; }
+        /* Header & Buttons */
+        .app-header { background: var(--card); display: flex; align-items: center; padding: 10px 15px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .menu-dots { background: none; border: none; color: var(--primary); font-size: 24px; cursor: pointer; }
+        .btn-clear { background: #f8f9fa; border: 1px solid #ddd; padding: 5px 12px; border-radius: 5px; font-size: 12px; cursor: pointer; margin-left: auto; }
         
         /* Side Menu */
-        .side-menu { display: none; position: absolute; top: 60px; left: 10px; background: var(--card); box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 15px; width: 200px; z-index: 1001; overflow: hidden; }
-        .side-menu a { display: block; padding: 15px 20px; color: var(--text); text-decoration: none; border-bottom: 1px solid var(--accent); }
+        .side-menu { display: none; position: absolute; top: 50px; left: 10px; background: var(--card); box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 12px; width: 180px; z-index: 1001; }
+        .side-menu a { display: block; padding: 12px 15px; color: var(--text); text-decoration: none; border-bottom: 1px solid var(--accent); font-size: 14px; }
 
-        /* Sections */
-        .content-section { display: none; padding: 15px; }
-        .active { display: block; }
-        
-        /* Progress Dashboard Style */
-        .progress-container { text-align: center; padding: 20px; }
-        .circle-progress { width: 120px; height: 120px; border-radius: 50%; background: conic-gradient(var(--primary) var(--p, 0%), #eee 0); display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; position: relative; }
-        .circle-progress::after { content: ""; width: 100px; height: 100px; background: var(--card); border-radius: 50%; position: absolute; }
-        .progress-text { position: relative; z-index: 1; font-size: 1.5em; font-weight: bold; color: var(--primary); }
-        
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
-        .stat-box { background: var(--accent); padding: 15px; border-radius: 15px; }
+        /* Progress UI */
+        .circle-progress { width: 100px; height: 100px; border-radius: 50%; background: conic-gradient(var(--primary) var(--p, 0%), #eee 0); display: flex; align-items: center; justify-content: center; margin: 10px auto; position: relative; }
+        .circle-progress::after { content: ""; width: 80px; height: 80px; background: var(--card); border-radius: 50%; position: absolute; }
+        .progress-text { position: relative; z-index: 1; font-size: 1.2em; font-weight: bold; color: var(--primary); }
 
-        /* Tag Style */
-        .q-tag { display: inline-block; background: #FFDAB9; color: #8B4513; font-size: 0.75em; padding: 2px 8px; border-radius: 50px; margin-bottom: 8px; font-weight: bold; }
-
-        /* Card Style */
-        .card { background: var(--card); border-radius: 20px; padding: 20px; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); position: relative; }
-        
-        /* Error List Red Highlight */
-        .error-warning { color: var(--error); font-weight: 900; border: 2px solid var(--error); padding: 5px 10px; border-radius: 10px; display: inline-block; margin-bottom: 10px; }
-
-        .tab-bar { display: flex; background: var(--accent); padding: 5px; border-radius: 50px; margin-bottom: 15px; }
-        .tab-btn { flex: 1; padding: 10px; border: none; background: transparent; border-radius: 50px; cursor: pointer; color: #888; }
+        /* Tabs */
+        .tab-bar { display: flex; background: var(--accent); padding: 4px; border-radius: 50px; margin: 10px 0; }
+        .tab-btn { flex: 1; padding: 8px; border: none; background: transparent; border-radius: 50px; cursor: pointer; font-size: 13px; color: #777; }
         .tab-btn.active { background: var(--card); color: var(--primary); font-weight: bold; }
 
-        .btn-main { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 50px; font-weight: bold; font-size: 1em; cursor: pointer; margin-top: 10px; }
+        /* Quiz Filter */
+        .filter-group { background: var(--accent); padding: 15px; border-radius: 15px; margin-bottom: 15px; }
+        select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; margin: 5px 0 15px; }
+
+        /* Utility */
+        .content-section { display: none; padding: 15px; }
+        .active { display: block; }
+        .card { background: var(--card); border-radius: 15px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+        .q-tag { display: inline-block; background: #FFDAB9; color: #8B4513; font-size: 11px; padding: 2px 8px; border-radius: 50px; margin-bottom: 5px; }
+        .btn-main { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn-del { color: var(--error); border: 1px solid var(--error); background: none; padding: 3px 8px; border-radius: 5px; font-size: 11px; float: right; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -64,157 +50,191 @@
         <a href="javascript:void(0)" onclick="showSection('exam-section')">📝 考題寶典</a>
         <a href="javascript:void(0)" onclick="showSection('review-section')">🔄 複習機制</a>
     </div>
-    <div style="flex:1; text-align:center; font-weight:bold;">GenAI 助手 ☕</div>
+    <div style="flex:1; text-align:center; font-weight:bold; font-size: 14px;">GenAI 考照助手</div>
+    <button class="btn-clear" onclick="clearAllData()">清除</button>
 </header>
 
-<section id="progress-section" class="content-section">
+<section id="progress-section" class="content-section active">
     <div class="tab-bar">
-        <button class="tab-btn active" onclick="switchProgTab(0)">目標達成率</button>
-        <button class="tab-btn" onclick="switchProgTab(1)">每日刷題計數</button>
+        <button class="tab-btn active" onclick="switchTab('prog', 0)">目標達成率</button>
+        <button class="tab-btn" onclick="switchTab('prog', 1)">每日刷題計數</button>
     </div>
-
-    <div id="prog-sheet-0" class="prog-sheet active">
-        <div class="card progress-container">
-            <h3>總體練習進度</h3>
-            <div class="circle-progress" id="progressCircle" style="--p: 0%">
-                <div class="progress-text" id="progressVal">0%</div>
-            </div>
-            <p>已掌握題數：<span id="masteredCount">0</span> / <span id="totalCount">0</span></p>
+    <div id="prog-0" class="tab-content active">
+        <div class="card" style="text-align:center">
+            <div class="circle-progress" id="progressCircle" style="--p: 0%"><div class="progress-text" id="progressVal">0%</div></div>
+            <p style="font-size:14px">已掌握題數：<span id="masteredCount">0</span> / <span id="totalCount">0</span></p>
         </div>
     </div>
-
-    <div id="prog-sheet-1" class="prog-sheet" style="display:none;">
+    <div id="prog-1" class="tab-content" style="display:none">
         <div class="card">
-            <h3>今日戰績 📈</h3>
-            <div class="stat-grid">
-                <div class="stat-box">
-                    <small>今日練習</small>
-                    <div style="font-size: 1.5em; font-weight: bold;" id="todayCount">0 題</div>
-                </div>
-                <div class="stat-box">
-                    <small>平均分數</small>
-                    <div style="font-size: 1.5em; font-weight: bold;" id="avgScore">0 分</div>
-                </div>
-            </div>
+            <p>今日練習：<b id="todayCount">0</b> 題</p>
+            <p>平均分數：<b id="avgScore">0</b> 分</p>
         </div>
     </div>
 </section>
 
+<section id="vocab-section" class="content-section">
+    <div class="card">
+        <h3>💡 考試重點整理</h3>
+        <p><b>1. 模型基礎：</b> 理解 Transformer 架構、參數 (Parameters) 與權重。</p>
+        <p><b>2. 提示工程：</b> Role-play、Few-shot、Chain of Thought (CoT) 的應用。</p>
+        <p><b>3. 企業應用：</b> RAG (檢索增強生成) 與向量資料庫的結合。</p>
+        <p><b>4. 風險治理：</b> 幻覺 (Hallucination)、偏見、智財權與去識別化。</p>
+    </div>
+</section>
+
 <section id="exam-section" class="content-section">
-    <div id="quizArea">
+    <div class="filter-group" id="quizFilter">
+        <label>選擇題數</label>
+        <select id="setCount">
+            <option value="5">5 題</option>
+            <option value="10">10 題</option>
+            <option value="15">15 題</option>
+            <option value="20">20 題</option>
+        </select>
+        <label>困難度</label>
+        <select id="setLevel">
+            <option value="easy">簡易</option>
+            <option value="medium">中級</option>
+            <option value="hard">困難</option>
+        </select>
+        <button class="btn-main" onclick="generateQuiz()">開始出題</button>
+    </div>
+    <div id="quizArea" style="display:none">
         <div id="questionList"></div>
         <button class="btn-main" onclick="gradeExam()">送出評分</button>
     </div>
 </section>
 
 <section id="review-section" class="content-section">
-    <h3>❌ 錯題複習 (紅字警告)</h3>
-    <div id="errorList"></div>
-</section>
-
-<section id="vocab-section" class="content-section">
-    <div id="vocabList"></div>
+    <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('rev', 0)">所有錯題</button>
+        <button class="tab-btn" onclick="switchTab('rev', 1)">魔王提醒(3次+)</button>
+    </div>
+    <div id="rev-0" class="tab-content active"></div>
+    <div id="rev-1" class="tab-content" style="display:none"></div>
 </section>
 
 <script>
-    // 題庫擴充：增加標籤 (tags)
-    const questionBank = [
-        { id: 1, tag: "模型原理", q: "關於 AI 的「幻覺」，下列敘述何者正確？", options: ["AI 喝醉了", "AI 自信地說出錯誤資訊", "AI 拒絕回答"], ans: 1 },
-        { id: 2, tag: "技術架項", q: "哪種技術能讓 AI 連結企業文件來回答問題？", options: ["RAG", "CPU", "GPU"], ans: 0 },
-        { id: 3, tag: "參數調整", q: "Temperature 參數調低會讓 AI 的內容？", options: ["更嚴謹", "更有創意", "更長"], ans: 0 },
-        { id: 4, tag: "法律倫理", q: "要降低風險，導入 AI 前應先做？", options: ["資料去識別化", "增加電力", "重新開機"], ans: 0 }
+    // 1. 資料庫建置 (根據連結整理)
+    const masterBank = [
+        { id: 1, level: "easy", tag: "基礎觀念", q: "Generative AI 的「Generative」是指什麼？", options: ["生成新內容", "過濾舊資料", "搜尋引擎"], ans: 0 },
+        { id: 2, level: "easy", tag: "風險治理", q: "AI 產生看似真實但錯誤的資訊稱為？", options: ["失憶", "幻覺", "過擬合"], ans: 1 },
+        { id: 3, level: "medium", tag: "技術架構", q: "RAG 技術的主要目的是？", options: ["增加訓練速度", "減少幻覺並引入即時資訊", "更換模型外殼"], ans: 1 },
+        { id: 4, level: "hard", tag: "法律倫理", q: "在台灣金管會指引中，金融業導入 AI 最重視？", options: ["模型層數", "算力大小", "可解釋性與公平性"], ans: 2 },
+        { id: 5, level: "medium", tag: "提示工程", q: "Chain of Thought (CoT) 是指要求 AI？", options: ["畫出圖案", "一步步思考並說明理由", "重複回答五次"], ans: 1 },
+        // ... (可依此結構繼續擴充)
     ];
 
-    let errorStats = JSON.parse(localStorage.getItem('errorStats')) || {}; // 紀錄每題錯幾次
-    let dailyLog = JSON.parse(localStorage.getItem('dailyLog')) || { date: "", count: 0, totalScore: 0, times: 0 };
+    let errorStats = JSON.parse(localStorage.getItem('errorStats')) || {}; 
+    let currentQuiz = [];
 
-    function toggleMenu() { const m = document.getElementById('sideMenu'); m.style.display = (m.style.display === 'block') ? 'none' : 'block'; }
-    
+    // 選單控制
+    function toggleMenu() { const m = document.getElementById('sideMenu'); m.style.display = (m.style.display==='block')?'none':'block'; }
     function showSection(id) { 
         document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         toggleMenu();
         if(id === 'progress-section') updateProgressUI();
-        if(id === 'review-section') renderErrors();
-        if(id === 'exam-section') startQuiz();
+        if(id === 'review-section') renderReview();
     }
 
-    // 學習進度分頁切換
-    function switchProgTab(idx) {
-        document.querySelectorAll('.prog-sheet').forEach(s => s.style.display = 'none');
-        document.querySelectorAll('#progress-section .tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('prog-sheet-' + idx).style.display = 'block';
-        document.querySelectorAll('#progress-section .tab-btn')[idx].classList.add('active');
+    // 分頁切換
+    function switchTab(prefix, idx) {
+        document.querySelectorAll(`#${prefix}-section .tab-content`).forEach(c => c.style.display = 'none');
+        document.querySelectorAll(`#${prefix}-section .tab-btn`).forEach(b => b.classList.remove('active'));
+        document.getElementById(`${prefix}-${idx}`).style.display = 'block';
+        document.querySelectorAll(`#${prefix}-section .tab-btn`)[idx].classList.add('active');
     }
 
-    function updateProgressUI() {
-        const total = questionBank.length;
-        const errorKeys = Object.keys(errorStats).length;
-        const mastered = Math.max(0, total - errorKeys);
-        const percent = Math.round((mastered / total) * 100);
+    // 出題邏輯
+    function generateQuiz() {
+        const count = parseInt(document.getElementById('setCount').value);
+        const level = document.getElementById('setLevel').value;
+        const filtered = masterBank.filter(q => q.level === level);
+        currentQuiz = filtered.sort(() => 0.5 - Math.random()).slice(0, count);
         
-        document.getElementById('progressCircle').style.setProperty('--p', percent + '%');
-        document.getElementById('progressVal').innerText = percent + '%';
-        document.getElementById('masteredCount').innerText = mastered;
-        document.getElementById('totalCount').innerText = total;
-
-        // 今日數據
-        const today = new Date().toLocaleDateString();
-        if(dailyLog.date !== today) {
-            dailyLog = { date: today, count: 0, totalScore: 0, times: 0 };
-        }
-        document.getElementById('todayCount').innerText = dailyLog.count + " 題";
-        const avg = dailyLog.times > 0 ? Math.round(dailyLog.totalScore / dailyLog.times) : 0;
-        document.getElementById('avgScore').innerText = avg + " 分";
-    }
-
-    function startQuiz() {
-        document.getElementById('questionList').innerHTML = questionBank.map((q, idx) => `
+        document.getElementById('quizFilter').style.display = 'none';
+        document.getElementById('quizArea').style.display = 'block';
+        const list = document.getElementById('questionList');
+        list.innerHTML = currentQuiz.map((q, i) => `
             <div class="card">
-                <span class="q-tag"># ${q.tag}</span>
-                <p><b>Q${idx+1}:</b> ${q.q}</p>
-                ${q.options.map((o, oi) => `<label style="display:block; margin:10px 0;"><input type="radio" name="q${idx}" value="${oi}"> ${o}</label>`).join('')}
+                <span class="q-tag"># ${q.tag} (${q.level})</span>
+                <p><b>Q${i+1}:</b> ${q.q}</p>
+                ${q.options.map((o, oi) => `<label style="display:block;margin:8px 0;"><input type="radio" name="q${i}" value="${oi}"> ${o}</label>`).join('')}
             </div>
         `).join('');
     }
 
+    // 評分與紀錄
     function gradeExam() {
-        let score = 0;
-        questionBank.forEach((q, idx) => {
-            const selected = document.querySelector(`input[name="q${idx}"]:checked`);
-            if (selected && parseInt(selected.value) === q.ans) {
-                score++;
-            } else {
-                // 錯題紀錄 + 累計次數
+        currentQuiz.forEach((q, i) => {
+            const sel = document.querySelector(`input[name="q${i}"]:checked`);
+            if (!sel || parseInt(sel.value) !== q.ans) {
                 errorStats[q.id] = (errorStats[q.id] || 0) + 1;
             }
         });
-
-        // 儲存今日戰績
-        dailyLog.count += questionBank.length;
-        dailyLog.totalScore += (score / questionBank.length) * 100;
-        dailyLog.times += 1;
-        localStorage.setItem('dailyLog', JSON.stringify(dailyLog));
         localStorage.setItem('errorStats', JSON.stringify(errorStats));
-        
-        alert(`測驗結束！得分：${Math.round((score/questionBank.length)*100)}`);
-        showSection('progress-section');
+        alert("測驗完成！錯題已記錄至複習機制。");
+        document.getElementById('quizFilter').style.display = 'block';
+        document.getElementById('quizArea').style.display = 'none';
+        updateProgressUI();
     }
 
-    function renderErrors() {
-        const list = document.getElementById('errorList');
-        const errors = questionBank.filter(q => errorStats[q.id]);
+    // 複習機制渲染
+    function renderReview() {
+        const sheet0 = document.getElementById('rev-0');
+        const sheet1 = document.getElementById('rev-1');
+        const errorIds = Object.keys(errorStats);
         
-        list.innerHTML = errors.length ? errors.map(q => `
-            <div class="card">
-                ${errorStats[q.id] >= 2 ? `<div class="error-warning">⚠️ 嚴重弱點：已錯 ${errorStats[q.id]} 次</div>` : ''}
+        const allErrors = masterBank.filter(q => errorIds.includes(q.id.toString()));
+        sheet0.innerHTML = allErrors.map(q => `
+            <div class="card" id="err-card-${q.id}">
+                <button class="btn-del" onclick="deleteError(${q.id})">刪除</button>
                 <p><b>[${q.tag}]</b> ${q.q}</p>
-                <p style="color:var(--success); font-weight:bold;">正確答案：${q.options[q.ans]}</p>
+                <p style="color:var(--success);font-size:13px">正確答案：${q.options[q.ans]}</p>
             </div>
-        `).join('') : '<p style="text-align:center; padding:20px;">目前沒有錯題，繼續保持！☕</p>';
+        `).join('') || "暫無錯題";
+
+        const bossErrors = allErrors.filter(q => errorStats[q.id] >= 3);
+        sheet1.innerHTML = bossErrors.map(q => `
+            <div class="card" style="border:2px solid var(--error)">
+                <h4 style="color:var(--error);margin:0">🔥 重點提醒 (錯 ${errorStats[q.id]} 次)</h4>
+                <p>${q.q}</p>
+                <p><b>詳解提示：</b> 這是核心考點，請務必回頭閱讀資策會講義相關章節。</p>
+            </div>
+        `).join('') || "尚未有出現 3 次以上的魔王題。";
     }
 
-    showSection('progress-section'); // 預設進入進度頁面
+    function deleteError(id) {
+        delete errorStats[id];
+        localStorage.setItem('errorStats', JSON.stringify(errorStats));
+        renderReview();
+        updateProgressUI();
+    }
+
+    function clearAllData() {
+        if(confirm("確定要將進度與錯題紀錄全部歸零嗎？")) {
+            localStorage.clear();
+            errorStats = {};
+            updateProgressUI();
+            alert("已清除所有紀錄。");
+            location.reload();
+        }
+    }
+
+    function updateProgressUI() {
+        const total = masterBank.length;
+        const errCount = Object.keys(errorStats).length;
+        const mastered = Math.max(0, total - errCount);
+        const p = Math.round((mastered / total) * 100);
+        document.getElementById('progressCircle').style.setProperty('--p', p + '%');
+        document.getElementById('progressVal').innerText = p + '%';
+        document.getElementById('masteredCount').innerText = mastered;
+        document.getElementById('totalCount').innerText = total;
+    }
+
+    window.onload = updateProgressUI;
 </script>
 </body>
 </html>
