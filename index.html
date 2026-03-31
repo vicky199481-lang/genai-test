@@ -268,7 +268,7 @@
 </section>
 
 <script>
-    // ================= 1. 資料庫區 =================
+    // ================= 1. 資料庫區 (100 個單字、27 題考題) =================
     let vocabBank = [
         { id: 'v1', en: "LLM", ch: "大型語言模型", def: "基於巨量資料訓練，具備理解與生成能力的深度學習模型。", topic: "基礎觀念" },
         { id: 'v2', en: "Token", ch: "標記 / 權杖", def: "模型處理文字的最小單位，可能是單字、詞或字元。", topic: "基礎觀念" },
@@ -310,72 +310,72 @@
         { id: 'v38', en: "Workflow Automation", ch: "工作流自動化", def: "將重複性任務串聯起來自動執行的過程。", topic: "應用開發" },
         { id: 'v39', en: "Agent", ch: "代理人", def: "具備自主拆解任務、調用工具並達成目標能力的 AI。", topic: "系統架構" },
         { id: 'v40', en: "Tool Calling", ch: "工具調用", def: "模型決定調用外部函數（如計算機、搜尋引擎）的功能。", topic: "系統架構" },
-        { id: 'v41', en: "Orchestration", ch: "編排", def: "管理多個任務、工具 or 代理人運作順序。", topic: "系統架構" },
+        { id: 'v41', en: "Orchestration", ch: "編排", def: "管理多個任務、工具或代理人之間的運作順序。", topic: "系統架構" },
         { id: 'v42', en: "Prompt Template", ch: "提示詞模板", def: "預先定義好的提示詞結構，僅需填入變數。", topic: "提示工程" },
-        { id: 'v43', en: "System Prompt", ch: "系統提示詞", def: "定義模型角色、行為準則與行為邊界的最高指令。", topic: "提示工程" },
+        { id: 'v43', en: "System Prompt", ch: "系統提示詞", def: "定義模型角色、行為準則與行為邊界的最高等級指令。", topic: "提示工程" },
         { id: 'v44', en: "Context Injection", ch: "上下文注入", def: "將相關資訊動態加入提示詞中，增加模型判斷依據。", topic: "提示工程" },
         { id: 'v45', en: "Model Deployment", ch: "模型部署", def: "將訓練好的模型上架至生產環境提供服務的過程。", topic: "應用開發" },
-        { id: 'v46', en: "Cloud vs On-Prem", ch: "雲端 vs 地端部署", def: "租用雲服務 or 在公司內部硬體運行模型。", topic: "應用開發" },
-        { id: 'v47', en: "Cost Control", ch: "成本控制", def: "透過優化 Token 使用來管理支出。", topic: "應用開發" },
+        { id: 'v46', en: "Cloud vs On-Prem", ch: "雲端 vs 地端部署", def: "租用雲服務（如 Azure）或在公司內部硬體運行模型。", topic: "應用開發" },
+        { id: 'v47', en: "Cost Control", ch: "成本控制", def: "透過優化 Token 使用或選擇模型來管理支出。", topic: "應用開發" },
         { id: 'v48', en: "Usage Quota", ch: "使用額度", def: "系統設定的調用次數或流量上限。", topic: "應用開發" },
-        { id: 'v49', en: "Rate Limit", ch: "速率限制", def: "單位時間內允許發送的最大請求數。", topic: "應用開發" },
+        { id: 'v49', en: "Rate Limit", ch: "速率限制", def: "單位時間內允許發送的最大請求數，用以保護系統。", topic: "應用開發" },
         { id: 'v50', en: "Governance", ch: "治理", def: "針對 AI 的政策、標準與流程進行全面管理。", topic: "風險治理" },
         { id: 'v51', en: "Attention Head", ch: "注意力頭", def: "Transformer 中平行處理不同子空間資訊的組件。", topic: "進階觀念" },
-        { id: 'v52', en: "Positional Encoding", ch: "位置編碼", def: "為 Token 加入序列位置資訊。", topic: "進階觀念" },
-        { id: 'v53', en: "Long-context Degradation", ch: "長文本效能衰減", def: "隨著上下文增加，模型對早期資訊提取能力下降。", topic: "進階觀念" },
+        { id: 'v52', en: "Positional Encoding", ch: "位置編碼", def: "為 Token 加入序列位置資訊，解決模型無順序感問題。", topic: "進階觀念" },
+        { id: 'v53', en: "Long-context Degradation", ch: "長文本效能衰減", def: "隨著上下文增加，模型對早期資訊的提取能力下降。", topic: "進階觀念" },
         { id: 'v54', en: "Prompt Leakage", ch: "提示詞洩漏", def: "透過攻擊誘導模型吐露其內部的系統指令。", topic: "進階觀念" },
-        { id: 'v55', en: "Context Collapse", ch: "上下文崩潰", def: "當上下文過雜時，模型失去邏輯處理能力。", topic: "進階觀念" },
+        { id: 'v55', en: "Context Collapse", ch: "上下文崩潰", def: "當上下文過長或過雜時，模型失去邏輯處理能力。", topic: "進階觀念" },
         { id: 'v56', en: "Embedding Drift", ch: "嵌入偏移", def: "資料演進導致向量空間中的相對位置不再準確。", topic: "進階觀念" },
-        { id: 'v57', en: "Hybrid Search", ch: "混合搜尋", def: "結合向量搜尋與傳統關鍵字搜尋。", topic: "進階觀念" },
-        { id: 'v58', en: "RAG Recall vs Precision", ch: "RAG 召回率 vs 精準度", def: "評估檢索系統找得「全」且「準」的指標。", topic: "進階觀念" },
-        { id: 'v59', en: "Knowledge Cutoff", ch: "知識截斷點", def: "模型訓練資料的截止日期。", topic: "進階觀念" },
-        { id: 'v60', en: "Tool-grounded Generation", ch: "基於工具的生成", def: "模型根據工具回傳的真實數據來生成。", topic: "進階觀念" },
-        { id: 'v61', en: "Agent Planner", ch: "代理人規劃器", def: "AI Agent 拆解複雜目標為子任務的邏輯核心。", topic: "進階觀念" },
-        { id: 'v62', en: "Reflection Mechanism", ch: "自省機制", def: "模型檢視生成結果並進行自我糾正的過程。", topic: "進階觀念" },
-        { id: 'v63', en: "Memory Module", ch: "記憶模組", def: "讓 Agent 儲存長期或短期對話經驗的架構。", topic: "進階觀念" },
-        { id: 'v64', en: "Function Calling", ch: "函數調用", def: "將模型意圖轉化為可執行的結構化參數。", topic: "進階觀念" },
-        { id: 'v65', en: "Prompt Injection", ch: "提示詞注入", def: "惡意繞過安全過濾器或改變模型行為。", topic: "進階觀念" },
-        { id: 'v66', en: "Jailbreak", ch: "越獄攻擊", def: "誘導模型違反安全準則產出違禁內容。", topic: "進階觀念" },
-        { id: 'v67', en: "Red Teaming", ch: "紅隊演練", def: "模擬攻擊者思維進行壓力與漏洞測試。", topic: "進階觀念" },
-        { id: 'v68', en: "Safety Alignment", ch: "安全對齊", def: "使模型產出符合人類安全規範與道德。", topic: "進階觀念" },
-        { id: 'v69', en: "Output Guardrails", ch: "輸出護欄", def: "輸出前阻擋不當內容或外洩資訊。", topic: "進階觀念" },
-        { id: 'v70', en: "Evaluation Harness", ch: "評估測試組件", def: "系統性測試模型表現的框架。", topic: "進階觀念" },
-        { id: 'v71', en: "Offline Evaluation", ch: "離線評估", def: "發布前使用測試集對模型評分。", topic: "進階觀念" },
-        { id: 'v72', en: "Online A/B Testing", ch: "線上 A/B 測試", def: "比較不同模型在真實環境下的成效。", topic: "進階觀念" },
-        { id: 'v73', en: "Prompt Versioning", ch: "提示詞版本控制", def: "對提示詞進行版本管理。", topic: "進階觀念" },
-        { id: 'v74', en: "Token Cost Optimization", ch: "Token 成本優化", def: "降低 API 支出。", topic: "進階觀念" },
-        { id: 'v75', en: "Batch Inference", ch: "批次推論", def: "一次處理大量輸入請求。", topic: "進階觀念" },
-        { id: 'v76', en: "Streaming Response", ch: "串流回應", def: "生成時即時傳回文字，減少等待感。", topic: "進階觀念" },
-        { id: 'v77', en: "Multimodal Input", ch: "多模態輸入", def: "同時處理文字、圖片、音訊資料。", topic: "進階觀念" },
-        { id: 'v78', en: "Vision-Language Model", ch: "視覺語言模型", def: "理解圖片內容並進行對話的 LLM。", topic: "進階觀念" },
-        { id: 'v79', en: "Speech-to-Text (ASR)", ch: "自動語音辨識", def: "將語音轉換為文字。", topic: "進階觀念" },
-        { id: 'v80', en: "Text-to-Speech (TTS)", ch: "文字轉語音", def: "將文字轉換為合成語音。", topic: "進階觀念" },
-        { id: 'v81', en: "Data Lineage", ch: "資料血緣", def: "追蹤資料從來源到應用的路徑。", topic: "進階觀念" },
-        { id: 'v82', en: "Access Control", ch: "存取控制", def: "管理存取權限。", topic: "進階觀念" },
-        { id: 'v83', en: "Zero Trust Architecture", ch: "零信任架構", def: "對所有請求進行持續驗證。", topic: "進階觀念" },
-        { id: 'v84', en: "Model Registry", ch: "模型註冊表", def: "管理、儲存不同版本模型檔案。", topic: "進階觀念" },
-        { id: 'v85', en: "Canary Deployment", ch: "金絲雀部署", def: "推送給部分用戶測試，穩定後全開。", topic: "進階觀念" },
-        { id: 'v86', en: "Shadow Deployment", ch: "影子部署", def: "運行但不輸出結果，僅供觀測。", topic: "進階觀念" },
-        { id: 'v87', en: "Auto Prompt Engineer", ch: "自動提示詞工程", def: "自動生成或優化提示詞。", topic: "進階觀念" },
-        { id: 'v88', en: "Graph Prompting", ch: "圖譜提示", def: "利用結構化關係增強推理。", topic: "進階觀念" },
-        { id: 'v89', en: "Context Engineering", ch: "上下文工程", def: "結構化提供給模型的內容。", topic: "進階觀念" },
-        { id: 'v90', en: "Semantic Chunking", ch: "語意切塊", def: "依據意義完整性切分內容。", topic: "進階觀念" },
-        { id: 'v91', en: "Knowledge Graph", ch: "知識圖譜", def: "以節點與邊表示實體關係。", topic: "進階觀念" },
-        { id: 'v92', en: "MCP", ch: "模型上下文協定", def: "統一串接的標準通訊協議。", topic: "進階觀念" },
-        { id: 'v93', en: "A2A", ch: "代理人間協作", def: "Agent 之間傳遞訊息、指派任務。", topic: "進階觀念" },
-        { id: 'v94', en: "API Gateway", ch: "API 閘道", def: "管理 API 呼叫的單一進入點。", topic: "進階觀念" },
-        { id: 'v95', en: "Rate Throttling", ch: "速率調解", def: "動態調降處理速度。", topic: "進階觀念" },
-        { id: 'v96', en: "Failover", ch: "容錯移轉", def: "失效時自動切換至備援。", topic: "進階觀念" },
-        { id: 'v97', en: "Cost Attribution", ch: "成本歸因", def: "計算專案消耗資源費用。", topic: "進階觀念" },
-        { id: 'v98', en: "Audit Log", ch: "稽核日誌", def: "記錄調用時間與對象。", topic: "進階觀念" },
-        { id: 'v99', en: "Compliance by Design", ch: "內建合規設計", def: "開發初期就將法規納入設計。", topic: "進階觀念" },
-        { id: 'v100', en: "AI Governance Framework", ch: "AI 治理框架", def: "風險、責任管理體制。", topic: "進階觀念" }
+        { id: 'v57', en: "Hybrid Search", ch: "混合搜尋", def: "結合向量搜尋（語意）與傳統關鍵字搜尋（精準字詞）。", topic: "進階觀念" },
+        { id: 'v58', en: "RAG Recall vs Precision", ch: "RAG 召回率 vs 精準度", def: "評估檢索系統是否找得「全」且找得「準」的指標。", topic: "進階觀念" },
+        { id: 'v59', en: "Knowledge Cutoff", ch: "知識截斷點", def: "模型訓練資料的截止日期，之後發生的事模型不知情。", topic: "進階觀念" },
+        { id: 'v60', en: "Tool-grounded Generation", ch: "基於工具的生成", def: "模型根據工具回傳的真實數據（如氣象 API）來生成。", topic: "進階觀念" },
+        { id: 'v61', en: "Agent Planner", ch: "代理人規劃器", def: "AI Agent 拆解複雜目標為多個子任務的邏輯核心。", topic: "進階觀念" },
+        { id: 'v62', en: "Reflection Mechanism", ch: "自省機制", def: "模型檢視自己生成的結果並進行自我糾正的過程。", topic: "進階觀念" },
+        { id: 'v63', en: "Memory Module", ch: "記憶模組", def: "讓 Agent 儲存長期或短期對話經驗的儲存架構。", topic: "進階觀念" },
+        { id: 'v64', en: "Function Calling", ch: "函數調用", def: "將模型意圖轉化為可執行的結構化參數（如 JSON）。", topic: "進階觀念" },
+        { id: 'v65', en: "Prompt Injection", ch: "提示詞注入", def: "透過輸入指令惡意繞過安全過濾器或改變模型行為。", topic: "進階觀念" },
+        { id: 'v66', en: "Jailbreak", ch: "越獄攻擊", def: "誘導模型違反安全性準則產出違禁內容的手段。", topic: "進階觀念" },
+        { id: 'v67', en: "Red Teaming", ch: "紅隊演練", def: "模擬攻擊者思維，對 AI 系統進行壓力與漏洞測試。", topic: "進階觀念" },
+        { id: 'v68', en: "Safety Alignment", ch: "安全對齊", def: "使模型產出符合人類安全規範與道德紅線。", topic: "進階觀念" },
+        { id: 'v69', en: "Output Guardrails", ch: "輸出護欄", def: "在輸出前加裝過濾層，阻擋不當內容或外洩資訊。", topic: "進階觀念" },
+        { id: 'v70', en: "Evaluation Harness", ch: "評估測試組件", def: "用於系統性測試模型在特定任務上表現的框架。", topic: "進階觀念" },
+        { id: 'v71', en: "Offline Evaluation", ch: "離線評估", def: "在發布前使用預設的測試集對模型效能進行評分。", topic: "進階觀念" },
+        { id: 'v72', en: "Online A/B Testing", ch: "線上 A/B 測試", def: "將流量分給不同模型，比較真實使用環境下的成效。", topic: "進階觀念" },
+        { id: 'v73', en: "Prompt Versioning", ch: "提示詞版本控制", def: "對提示詞進行版本管理，確保優化過程可回溯。", topic: "進階觀念" },
+        { id: 'v74', en: "Token Cost Optimization", ch: "Token 成本優化", def: "透過精簡提示或快取技術降低 API 支出。", topic: "進階觀念" },
+        { id: 'v75', en: "Batch Inference", ch: "批次推論", def: "一次性處理大量輸入請求，提高硬體利用率。", topic: "進階觀念" },
+        { id: 'v76', en: "Streaming Response", ch: "串流回應", def: "模型生成時即時傳回文字，減少使用者等待感（如打字機效果）。", topic: "進階觀念" },
+        { id: 'v77', en: "Multimodal Input", ch: "多模態輸入", def: "模型能同時處理文字、圖片、音訊等多種形式資料。", topic: "進階觀念" },
+        { id: 'v78', en: "Vision-Language Model", ch: "視覺語言模型", def: "具備理解圖片內容並以文字進行互動能力的 LLM。", topic: "進階觀念" },
+        { id: 'v79', en: "Speech-to-Text (ASR)", ch: "自動語音辨識", def: "將語音波形轉換為對應文字的技術。", topic: "進階觀念" },
+        { id: 'v80', en: "Text-to-Speech (TTS)", ch: "文字轉語音", def: "將文字序列轉換為自然語音合成的技術。", topic: "進階觀念" },
+        { id: 'v81', en: "Data Lineage", ch: "資料血緣", def: "追蹤資料從來源、處理到最終應用於模型的路徑。", topic: "進階觀念" },
+        { id: 'v82', en: "Access Control", ch: "存取控制", def: "管理誰有權限存取特定的模型、資料或 API。", topic: "進階觀念" },
+        { id: 'v83', en: "Zero Trust Architecture", ch: "零信任架構", def: "對所有存取請求進行持續驗證，不因身在內網就信任。", topic: "進階觀念" },
+        { id: 'v84', en: "Model Registry", ch: "模型註冊表", def: "統一管理、追蹤與儲存不同版本模型檔案的中心倉庫。", topic: "進階觀念" },
+        { id: 'v85', en: "Canary Deployment", ch: "金絲雀部署", def: "先將新模型推送給一小部分使用者測試，確認穩定再全開。", topic: "進階觀念" },
+        { id: 'v86', en: "Shadow Deployment", ch: "影子部署", def: "新舊模型同時運行，但不對外輸出新模型的結果，僅觀測。", topic: "進階觀念" },
+        { id: 'v87', en: "Auto Prompt Engineer", ch: "自動提示詞工程", def: "使用模型來自動生成或優化另一個模型的提示詞。", topic: "進階觀念" },
+        { id: 'v88', en: "Graph Prompting", ch: "圖譜提示", def: "利用知識圖譜的結構化關係來增強模型的推理。", topic: "進階觀念" },
+        { id: 'v89', en: "Context Engineering", ch: "上下文工程", def: "科學化地篩選、排序與結構化提供給模型的上下文內容。", topic: "進階觀念" },
+        { id: 'v90', en: "Semantic Chunking", ch: "語意切塊", def: "依據內容意義的完整性進行切分，而非固定字數。", topic: "進階觀念" },
+        { id: 'v91', en: "Knowledge Graph", ch: "知識圖譜", def: "以節點與邊表示實體間複雜關係的結構化知識庫。", topic: "進階觀念" },
+        { id: 'v92', en: "MCP", ch: "模型上下文協定", def: "統一模型、資料源與工具之間串接的標準通訊協議。", topic: "進階觀念" },
+        { id: 'v93', en: "A2A", ch: "代理人間協作", def: "不同的 AI Agent 之間互相傳遞訊息、指派任務。", topic: "進階觀念" },
+        { id: 'v94', en: "API Gateway", ch: "API 閘道", def: "管理所有 API 呼叫的單一進入點，處理鑑權、限流。", topic: "進階觀念" },
+        { id: 'v95', en: "Rate Throttling", ch: "速率調解", def: "當請求過多時，動態調降處理速度以維持系統運作。", topic: "進階觀念" },
+        { id: 'v96', en: "Failover", ch: "容錯移轉", def: "當主要模型失效時，自動切換至備援模型。", topic: "進階觀念" },
+        { id: 'v97', en: "Cost Attribution", ch: "成本歸因", def: "準確計算特定專案或部門所消耗的 AI 資源費用。", topic: "進階觀念" },
+        { id: 'v98', en: "Audit Log", ch: "稽核日誌", def: "詳細記錄模型調用的時間、輸入、輸出與執行者。", topic: "進階觀念" },
+        { id: 'v99', en: "Compliance by Design", ch: "內建合規設計", def: "在系統開發初期就將法規要求納入架構設計。", topic: "進階觀念" },
+        { id: 'v100', en: "AI Governance Framework", ch: "AI 治理框架", def: "企業管理 AI 風險、責任與效能的完整體制。", topic: "進階觀念" }
     ];
 
     const masterBank = [
         { id: 'q1', level: "簡易", tag: "定義與原理", q: "生成式 AI (AIGC) 的核心定義為何？", options: ["數據清洗", "創造新內容", "AR硬體", "固定指令"], ans: 1, exp: "正確解答為 (B)創造新內容。" },
         { id: 'q2', level: "中級", tag: "運作基礎", q: "AIGC 如何達成類似人類創作的效果？", options: ["整合分析模擬邏輯", "複製細胞", "手寫規則", "關鍵字拼接"], ans: 0, exp: "正確解答為 (A)整合分析模擬邏輯。" },
-        { id: 'q3', level: "困難", tag: "機器學習", q: "損失函數 (Loss Function) 的主要作用？", options: ["刪除雜訊", "衡量生成與真實數據誤差", "提升速度", "轉換向量"], ans: 1, exp: "正確解答為 (B)衡量生成與真實數據誤差。" },
+        { id: 'q3', level: "困難", tag: "機器學習", q: "損失函數 (Loss Function) 的主要作用？", options: ["刪除雜訊", "衡量生成與真實數據誤差", "提升速度", "轉換向量"], ans: 1, exp: "正確解答為 (B)衡量生成與真實數據誤差。", level: "困難" },
         { id: 'q4', level: "簡易", tag: "開發框架", q: "下列何者「不屬於」常用的深度學習框架？", options: ["TensorFlow", "PyTorch", "Keras", "Microsoft Excel"], ans: 3, exp: "正確解答為 (D)Microsoft Excel。" },
         { id: 'q5', level: "困難", tag: "模型架構", q: "GAN 依賴哪兩個組件競爭？", options: ["編碼/解碼", "生成/鑑別", "卷積/池化", "注意力/前饋"], ans: 1, exp: "正確解答為 (B)生成/鑑別。" },
         { id: 'q6', level: "中級", tag: "模型架構", q: "GAN 生成器的最終訓練目標？", options: ["圖片分類", "創造相似資料騙過鑑別器", "剔除異常", "壓縮影像"], ans: 1, exp: "正確解答為 (B)創造相似資料騙過鑑別器。" },
@@ -392,31 +392,58 @@
         { id: 'q17', level: "困難", tag: "資料處理", q: "資料前處理中處理缺漏值，「最不適當」的做法？", options: ["平均值填補", "回歸預測", "全數刪除整列", "標記特殊類別"], ans: 2, exp: "正確解答為 (C)全數刪除整列。" },
         { id: 'q18', level: "中級", tag: "法規監管", q: "歐盟《人工智慧法案》依據什麼標準分級？", options: ["風險程度", "國別", "程式碼開源", "禁止所有個資應用"], ans: 0, exp: "正確解答為 (A)風險程度。" },
         { id: 'q19', level: "困難", tag: "倫理準則", q: "下列何者不屬於可信賴 AI 的「倫理」要求？", options: ["透明性", "公平性", "實用性(追求利潤最大化)", "問責制"], ans: 2, exp: "正確解答為 (C)實用性(追求利潤最大化)。" },
-        { id: 'q20', level: "困難", tag: "進階 RAG 優化", q: "當 RAG 系統檢索出大量文件，但模型遺漏關鍵資訊時？", options: ["增加 Temperature", "實施 Reranking 僅保留 Top 3", "Fine-tuning", "停用 Chunking"], ans: 1, exp: "再排序能將最相關片段排在最前面，確保模型讀到最高品質資料。" },
-        { id: 'q21', level: "困難", tag: "多模態技術細節", q: "視覺語言模型在處理圖片時分割的區塊稱為？", options: ["Textual Tokens", "Image Patches", "Neural Layers", "Pixel Clusters"], ans: 1, exp: "Image Patches 將圖片視為序列，轉換為 Embedding 後處理。" },
+        { id: 'q20', level: "困難", tag: "進階 RAG 優化", q: "當 RAG 系統檢索出大量文件但模型遺漏關鍵資訊時，哪項做法最有效？", options: ["增加 Temperature 數值", "實施 Reranking (再排序) 僅保留 Top 3", "將所有文件進行 Fine-tuning", "停用資料切塊 (Chunking)"], ans: 1, exp: "再排序能將最相關片段排在最前面，確保模型讀到最高品質資料。" },
+        { id: 'q21', level: "困難", tag: "多模態技術細節", q: "視覺語言模型在處理圖片時分割的區塊稱為？", options: ["Textual Tokens", "Image Patches", "Neural Layers", "Pixel Clusters"], ans: 1, exp: "Image Patches 將圖片視為序列進行處理。" },
         { id: 'q22', level: "中級", tag: "企業安全與資安", q: "因提示詞設計不當導致模型吐露系統指令稱為？", options: ["Data Poisoning", "Model Drift", "Prompt Leakage", "Hallucination"], ans: 2, exp: "提示詞洩漏旨在獲取模型的 System Prompt。" },
-        { id: 'q23', level: "困難", tag: "成本與效能優化", q: "為降低重複發送背景知識產生的 token 費用？", options: ["Context Caching", "Model Quantization", "Batch Inference", "Rate Limit"], ans: 0, exp: "Context Caching 儲存頻繁使用的上下文，減少重複運算費用。" },
-        { id: 'q24', level: "中級", tag: "AI 治理與合規", q: "AI 用於「信用評等」或「履歷篩選」風險分級？", options: ["不可接受", "高風險", "有限", "最低"], ans: 1, exp: "涉及個人生計、就業的 AI 被列為「高風險」。" },
-        { id: 'q25', level: "困難", tag: "Agent 代理架構", q: "負責將使用者目標拆解為子任務的組件稱為？", options: ["Tool Caller", "Planner (規劃器)", "Memory", "Executor"], ans: 1, exp: "Planner 是 Agent 的大腦，負責策略思考。" },
-        { id: 'q26', level: "中級", tag: "提示工程進階", q: "要求 AI「一步一步思考」應用了哪種技巧？", options: ["Few-shot", "Chain-of-Thought (CoT)", "Context Injection", "Zero-shot"], ans: 1, exp: "思路鏈 (CoT) 誘發模型進行序列化推理。" },
-        { id: 'q27', level: "困難", tag: "模型部署與運維", q: "為不影響用戶下測試新版 RAG 檢索演算法應採用？", options: ["Blue-Green", "Canary Deployment", "Recreate", "Shadow"], ans: 1, exp: "金絲雀部署適合用於測試不確定的 AI 生成結果。" }
+        { id: 'q23', level: "困難", tag: "成本與效能優化", q: "為降低重複發送背景知識產生的費用應考慮哪種技術？", options: ["Context Caching (內容快取)", "Model Quantization", "Batch Inference", "Rate Limit"], ans: 0, exp: "Context Caching 儲存頻繁使用的上下文，減少重複運算費用。" },
+        { id: 'q24', level: "中級", tag: "AI 治理與合規", q: "根據歐盟 AI 法案，AI 用於「信用評等」屬於哪一風險等級？", options: ["不可接受", "高風險", "有限", "最低"], ans: 1, exp: "涉及個人生計、就業的 AI 被列為「高風險」。" },
+        { id: 'q25', level: "困難", tag: "Agent 代理架構", q: "在多代理協作中，負責將目標拆解為子任務的組件稱為？", options: ["Tool Caller", "Planner (規劃器)", "Memory Module", "Executor"], ans: 1, exp: "Planner 是 Agent 的大腦，負責策略思考。" },
+        { id: 'q26', level: "中級", tag: "提示工程進階", q: "要求 AI「一步一步思考」應用了哪種提示技巧？", options: ["Few-shot", "Chain-of-Thought (CoT)", "Context Injection", "Zero-shot"], ans: 1, exp: "思路鏈 (CoT) 誘發模型進行序列化推理。" },
+        { id: 'q27', level: "困難", tag: "模型部署與運維", q: "為不影響所有用戶的情況下測試新版本 RAG 應採用哪種策略？", options: ["Blue-Green", "Canary Deployment (金絲雀)", "Recreate", "Shadow"], ans: 1, exp: "金絲雀部署適合用於測試不確定的 AI 生成結果。" }
     ];
 
     const topicNotes = {
         "模型基礎": `
             <h3>📚 核心考試項目 (Core Exam Domains)</h3>
             <table>
-                <tr><th>項目</th><th>重點內容摘要</th></tr>
+                <tr><th>項目</th><th>重點摘要</th></tr>
                 <tr><td>1. 核心原理</td><td>LLM, Transformer, Token, Attention</td></tr>
-                <tr><td>2. 提示與上下文</td><td>Prompt Engineering & Context Engineering</td></tr>
-                <tr><td>3. 場景設計</td><td>業務場景導入、侷限性評估</td></tr>
+                <tr><td>2. 提示與上下文</td><td>Prompt & Context Engineering</td></tr>
+                <tr><td>3. 應用場景設計</td><td>業務場景導入、侷限性評估</td></tr>
                 <tr><td>4. RAG 架構</td><td>檢索增強生成架構與運作</td></tr>
-                <tr><td>5. 幻覺控管</td><td>Hallucination 辨識與緩解策略</td></tr>
+                <tr><td>5. 幻覺與風險控管</td><td>Hallucination 辨識與緩解策略</td></tr>
+            </table>
+            <h3>🛠️ AI 工具與框架</h3>
+            <table>
+                <tr><th>分類</th><th>代表工具</th><th>核心功能</th></tr>
+                <tr><td>通用模型</td><td>ChatGPT / GPT-4</td><td>通用生成核心</td></tr>
+                <tr><td>多模態</td><td>Gemini</td><td>長上下文、多模態</td></tr>
+                <tr><td>長文分析</td><td>Claude</td><td>長文、低幻覺</td></tr>
+                <tr><td>開發框架</td><td>LangChain / LlamaIndex</td><td>RAG 與 Agent 框架</td></tr>
+            </table>
+        `,
+        "風險治理": `
+            <h3>⚖️ 法規與 AI 治理</h3>
+            <table>
+                <tr><th>項目</th><th>細節解析</th></tr>
+                <tr><td><b>GDPR 罰款</b></td><td>最高 2,000 萬歐元或營業額 4%。</td></tr>
+                <tr><td><b>洩漏通報</b></td><td>知悉後 72 小時內。</td></tr>
+                <tr><td><b>AI 治理</b></td><td>重視問責制與可解釋性。</td></tr>
+            </table>
+        `,
+        "提示工程": `
+            <h3>🚀 進階技術</h3>
+            <table>
+                <tr><th>技術</th><th>應用價值</th></tr>
+                <tr><td>Query Transform</td><td>模糊問題轉精準詞。</td></tr>
+                <tr><td>Reranking</td><td>對檢索片段再排序，提昇精準度。</td></tr>
+                <tr><td>PII Masking</td><td>遮蔽敏感資訊，符合合規。</td></tr>
+                <tr><td>Prompt Firewall</td><td>即時攔截注入攻擊。</td></tr>
             </table>
         `
     };
 
-    // ================= 狀態變數 =================
+    // ================= 邏輯腳本 =================
     let errorStats = JSON.parse(localStorage.getItem('errorStats')) || {}; 
     let dailyStats = JSON.parse(localStorage.getItem('dailyStats')) || { date: "", count: 0, scoreSum: 0, exams: 0 };
     let starredVocab = JSON.parse(localStorage.getItem('starredVocab')) || [];
@@ -546,16 +573,14 @@
             const sel = document.querySelector(`input[name="q${i}"]:checked`);
             if (!sel || parseInt(sel.value) !== q.ans) {
                 wrong++; errorStats[q.id] = (errorStats[q.id] || 0) + 1;
-                expHtml += `<div class="wrong-ans-box"><b>${q.q}</b><br>✅ 正確: ${q.options[q.ans]}<br><small>💡 ${q.exp}</small></div>`;
+                expHtml += `<div class="wrong-ans-box"><b>${q.q}</b><br>✅ 正確: ${q.options[q.ans]}</div>`;
             }
         });
         localStorage.setItem('errorStats', JSON.stringify(errorStats));
-        const score = Math.round(((currentQuiz.length - wrong) / currentQuiz.length) * 100);
-        dailyStats.count += currentQuiz.length; dailyStats.scoreSum += score; dailyStats.exams += 1;
-        localStorage.setItem('dailyStats', JSON.stringify(dailyStats));
+        updateProgressUI();
         document.getElementById('quizArea').style.display = 'none';
         document.getElementById('examResult').style.display = 'block';
-        document.getElementById('scoreDisplay').innerText = score;
+        document.getElementById('scoreDisplay').innerText = Math.round(((currentQuiz.length - wrong) / currentQuiz.length) * 100);
         document.getElementById('errCountDisplay').innerText = wrong;
         document.getElementById('errExplanations').innerHTML = expHtml || "全對！";
     }
@@ -574,21 +599,14 @@
 
     function deleteError(id) { if(confirm("精熟了？")) { delete errorStats[id]; localStorage.setItem('errorStats', JSON.stringify(errorStats)); renderReview(); updateProgressUI(); } }
 
-    // 修復清除紀錄：確保畫面上的 127/127 等數字也立即歸零
     function clearAllData() {
-        if(confirm("確定清除紀錄嗎？")) {
+        if(confirm("確定清除所有紀錄嗎？")) {
             localStorage.clear();
             errorStats = {};
             dailyStats = { date: "", count: 0, scoreSum: 0, exams: 0 };
             starredVocab = [];
-            
-            // 立即強制歸零畫面上所有元素
-            document.getElementById('progressCircle').style.setProperty('--p', '0%');
-            document.getElementById('progressVal').innerText = '0%';
-            document.getElementById('masteredCount').innerText = '0';
-            // totalCount 應維持題庫總數， masterCount 歸零代表進度重設
-            
-            alert("所有紀錄已歸零。");
+            updateProgressUI();
+            alert("資料已歸零。");
             location.reload(); 
         }
     }
