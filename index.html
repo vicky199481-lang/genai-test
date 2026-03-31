@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>☕ 史努比的生成式 AI 考照助手 (‧´｀U</title>
+    <title>☕ 的生成式 AI 考照助手 </title>
     <style>
         /* 視覺與介面風格：日系、奶茶色調 */
         :root { 
@@ -109,7 +109,7 @@
         <a href="javascript:void(0)" onclick="showSection('exam-section')">考題寶典</a>
         <a href="javascript:void(0)" onclick="showSection('review-section')">錯題複習</a>
     </div>
-    <div class="snoopy-title">(‧´｀U 生成式AI考照助手</div>
+    <div class="snoopy-title"> 生成式AI考照助手</div>
     <button class="btn-clear" onclick="clearAllData()">清除紀錄</button>
 </header>
 
@@ -194,7 +194,7 @@
             <p>1. <a href="#" style="color:var(--primary-dark)">金管會金融業導入 AI 指引</a></p>
             <p>2. <a href="#" style="color:var(--primary-dark)">OpenAI Prompt Engineering 官方指南</a></p>
             <p>3. 相關法規與政策懶人包</p>
-            <div class="snoopy-deco" style="margin-top:30px;">(‧´｀U 🐾...</div>
+            <div class="snoopy-deco" style="margin-top:30px;"> 🐾...</div>
         </div>
     </div>
 </section>
@@ -707,7 +707,7 @@
         document.getElementById('errCountDisplay').innerText = wrongCount;
         
         let msg = document.getElementById('scoreMessage');
-        if(score === 100) { msg.innerText = "🎉 太棒了！完美全對！(‧´｀U"; msg.style.color = "var(--success)"; }
+        if(score === 100) { msg.innerText = "🎉 太棒了！完美全對！"; msg.style.color = "var(--success)"; }
         else if(score >= 80) { msg.innerText = "👍 表現不錯！繼續保持！"; msg.style.color = "var(--primary-dark)"; }
         else { msg.innerText = "💪 還需要多加練習喔！去看看詳細解析吧！"; msg.style.color = "var(--error)"; }
 
@@ -739,7 +739,7 @@
         const bossErrors = uniqueErrors.filter(q => errorStats[q.id] >= 3);
         
         if(uniqueErrors.length === 0) {
-            listNormal.innerHTML = "<p style='text-align:center; color:#888; margin-top:30px;'>目前沒有錯題紀錄，繼續保持！(‧´｀U</p>";
+            listNormal.innerHTML = "<p style='text-align:center; color:#888; margin-top:30px;'>目前沒有錯題紀錄，繼續保持！</p>";
         } else {
             listNormal.innerHTML = uniqueErrors.map(q => createReviewCard(q)).join('');
         }
@@ -780,7 +780,7 @@
             errorStats = {};
             dailyStats = { date: "", count: 0, scoreSum: 0, exams: 0 };
             starredVocab = [];
-            alert("已清除所有紀錄。(‧´｀U");
+            alert("已清除所有紀錄。");
             location.reload();
         }
     }
