@@ -392,16 +392,17 @@
         { id: 'q17', level: "困難", tag: "資料處理", q: "資料前處理中處理缺漏值，「最不適當」的做法？", options: ["平均值填補", "回歸預測", "全數刪除整列", "標記特殊類別"], ans: 2, exp: "正確解答為 (C)全數刪除整列。" },
         { id: 'q18', level: "中級", tag: "法規監管", q: "歐盟《人工智慧法案》依據什麼標準分級？", options: ["風險程度", "國別", "程式碼開源", "禁止所有個資應用"], ans: 0, exp: "正確解答為 (A)風險程度。" },
         { id: 'q19', level: "困難", tag: "倫理準則", q: "下列何者不屬於可信賴 AI 的「倫理」要求？", options: ["透明性", "公平性", "實用性(追求利潤最大化)", "問責制"], ans: 2, exp: "正確解答為 (C)實用性(追求利潤最大化)。" },
-        { id: 'q20', level: "困難", tag: "進階 RAG 優化", q: "當 RAG 系統檢索出大量參考文件，但模型回答卻受限於 Context Window 而遺漏關鍵資訊時，下列哪項做法最能有效解決？", options: ["增加 Temperature 數值", "實施 Reranking (再排序) 僅保留 Top 3", "將所有文件進行 Fine-tuning", "停用資料切塊 (Chunking)"], ans: 1, exp: "再排序能將最相關的片段排在最前面，確保模型在有限的窗口內讀到最高品質的資料。" },
-        { id: 'q21', level: "困難", tag: "多模態技術細節", q: "視覺語言模型（VLM）在處理圖片時，會將圖片分割成固定大小的區塊，技術上稱為？", options: ["Textual Tokens", "Image Patches", "Neural Layers", "Pixel Clusters"], ans: 1, exp: "Image Patches 將圖片視為序列進行處理。" },
-        { id: 'q22', level: "中級", tag: "企業安全與資安", q: "導致模型吐露系統指令或私密設定的現象稱為？", options: ["Data Poisoning", "Model Drift", "Prompt Leakage", "Hallucination"], ans: 2, exp: "Prompt Leakage 旨在獲取內部系統指令。" },
-        { id: 'q23', level: "困難", tag: "成本與效能優化", q: "為了降低客服機器人每次重複發送背景知識產生的 token 費用？", options: ["Context Caching (內容快取)", "Model Quantization", "Batch Inference", "Rate Limit"], ans: 0, exp: "Context Caching 儲存頻繁使用的內容。" },
-        { id: 'q24', level: "中級", tag: "AI 治理與合規", q: "AI 用於「信用評等」在歐盟 AI 法案中屬於哪一風險等級？", options: ["不可接受風險", "高風險 (High Risk)", "有限風險", "最低風險"], ans: 1, exp: "涉及生計應用列為高風險。" },
-        { id: 'q25', level: "困難", tag: "Agent 代理架構", q: "負責接收目標並拆解為子任務的組件稱為？", options: ["Tool Caller", "Planner (規劃器)", "Memory", "Executor"], ans: 1, exp: "Planner 是規劃核心。" },
-        { id: 'q26', level: "中級", tag: "提示工程進階", q: "要求 AI「一步一步思考」是？", options: ["Few-shot", "Chain-of-Thought (CoT)", "Injection", "Zero-shot"], ans: 1, exp: "思路鏈誘發模型推理。" },
-        { id: 'q27', level: "困難", tag: "部署運維", q: "測試新版 RAG 演算法而不影響所有用戶採用？", options: ["Blue-Green", "Canary Deployment", "Recreate", "Shadow"], ans: 1, exp: "金絲雀部署先測試部分用戶。" }
+        { id: 'q20', level: "困難", tag: "進階 RAG 優化", q: "當 RAG 系統檢索出大量參考文件，但模型回答卻受限於 Context Window 而遺漏關鍵資訊時，下列哪項做法最能有效解決？", options: ["增加 Temperature 數值", "實施 Reranking (再排序) 僅保留 Top 3", "將所有文件進行 Fine-tuning", "停用資料切塊 (Chunking)"], ans: 1, exp: "再排序能將最相關的片段排在最前面，確保模型在有限的窗口內讀到最高品質的資料，避免「Lost in the Middle」現象。" },
+        { id: 'q21', level: "困難", tag: "多模態技術細節", q: "視覺語言模型（VLM）在處理圖片時，會將圖片分割成固定大小的區塊進行向量化，這些區塊在技術上稱為？", options: ["Textual Tokens", "Image Patches", "Neural Layers", "Pixel Clusters"], ans: 1, exp: "現代模型（如 ViT 架構）將圖片視為序列，切成 Patches 後轉換為 Embedding，使其能與文字 Token 一起處理。" },
+        { id: 'q22', level: "中級", tag: "企業安全與資安", q: "某銀行助理 AI 誤將內部利率政策洩露給未授權用戶，這種因提示詞設計不當導致模型吐露系統指令或私密設定的現象稱為？", options: ["Data Poisoning", "Model Drift", "Prompt Leakage", "Hallucination"], ans: 2, exp: "提示詞洩漏是提示注入攻擊的一種，旨在獲取模型的 System Prompt 或隱藏的上下文資訊。" },
+        { id: 'q23', level: "困難", tag: "成本與效能優化", q: "企業在導入長對話客服機器人時，為了降低每次發送重複「背景知識」產生的 token 費用，應優先考慮哪種技術？", options: ["Context Caching (內容快取)", "Model Quantization", "Batch Inference", "Increasing Rate Limit"], ans: 0, exp: "內容快取允許 API 供應商儲存頻繁使用的上下文（如說明書、法規），減少重複運算的費用與延遲。" },
+        { id: 'q24', level: "中級", tag: "AI 治理與合規", q: "根據歐盟 AI 法案 (EU AI Act)，若 AI 系統被用於「信用評等」或「履歷自動篩選」，這類應用屬於哪一個風險等級？", options: ["不可接受風險 (Unacceptable)", "高風險 (High Risk)", "有限風險 (Limited)", "最低風險 (Minimal)"], ans: 1, exp: "涉及個人生計、教育、就業與基本權利的 AI 決策系統，皆被列為「高風險」，需符合嚴格的審查與透明度規範。" },
+        { id: 'q25', level: "困難", tag: "Agent 代理架構", q: "在多代理協作 (Multi-agent) 架構中，負責接收使用者目標並將其拆解為子任務的組件通常稱為？", options: ["Tool Caller", "Planner (規劃器)", "Memory Module", "Executor"], ans: 1, exp: "Planner 是 Agent 的大腦，負責策略思考與任務分發，是實現複雜自動化流程的核心。" },
+        { id: 'q26', level: "中級", tag: "提示工程進階", q: "當 AI 無法正確處理複雜的邏輯推理時，要求 AI「先深呼吸並一步一步思考」是應用了哪種提示技巧？", options: ["Few-shot Prompting", "Chain-of-Thought (CoT)", "Context Injection", "Zero-shot Learning"], ans: 1, exp: "思路鏈 (CoT) 誘發模型進行序列化推理，顯著提升數學與邏輯任務的準確率。" },
+        { id: 'q27', level: "困難", tag: "模型部署與運維", q: "為了在不影響所有用戶的情況下測試新版本的 RAG 檢索演算法，應採用哪種部署策略？", options: ["Blue-Green Deployment", "Canary Deployment (金絲雀部署)", "Recreate Deployment", "Shadow Deployment"], ans: 1, exp: "金絲雀部署先開放給 5-10% 的用戶，觀察穩定後再逐步擴散，適合用於測試不確定的 AI 生成結果。" }
     ];
 
+    // ================= 將補充講義完美融入 HTML =================
     const topicNotes = {
         "模型基礎": `
             <h3>📚 核心考試項目 (Core Exam Domains)</h3>
@@ -557,18 +558,27 @@
     
     function deleteError(id) { if(confirm("精熟此題並從錯題本移除？")) { delete errorStats[id]; localStorage.setItem('errorStats', JSON.stringify(errorStats)); renderReview(); updateProgressUI(); } }
 
-    // 優化清除功能：強制重設變數並立即刷新 UI
+    // 優化後的清除功能：確保狀態同步重設並立即刷新 UI
     function clearAllData() {
-        if(confirm("確定要清除所有進度與紀錄嗎？")) {
-            // 1. 清空儲存
+        if (confirm("確定要將所有學習進度與紀錄歸零嗎？此動作無法復原。")) {
+            // 1. 徹底清空瀏覽器儲存空間
             localStorage.clear();
-            // 2. 強制重設記憶體變數
+
+            // 2. 強制重設記憶體中的變數狀態 (這是進度條歸零的關鍵)
             errorStats = {};
-            dailyStats = { date: "", count: 0, scoreSum: 0, exams: 0 };
             starredVocab = [];
-            // 3. 立即重新渲染 UI（歸零進度條）
+            dailyStats = { date: "", count: 0, scoreSum: 0, exams: 0 };
+
+            // 3. 立即呼叫 UI 更新函數，讓畫面上的 127/127 瞬間變回 0
             updateProgressUI();
-            alert("已成功歸零！");
+
+            // 4. 針對單字分頁與星號列表進行重置渲染 (避免舊資料殘留)
+            if (typeof renderVocab === "function") renderVocab();
+            if (typeof renderStarred === "function") renderStarred();
+
+            alert("紀錄已成功清除，進度已歸零。");
+            
+            // 5. 強制重新整理頁面作為最後一道保險
             location.reload(); 
         }
     }
