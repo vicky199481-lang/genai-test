@@ -5,98 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>☕ 史努比的生成式 AI 考照助手</title>
     <style>
-        /* 視覺與介面風格：日系、奶茶色調 */
         :root { 
-            --primary: #BCA38F; 
-            --primary-dark: #8D6E63; 
-            --bg: #FAF6F0; 
-            --card: #FFFFFF; 
-            --success: #A3B18A; 
-            --error: #E07A5F; 
-            --text: #5C4D43; 
-            --accent: #EFE6DD; 
+            --primary: #BCA38F; --primary-dark: #8D6E63; --bg: #FAF6F0; --card: #FFFFFF; 
+            --success: #A3B18A; --error: #E07A5F; --text: #5C4D43; --accent: #EFE6DD; 
         }
-        
-        body { 
-            font-family: 'Quicksand', 'Nunito', "微軟正黑體", sans-serif; 
-            background: var(--bg); 
-            margin: 0; 
-            color: var(--text); 
-            padding-bottom: 50px; 
-            line-height: 1.6;
-        }
-        
-        /* Header & 導覽列 */
-        .app-header { 
-            background: var(--card); 
-            display: flex; 
-            align-items: center; 
-            padding: 12px 15px; 
-            position: sticky; 
-            top: 0; 
-            z-index: 1000; 
-            box-shadow: 0 4px 15px rgba(188, 163, 143, 0.15); 
-            border-bottom: 2px solid var(--accent);
-        }
+        body { font-family: 'Quicksand', 'Nunito', "微軟正黑體", sans-serif; background: var(--bg); margin: 0; color: var(--text); padding-bottom: 50px; line-height: 1.6; }
+        .app-header { background: var(--card); display: flex; align-items: center; padding: 12px 15px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(188, 163, 143, 0.15); border-bottom: 2px solid var(--accent); }
         .menu-dots { background: none; border: none; color: var(--primary-dark); font-size: 24px; cursor: pointer; padding: 0 10px; }
         .snoopy-title { flex:1; text-align:center; font-weight:bold; font-size: 16px; color: var(--primary-dark); }
-        .btn-clear { background: var(--accent); border: none; padding: 6px 12px; border-radius: 20px; font-size: 12px; color: var(--text); cursor: pointer; font-weight: bold; transition: 0.2s; }
-        .btn-clear:hover { background: #e0d4c8; }
-        
-        /* 左上角選單 */
+        .btn-clear { background: var(--accent); border: none; padding: 6px 12px; border-radius: 20px; font-size: 12px; color: var(--text); cursor: pointer; font-weight: bold; }
         .side-menu { display: none; position: absolute; top: 55px; left: 10px; background: var(--card); box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 15px; width: 180px; z-index: 1001; overflow: hidden; }
-        .side-menu a { display: block; padding: 12px 15px; color: var(--text); text-decoration: none; border-bottom: 1px dashed var(--accent); font-size: 14px; transition: 0.3s; font-weight: bold; }
-        .side-menu a:hover { background: var(--accent); }
-
-        /* 分頁切換 (Tabs) */
-        .tab-bar { display: flex; background: var(--accent); padding: 5px; border-radius: 50px; margin: 10px 0; overflow-x: auto; white-space: nowrap; }
-        .tab-btn { flex: 1; padding: 8px 12px; border: none; background: transparent; border-radius: 50px; cursor: pointer; font-size: 13px; color: var(--primary-dark); transition: 0.3s; }
-        .tab-btn.active { background: var(--card); font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-
-        /* 內容區塊 */
+        .side-menu a { display: block; padding: 12px 15px; color: var(--text); text-decoration: none; border-bottom: 1px dashed var(--accent); font-size: 14px; font-weight: bold; }
+        .tab-bar { display: flex; background: var(--accent); padding: 5px; border-radius: 50px; margin: 10px 0; overflow-x: auto; }
+        .tab-btn { flex: 1; padding: 8px 12px; border: none; background: transparent; border-radius: 50px; cursor: pointer; font-size: 13px; color: var(--primary-dark); white-space: nowrap; }
+        .tab-btn.active { background: var(--card); font-weight: bold; }
         .content-section { display: none; padding: 15px; }
         .active-sec { display: block; }
-        .card { background: var(--card); border-radius: 20px; padding: 18px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(188, 163, 143, 0.1); border: 1px solid #FAF6F0; transition: all 0.3s ease; }
-        
-        /* 圓形進度條 */
+        .card { background: var(--card); border-radius: 20px; padding: 18px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(188, 163, 143, 0.1); }
         .circle-progress { width: 120px; height: 120px; border-radius: 50%; background: conic-gradient(var(--primary) var(--p, 0%), var(--accent) 0); display: flex; align-items: center; justify-content: center; margin: 20px auto; position: relative; }
         .circle-progress::after { content: ""; width: 95px; height: 95px; background: var(--card); border-radius: 50%; position: absolute; }
         .progress-text { position: relative; z-index: 1; font-size: 24px; font-weight: bold; color: var(--primary-dark); }
-
-        /* 輸入框與按鈕 */
-        select, input[type="text"] { width: 100%; padding: 12px; border-radius: 12px; border: 2px solid var(--accent); margin: 5px 0 15px; background: var(--card); color: var(--text); outline: none; box-sizing: border-box; font-family: inherit; font-size:14px; }
-        .btn-main { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 50px; font-weight: bold; font-size: 15px; cursor: pointer; margin-top: 10px; transition: 0.2s; box-shadow: 0 4px 10px rgba(188, 163, 143, 0.3); }
-        .btn-main:active { transform: scale(0.98); }
-        .btn-small { background: var(--accent); color: var(--text); border: none; padding: 6px 12px; border-radius: 15px; font-size: 12px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 5px; font-weight:bold; }
-        .btn-small:hover { background: #e0d4c8; }
-        
-        /* B. 單字卡 */
-        .vocab-card { display: flex; flex-direction: column; gap: 10px; position: relative; border-left: 6px solid var(--primary); background: #fff; }
-        .vocab-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(188, 163, 143, 0.3); }
-        .vocab-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px dashed var(--accent); padding-bottom: 10px; }
-        .vocab-en { font-size: 19px; font-weight: bold; color: var(--primary-dark); margin-bottom: 2px; }
-        .vocab-ch { font-size: 14px; color: #888; transition: 0.3s; line-height: 1.5; }
-        .hide-chinese .vocab-ch { filter: blur(6px); opacity: 0.3; user-select: none; }
-        
-        /* 考題寶典 UI */
+        select, input[type="text"] { width: 100%; padding: 12px; border-radius: 12px; border: 2px solid var(--accent); margin: 5px 0 15px; box-sizing: border-box; }
+        .btn-main { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; }
+        .vocab-card { border-left: 6px solid var(--primary); margin-bottom: 15px; }
         .q-tag { display: inline-block; background: var(--accent); color: var(--primary-dark); font-size: 11px; padding: 4px 12px; border-radius: 50px; margin-bottom: 10px; font-weight: bold; }
-        .option-label { display: block; background: var(--bg); padding: 12px; border-radius: 12px; margin: 8px 0; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
-        .option-label:hover { background: var(--accent); }
-        input[type="radio"]:checked + span { font-weight: bold; color: var(--primary-dark); }
-        
-        /* 紅框清楚標示 */
-        .wrong-ans-box { background: var(--bg); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 2px solid var(--error); box-shadow: 0 4px 10px rgba(224, 122, 95, 0.15); }
-        
-        /* Pagination */
-        .pagination { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
-        
-        /* Snoopy 可愛元素 */
-        .snoopy-deco { text-align: center; margin: 10px 0; color: var(--primary-dark); font-size: 18px; font-weight: bold; }
-
-        /* 講義表格風格 */
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
+        .option-label { display: block; background: var(--bg); padding: 12px; border-radius: 12px; margin: 8px 0; cursor: pointer; }
+        .wrong-ans-box { background: var(--bg); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 2px solid var(--error); }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
         th, td { border: 1px solid var(--accent); padding: 10px; text-align: left; }
-        th { background: var(--accent); color: var(--primary-dark); }
+        th { background: var(--accent); }
     </style>
 </head>
 <body>
@@ -116,33 +53,21 @@
 <section id="progress-section" class="content-section active-sec">
     <div class="tab-bar">
         <button class="tab-btn active" onclick="switchTab('progress', 0)">🏆 完成度</button>
-        <button class="tab-btn" onclick="switchTab('progress', 1)">📅 每日刷題狀況</button>
+        <button class="tab-btn" onclick="switchTab('progress', 1)">📅 刷題狀況</button>
     </div>
-
     <div id="progress-0" class="tab-content">
         <div class="card" style="text-align:center">
-            <h3 class="snoopy-deco">🏆 整體題庫掌握度</h3>
+            <h3 style="color:var(--primary-dark)">🏆 整體掌握度</h3>
             <div class="circle-progress" id="progressCircle" style="--p: 0%">
                 <div class="progress-text" id="progressVal">0%</div>
             </div>
-            <p style="font-size:14px; color:#666;">(扣除錯題後的精熟比例)<br>已精熟：<span id="masteredCount" style="font-weight:bold; color:var(--primary-dark);">0</span> / <span id="totalCount">0</span> 題</p>
+            <p>已精熟：<span id="masteredCount">0</span> / <span id="totalCount">0</span> 題</p>
         </div>
     </div>
-
     <div id="progress-1" class="tab-content" style="display:none">
         <div class="card" style="text-align:center">
-            <h3 class="snoopy-deco">📅 今日刷題狀況 (<span id="todayDate"></span>)</h3>
-            <div style="display:flex; justify-content:space-around; margin-top:20px;">
-                <div>
-                    <div style="font-size:30px; font-weight:bold; color:var(--primary-dark);" id="todayCount">0</div>
-                    <div style="font-size:12px; color:#888;">做了幾題</div>
-                </div>
-                <div>
-                    <div style="font-size:30px; font-weight:bold; color:var(--success);" id="todayAvgScore">0</div>
-                    <div style="font-size:12px; color:#888;">平均分數</div>
-                </div>
-            </div>
-            <p style="margin-top:20px; font-size:13px; color:#999;">※ 自動記錄並於每天跨日累積重置</p>
+            <h3>今日狀況：做了 <span id="todayCount">0</span> 題</h3>
+            <h3>平均分數：<span id="todayAvgScore">0</span> 分</h3>
         </div>
     </div>
 </section>
@@ -152,402 +77,307 @@
         <button class="tab-btn active" onclick="switchTab('vocab', 0)">單字卡</button>
         <button class="tab-btn" onclick="switchTab('vocab', 1)">星號註記</button>
         <button class="tab-btn" onclick="switchTab('vocab', 2)">講義</button>
-        <button class="tab-btn" onclick="switchTab('vocab', 3)">補充</button>
     </div>
-
     <div id="vocab-0" class="tab-content">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
-            <span style="font-size:14px; font-weight:bold; color:var(--primary-dark)">總詞彙量：<span id="vocabTotalCount"></span></span>
-            <button class="btn-small" id="toggleChBtn" onclick="toggleChinese()">👁️ 隱藏中文</button>
-        </div>
         <div id="vocabList"></div>
-        <div class="pagination">
-            <button class="btn-small" onclick="changePage(-1)">◀ 上一頁</button>
-            <span id="pageInfo" style="font-size:14px; font-weight:bold; align-self:center; color: var(--primary-dark);"></span>
-            <button class="btn-small" onclick="changePage(1)">下一頁 ▶</button>
+        <div class="pagination" style="display:flex; justify-content:center; gap:10px; margin-top:10px;">
+            <button onclick="changePage(-1)">◀ 上一頁</button>
+            <span id="pageInfo"></span>
+            <button onclick="changePage(1)">下一頁 ▶</button>
         </div>
     </div>
-
-    <div id="vocab-1" class="tab-content" style="display:none">
-        <div class="card">
-            <h3 class="snoopy-deco">⭐ 星號重點單字</h3>
-            <div id="starredList" style="margin-top: 15px;"></div>
-        </div>
-    </div>
-
+    <div id="vocab-1" class="tab-content" style="display:none"><div id="starredList"></div></div>
     <div id="vocab-2" class="tab-content" style="display:none">
         <div class="card">
-            <label>選擇主題講義：</label>
             <select id="topicSelect" onchange="renderTopicNotes()">
-                <option value="模型基礎">模型基礎與核心考點</option>
-                <option value="風險治理">風險治理與法規解析</option>
-                <option value="提示工程">進階技術與提示工程</option>
+                <option value="模型基礎">模型基礎</option>
+                <option value="風險治理">風險治理</option>
+                <option value="提示工程">提示工程</option>
             </select>
-            <div id="topicNotesArea" style="margin-top: 15px;"></div>
-        </div>
-    </div>
-
-    <div id="vocab-3" class="tab-content" style="display:none">
-        <div class="card">
-            <h3 class="snoopy-deco">📎 外部參考連結</h3>
-            <p>1. <a href="#" style="color:var(--primary-dark)">金管會金融業導入 AI 指引</a></p>
-            <p>2. <a href="#" style="color:var(--primary-dark)">OpenAI Prompt Engineering 官方指南</a></p>
-            <div class="snoopy-deco" style="margin-top:30px;">🐾...</div>
+            <div id="topicNotesArea"></div>
         </div>
     </div>
 </section>
 
 <section id="exam-section" class="content-section">
     <div class="card" id="quizFilter">
-        <h3 class="snoopy-deco">📝 測驗設定</h3>
-        <label>選擇題數</label>
-        <select id="setCount">
-            <option value="5">5 題</option>
-            <option value="10">10 題</option>
-            <option value="15">15 題</option>
-            <option value="20">20 題</option>
-        </select>
-        <label>難易度</label>
-        <select id="setLevel">
-            <option value="簡易">簡易</option>
-            <option value="中級" selected>中級</option>
-            <option value="困難">困難</option>
-        </select>
-        <div style="margin-bottom: 15px;">
-            <label style="display:block;"><input type="checkbox" id="srcMock" checked> 模擬題庫</label>
-            <label style="display:block;"><input type="checkbox" id="srcVocab" checked> 核心觀念自動出題</label>
-        </div>
-        <button class="btn-main" onclick="generateQuiz()">🐾 開始測驗</button>
+        <h3>📝 測驗設定</h3>
+        <label>題數</label>
+        <select id="setCount"><option value="5">5 題</option><option value="10">10 題</option><option value="27">全做</option></select>
+        <label>難度</label>
+        <select id="setLevel"><option value="簡易">簡易</option><option value="中級" selected>中級</option><option value="困難">困難</option></select>
+        <button class="btn-main" onclick="generateQuiz()">🐾 開始</button>
     </div>
-
     <div id="quizArea" style="display:none">
         <div id="questionList"></div>
-        <button class="btn-main" onclick="gradeExam()">✅ 送出評分</button>
+        <button class="btn-main" onclick="gradeExam()">✅ 送出</button>
     </div>
-
     <div id="examResult" class="card" style="display:none; text-align:center;">
-        <h2 style="color:var(--primary-dark);">測驗結果</h2>
-        <div style="font-size: 55px; font-weight: bold; color: var(--primary);" id="scoreDisplay"></div>
-        <div id="scoreMessage" style="font-weight:bold; margin-bottom:15px;"></div>
-        <div id="errExplanations" style="text-align:left; margin-top:20px;"></div>
-        <button class="btn-main" onclick="resetExam()">🔄 再測一次</button>
+        <h2 id="scoreDisplay">0分</h2>
+        <div id="errExplanations"></div>
+        <button class="btn-main" onclick="resetExam()">🔄 重來</button>
     </div>
 </section>
 
 <section id="review-section" class="content-section">
-    <div class="tab-bar">
-        <button class="tab-btn active" onclick="switchTab('review', 0)">錯題本</button>
-        <button class="tab-btn" onclick="switchTab('review', 1)">重點錯題本</button>
-    </div>
-    <div id="review-0" class="tab-content"><div id="reviewListNormal"></div></div>
-    <div id="review-1" class="tab-content" style="display:none"><div id="reviewListBoss"></div></div>
+    <div class="card"><h3>🎯 錯題本</h3><div id="reviewListNormal"></div></div>
 </section>
 
 <script>
-    // ================= 資料庫 (v1-v100) =================
-    let vocabBank = [
+    // ================= 完整資料庫 (V1-V100) =================
+    const vocabBank = [
         { id: 'v1', en: "LLM", ch: "大型語言模型", def: "基於巨量資料訓練，具備理解與生成能力的深度學習模型。", topic: "基礎觀念" },
         { id: 'v2', en: "Token", ch: "標記 / 權杖", def: "模型處理文字的最小單位，可能是單字、詞或字元。", topic: "基礎觀念" },
         { id: 'v3', en: "Context Window", ch: "上下文窗口", def: "模型單次對話中能處理的最大 Token 範圍。", topic: "基礎觀念" },
         { id: 'v4', en: "Transformer", ch: "轉換器架構", def: "基於注意力機制的底層架構，是現代 LLM 的核心。", topic: "基礎觀念" },
         { id: 'v5', en: "Self-Attention", ch: "自注意力機制", def: "計算輸入序列中不同位置之間的相關性權重。", topic: "基礎觀念" },
-        { id: 'v6', en: "Encoder / Decoder", ch: "編碼器 / 解碼器", def: "將資訊轉換為向量表示（編碼）並還原為文字（解碼）。", topic: "基礎觀念" },
+        { id: 'v6', en: "Encoder / Decoder", ch: "編碼器 / 解碼器", def: "將資訊轉換為向量表示並還原為文字。", topic: "基礎觀念" },
         { id: 'v7', en: "Prompt", ch: "提示詞", def: "使用者輸入給模型以引導其產生特定輸出的指令。", topic: "提示工程" },
-        { id: 'v8', en: "Zero-shot / Few-shot", ch: "零樣本 / 少樣本學習", def: "在不提供或僅提供少量範例的情況下讓模型執行任務。", topic: "提示工程" },
+        { id: 'v8', en: "Zero-shot", ch: "零樣本學習", def: "在不提供範例的情況下讓模型執行任務。", topic: "提示工程" },
         { id: 'v9', en: "Temperature", ch: "溫度", def: "控制輸出隨機性的參數；數值越高，產出越具創意。", topic: "提示工程" },
-        { id: 'v10', en: "Top-k / Top-p", ch: "Top-k / 核取樣", def: "限制模型從機率最高的前 k 個或累積機率 p 的詞中選取。", topic: "提示工程" },
-        { id: 'v11', en: "Embedding", ch: "嵌入 / 向量化", def: "將文字轉換為高維度空間中的數學向量表示。", topic: "資料處理" },
-        { id: 'v12', en: "Vector Database", ch: "向量資料庫", def: "專門儲存與檢索高維度向量資料的資料庫（如 Pinecone）。", topic: "資料處理" },
-        { id: 'v13', en: "Similarity Search", ch: "相似性搜尋", def: "在向量空間中尋找語意最接近的內容（如餘弦相似度）。", topic: "資料處理" },
-        { id: 'v14', en: "RAG", ch: "檢索增強生成", def: "結合外部資料檢索以補充模型知識，解決幻覺問題。", topic: "系統架構" },
-        { id: 'v15', en: "Chunking", ch: "文本切塊", def: "將長文本拆分為較小片段以便於處理與檢索。", topic: "資料處理" },
-        { id: 'v16', en: "Metadata", ch: "元數據 / 詮釋資料", def: "描述資料的資料（如日期、來源），用於精準過濾檢索。", topic: "資料處理" },
-        { id: 'v17', en: "Hallucination", ch: "幻覺", def: "模型生成看似合理但事實錯誤或虛假資訊的現象。", topic: "風險治理" },
-        { id: 'v18', en: "Fine-tuning", ch: "微調", def: "在特定領域資料集上進一步訓練預訓練模型。", topic: "模型訓練" },
-        { id: 'v19', en: "Instruction Tuning", ch: "指令微調", def: "透過指令式資料訓練模型，使其更能聽懂並執行任務。", topic: "模型訓練" },
-        { id: 'v20', en: "RLHF", ch: "人類回饋強化學習", def: "透過人類評分來調整模型，使其符合人類價值觀與偏好。", topic: "模型訓練" },
-        { id: 'v21', en: "API", ch: "應用程式介面", def: "讓不同應用程式之間能交換資料與調用模型能力的通道。", topic: "應用開發" },
-        { id: 'v22', en: "Latency", ch: "延遲", def: "從發送請求到收到回應所需的時間。", topic: "應用開發" },
-        { id: 'v23', en: "Throughput", ch: "吞吐量", def: "系統在單位時間內能處理的資料量或請求數。", topic: "應用開發" },
-        { id: 'v24', en: "Inference", ch: "推論", def: "模型在運行時根據輸入數據產生結果的過程。", topic: "模型訓練" },
-        { id: 'v25', en: "Model Drift", ch: "模型偏移", def: "隨著時間推移，模型表現或資料分佈與訓練時產生落差。", topic: "風險治理" },
-        { id: 'v26', en: "Data Leakage", ch: "資料洩漏", def: "敏感資料非預期地被包含在模型輸出或訓練集中。", topic: "風險治理" },
-        { id: 'v27', en: "PII", ch: "個人識別資訊", def: "任何可用於辨識特定個人的資料（如身分證號）。", topic: "風險治理" },
-        { id: 'v28', en: "Anonymization", ch: "去識別化 / 匿名化", def: "處理資料使其無法關聯回特定個人，以保護隱私。", topic: "風險治理" },
-        { id: 'v29', en: "Federated Learning", ch: "聯邦學習", def: "在不交換原始資料的情況下，分散式訓練模型的技術。", topic: "模型訓練" },
-        { id: 'v30', en: "Human-in-the-loop", ch: "人機協作（在環）", def: "在決策流程中，需要人類介入確認或修正結果。", topic: "風險治理" },
-        { id: 'v31', en: "Human-over-the-loop", ch: "人類監督（在旁）", def: "人類監控系統自動化過程，必要時才介入干預。", topic: "風險治理" },
-        { id: 'v32', en: "Responsible AI", ch: "責任 AI", def: "確保 AI 開發與應用符合道德、公平與法律。", topic: "風險治理" },
-        { id: 'v33', en: "Explainability", ch: "可解釋性", def: "能夠理解並解釋 AI 模型做出特定決策的原因。", topic: "風險治理" },
-        { id: 'v34', en: "Bias", ch: "偏見", def: "模型產出中存在的系統性不公平或偏袒特定群體。", topic: "風險治理" },
-        { id: 'v35', en: "Fairness", ch: "公平性", def: "確保 AI 系統對不同背景的使用者皆無歧視地對待。", topic: "風險治理" },
-        { id: 'v36', en: "No-code", ch: "無程式碼", def: "使用者不需撰寫程式碼即可建立應用程式的平台。", topic: "應用開發" },
-        { id: 'v37', en: "Low-code", ch: "低程式碼", def: "僅需少量撰寫程式碼即可快速開發應用的平台。", topic: "應用開發" },
-        { id: 'v38', en: "Workflow Automation", ch: "工作流自動化", def: "將重複性任務串聯起來自動執行的過程。", topic: "應用開發" },
-        { id: 'v39', en: "Agent", ch: "代理人", def: "具備自主拆解任務、調用工具並達成目標能力的 AI。", topic: "系統架構" },
-        { id: 'v40', en: "Tool Calling", ch: "工具調用", def: "模型決定調用外部函數（如計算機、搜尋引擎）的功能。", topic: "系統架構" },
-        { id: 'v41', en: "Orchestration", ch: "編排", def: "管理多個任務、工具或代理人之間的運作順序。", topic: "系統架構" },
-        { id: 'v42', en: "Prompt Template", ch: "提示詞模板", def: "預先定義好的提示詞結構，僅需填入變數。", topic: "提示工程" },
-        { id: 'v43', en: "System Prompt", ch: "系統提示詞", def: "定義模型角色、行為準則與行為邊界的最高等級指令。", topic: "提示工程" },
-        { id: 'v44', en: "Context Injection", ch: "上下文注入", def: "將相關資訊動態加入提示詞中，增加模型判斷依據。", topic: "提示工程" },
-        { id: 'v45', en: "Model Deployment", ch: "模型部署", def: "將訓練好的模型上架至生產環境提供服務的過程。", topic: "應用開發" },
-        { id: 'v46', en: "Cloud vs On-Prem", ch: "雲端 vs 地端部署", def: "租用雲服務（如 Azure）或在公司內部硬體運行模型。", topic: "應用開發" },
-        { id: 'v47', en: "Cost Control", ch: "成本控制", def: "透過優化 Token 使用來管理支出。", topic: "應用開發" },
-        { id: 'v48', en: "Usage Quota", ch: "使用額度", def: "系統設定的調用次數或流量上限。", topic: "應用開發" },
-        { id: 'v49', en: "Rate Limit", ch: "速率限制", def: "單位時間內允許發送的最大請求數。", topic: "應用開發" },
-        { id: 'v50', en: "Governance", ch: "治理", def: "針對 AI 的政策、標準與流程進行全面管理。", topic: "風險治理" },
-        { id: 'v51', en: "Attention Head", ch: "注意力頭", def: "Transformer 中平行處理不同子空間資訊的組件。", topic: "進階觀念" },
+        { id: 'v10', en: "Top-p", ch: "核取樣", def: "限制模型從累積機率 p 的詞中選取。", topic: "提示工程" },
+        { id: 'v11', en: "Embedding", ch: "嵌入", def: "將文字轉換為數學向量表示。", topic: "資料處理" },
+        { id: 'v12', en: "Vector Database", ch: "向量資料庫", def: "儲存與檢索高維度向量資料的資料庫。", topic: "資料處理" },
+        { id: 'v13', en: "Similarity Search", ch: "相似性搜尋", def: "在向量空間中尋找語意最接近的內容。", topic: "資料處理" },
+        { id: 'v14', en: "RAG", ch: "檢索增強生成", def: "結合外部資料檢索補充模型知識，解決幻覺問題。", topic: "系統架構" },
+        { id: 'v15', en: "Chunking", ch: "文本切塊", def: "將長文本拆分為小片段以便檢索。", topic: "資料處理" },
+        { id: 'v16', en: "Metadata", ch: "元數據", def: "描述資料的資料，用於精準過濾。", topic: "資料處理" },
+        { id: 'v17', en: "Hallucination", ch: "幻覺", def: "模型生成看似合理但事實錯誤的現象。", topic: "風險治理" },
+        { id: 'v18', en: "Fine-tuning", ch: "微調", def: "在特定領域資料上進一步訓練模型。", topic: "模型訓練" },
+        { id: 'v19', en: "Instruction Tuning", ch: "指令微調", def: "訓練模型使其更能聽懂並執行任務。", topic: "模型訓練" },
+        { id: 'v20', en: "RLHF", ch: "人類回饋強化學習", def: "透過評分調整模型，使其符合人類價值觀。", topic: "模型訓練" },
+        { id: 'v21', en: "API", ch: "應用程式介面", def: "不同應用間交換資料的通道。", topic: "應用開發" },
+        { id: 'v22', en: "Latency", ch: "延遲", def: "發送請求到收到回應所需的時間。", topic: "應用開發" },
+        { id: 'v23', en: "Throughput", ch: "吞吐量", def: "單位時間內能處理的請求數。", topic: "應用開發" },
+        { id: 'v24', en: "Inference", ch: "推論", def: "模型根據輸入數據產生結果的過程。", topic: "模型訓練" },
+        { id: 'v25', en: "Model Drift", ch: "模型偏移", def: "隨時間推移，表現與訓練時產生落差。", topic: "風險治理" },
+        { id: 'v26', en: "Data Leakage", ch: "資料洩漏", def: "敏感資料非預期地被包含在輸出中。", topic: "風險治理" },
+        { id: 'v27', en: "PII", ch: "個人識別資訊", def: "任何可用於辨識特定個人的資料。", topic: "風險治理" },
+        { id: 'v28', en: "Anonymization", ch: "去識別化", def: "處理資料使其無法關聯回特定個人。", topic: "風險治理" },
+        { id: 'v29', en: "Federated Learning", ch: "聯邦學習", def: "分散式訓練模型技術。", topic: "模型訓練" },
+        { id: 'v30', en: "Human-in-the-loop", ch: "人機協作", def: "決策流程中需要人類介入確認。", topic: "風險治理" },
+        { id: 'v31', en: "Human-over-the-loop", ch: "人類監督", def: "人類監控自動化過程，必要時才介入。", topic: "風險治理" },
+        { id: 'v32', en: "Responsible AI", ch: "責任 AI", def: "確保 AI 符合道德與法律。", topic: "風險治理" },
+        { id: 'v33', en: "Explainability", ch: "可解釋性", def: "能解釋 AI 做出決策的原因。", topic: "風險治理" },
+        { id: 'v34', en: "Bias", ch: "偏見", def: "模型產出存在系統性不公平。", topic: "風險治理" },
+        { id: 'v35', en: "Fairness", ch: "公平性", def: "確保 AI 對不同背景使用者皆無歧視。", topic: "風險治理" },
+        { id: 'v36', en: "No-code", ch: "無程式碼", def: "不需撰寫程式即可建立應用的平台。", topic: "應用開發" },
+        { id: 'v37', en: "Low-code", ch: "低程式碼", def: "僅需少量程式碼快速開發的平台。", topic: "應用開發" },
+        { id: 'v38', en: "Workflow Automation", ch: "工作流自動化", def: "將重複任務串聯自動執行。", topic: "應用開發" },
+        { id: 'v39', en: "Agent", ch: "代理人", def: "具備自主拆解任務、調用工具能力的 AI。", topic: "系統架構" },
+        { id: 'v40', en: "Tool Calling", ch: "工具調用", def: "模型決定調用外部函數的功能。", topic: "系統架構" },
+        { id: 'v41', en: "Orchestration", ch: "編排", def: "管理多個代理人運作順序。", topic: "系統架構" },
+        { id: 'v42', en: "Prompt Template", ch: "提示詞模板", def: "預先定義好的結構。", topic: "提示工程" },
+        { id: 'v43', en: "System Prompt", ch: "系統提示詞", def: "定義模型角色與邊界的最高指令。", topic: "提示工程" },
+        { id: 'v44', en: "Context Injection", ch: "上下文注入", def: "將相關資訊動態加入提示詞。", topic: "提示工程" },
+        { id: 'v45', en: "Model Deployment", ch: "模型部署", def: "將模型上架至生產環境。", topic: "應用開發" },
+        { id: 'v46', en: "Cloud vs On-Prem", ch: "雲端 vs 地端", def: "租用雲服務或在公司內部運行模型。", topic: "應用開發" },
+        { id: 'v47', en: "Cost Control", ch: "成本控制", def: "透過優化 Token 管理支出。", topic: "應用開發" },
+        { id: 'v48', en: "Usage Quota", ch: "使用額度", def: "系統設定的調用次數上限。", topic: "應用開發" },
+        { id: 'v49', en: "Rate Limit", ch: "速率限制", def: "單位時間內允許的最大請求數。", topic: "應用開發" },
+        { id: 'v50', en: "Governance", ch: "治理", def: "政策、標準與流程全面管理。", topic: "風險治理" },
+        { id: 'v51', en: "Attention Head", ch: "注意力頭", def: "Transformer 中平行處理資訊組件。", topic: "進階觀念" },
         { id: 'v52', en: "Positional Encoding", ch: "位置編碼", def: "為 Token 加入序列位置資訊。", topic: "進階觀念" },
-        { id: 'v53', en: "Long-context Degradation", ch: "長文本效能衰減", def: "隨著上下文增加，模型對早期資訊的提取能力下降。", topic: "進階觀念" },
-        { id: 'v54', en: "Prompt Leakage", ch: "提示詞洩漏", def: "透過攻擊誘導模型吐露其內部的系統指令。", topic: "進階觀念" },
-        { id: 'v55', en: "Context Collapse", ch: "上下文崩潰", def: "當上下文過長或過雜時，模型失去邏輯處理能力。", topic: "進階觀念" },
-        { id: 'v56', en: "Embedding Drift", ch: "嵌入偏移", def: "資料演進導致向量空間中的相對位置不再準確。", topic: "進階觀念" },
-        { id: 'v57', en: "Hybrid Search", ch: "混合搜尋", def: "結合向量搜尋與關鍵字搜尋。", topic: "進階觀念" },
-        { id: 'v58', en: "RAG Recall vs Precision", ch: "RAG 召回率 vs 精準度", def: "評估檢索系統是否找得「全」且找得「準」的指標。", topic: "進階觀念" },
-        { id: 'v59', en: "Knowledge Cutoff", ch: "知識截斷點", def: "模型訓練資料的截止日期。", topic: "進階觀念" },
-        { id: 'v60', en: "Tool-grounded Generation", ch: "基於工具的生成", def: "模型根據工具回傳的真實數據來生成。", topic: "進階觀念" },
-        { id: 'v61', en: "Agent Planner", ch: "代理人規劃器", def: "AI Agent 拆解複雜目標為多個子任務的邏輯核心。", topic: "進階觀念" },
-        { id: 'v62', en: "Reflection Mechanism", ch: "自省機制", def: "模型檢視自己生成的結果並進行自我糾正的過程。", topic: "進階觀念" },
-        { id: 'v63', en: "Memory Module", ch: "記憶模組", def: "讓 Agent 儲存長期或短期對話經驗的架構。", topic: "進階觀念" },
-        { id: 'v64', en: "Function Calling", ch: "函數調用", def: "將模型意圖轉化為可執行的參數結構。", topic: "進階觀念" },
-        { id: 'v65', en: "Prompt Injection", ch: "提示詞注入", def: "惡意繞過安全過濾器或改變模型行為。", topic: "進階觀念" },
-        { id: 'v66', en: "Jailbreak", ch: "越獄攻擊", def: "誘導模型違反安全準則產出違禁內容。", topic: "進階觀念" },
-        { id: 'v67', en: "Red Teaming", ch: "紅隊演練", def: "模擬攻擊者思維，對系統進行壓力與漏洞測試。", topic: "進階觀念" },
-        { id: 'v68', en: "Safety Alignment", ch: "安全對齊", def: "使模型產出符合人類安全規範與道德。", topic: "進階觀念" },
-        { id: 'v69', en: "Output Guardrails", ch: "輸出護欄", def: "在輸出前加裝過濾層阻擋不當內容。", topic: "進階觀念" },
-        { id: 'v70', en: "Evaluation Harness", ch: "評估測試組件", def: "用於系統性測試模型在特定任務上表現的框架。", topic: "進階觀念" },
-        { id: 'v71', en: "Offline Evaluation", ch: "離線評估", def: "在發布前使用預設測試集對模型評分。", topic: "進階觀念" },
-        { id: 'v72', en: "Online A/B Testing", ch: "線上 A/B 測試", def: "比較不同模型在真實環境下的成效。", topic: "進階觀念" },
-        { id: 'v73', en: "Prompt Versioning", ch: "提示詞版本控制", def: "對提示詞進行版本管理。", topic: "進階觀念" },
-        { id: 'v74', en: "Token Cost Optimization", ch: "Token 成本優化", def: "降低 API 支出。", topic: "進階觀念" },
-        { id: 'v75', en: "Batch Inference", ch: "批次推論", def: "一次性處理大量輸入請求。", topic: "進階觀念" },
-        { id: 'v76', en: "Streaming Response", ch: "串流回應", def: "模型生成時即時傳回文字，減少等待感。", topic: "進階觀念" },
-        { id: 'v77', en: "Multimodal Input", ch: "多模態輸入", def: "模型能同時處理文字、圖片、音訊等多種資料。", topic: "進階觀念" },
-        { id: 'v78', en: "Vision-Language Model", ch: "視覺語言模型", def: "具備理解圖片內容能力之 LLM。", topic: "進階觀念" },
-        { id: 'v79', en: "Speech-to-Text (ASR)", ch: "自動語音辨識", def: "將語音轉換為對應文字的技術。", topic: "進階觀念" },
-        { id: 'v80', en: "Text-to-Speech (TTS)", ch: "文字轉語音", def: "將文字序列轉換為合成語音。", topic: "進階觀念" },
-        { id: 'v81', en: "Data Lineage", ch: "資料血緣", def: "追蹤資料從來源到應用的路徑。", topic: "進階觀念" },
+        { id: 'v53', en: "Long-context Degradation", ch: "長文本衰減", def: "隨長度增加資訊提取能力下降。", topic: "進階觀念" },
+        { id: 'v54', en: "Prompt Leakage", ch: "提示詞洩漏", def: "誘導模型吐露系統指令。", topic: "進階觀念" },
+        { id: 'v55', en: "Context Collapse", ch: "上下文崩潰", def: "模型失去邏輯處理能力。", topic: "進階觀念" },
+        { id: 'v56', en: "Embedding Drift", ch: "嵌入偏移", def: "向量空間相對位置不再準確。", topic: "進階觀念" },
+        { id: 'v57', en: "Hybrid Search", ch: "混合搜尋", def: "結合向量與關鍵字搜尋。", topic: "進階觀念" },
+        { id: 'v58', en: "RAG Recall", ch: "RAG 召回率", def: "評估檢索是否找得全。", topic: "進階觀念" },
+        { id: 'v59', en: "Knowledge Cutoff", ch: "知識截斷點", def: "訓練資料截止日期。", topic: "進階觀念" },
+        { id: 'v60', en: "Tool-grounded", ch: "基於工具生成", def: "模型根據 API 回傳數據生成。", topic: "進階觀念" },
+        { id: 'v61', en: "Agent Planner", ch: "代理人規劃器", def: "拆解複雜目標的邏輯核心。", topic: "進階觀念" },
+        { id: 'v62', en: "Reflection", ch: "自省機制", def: "模型自我糾正過程。", topic: "進階觀念" },
+        { id: 'v63', en: "Memory Module", ch: "記憶模組", def: "儲存對話經驗的架構。", topic: "進階觀念" },
+        { id: 'v64', en: "Function Calling", ch: "函數調用", def: "模型意圖轉化為可執行參數。", topic: "進階觀念" },
+        { id: 'v65', en: "Prompt Injection", ch: "提示詞注入", def: "惡意繞過安全過濾器。", topic: "進階觀念" },
+        { id: 'v66', en: "Jailbreak", ch: "越獄攻擊", def: "誘導模型違反安全準則。", topic: "進階觀念" },
+        { id: 'v67', en: "Red Teaming", ch: "紅隊演練", def: "模擬攻擊進行壓力測試。", topic: "進階觀念" },
+        { id: 'v68', en: "Safety Alignment", ch: "安全對齊", def: "使產出符合安全規範。", topic: "進階觀念" },
+        { id: 'v69', en: "Output Guardrails", ch: "輸出護欄", def: "輸出前阻擋不當內容。", topic: "進階觀念" },
+        { id: 'v70', en: "Evaluation Harness", ch: "評估框架", def: "系統測試模型表現。", topic: "進階觀念" },
+        { id: 'v71', en: "Offline Evaluation", ch: "離線評估", def: "發布前使用測試集評分。", topic: "進階觀念" },
+        { id: 'v72', en: "Online A/B Testing", ch: "線上 A/B 測試", def: "比較真實環境成效。", topic: "進階觀念" },
+        { id: 'v73', en: "Prompt Versioning", ch: "提示詞版本", def: "對提示詞進行版本管理。", topic: "進階觀念" },
+        { id: 'v74', en: "Token Cost", ch: "Token 成本", def: "精簡提示降低支出。", topic: "進階觀念" },
+        { id: 'v75', en: "Batch Inference", ch: "批次推論", def: "一次處理大量請求。", topic: "進階觀念" },
+        { id: 'v76', en: "Streaming", ch: "串流回應", def: "即時傳回文字減少等待。", topic: "進階觀念" },
+        { id: 'v77', en: "Multimodal", ch: "多模態", def: "同時處理文字圖片音訊。", topic: "進階觀念" },
+        { id: 'v78', en: "VLM", ch: "視覺語言模型", def: "理解圖片內容的 LLM。", topic: "進階觀念" },
+        { id: 'v79', en: "ASR", ch: "語音辨識", def: "語音轉文字。", topic: "進階觀念" },
+        { id: 'v80', en: "TTS", ch: "文字轉語音", def: "文字轉合成語音。", topic: "進階觀念" },
+        { id: 'v81', en: "Data Lineage", ch: "資料血緣", def: "追蹤資料路徑。", topic: "進階觀念" },
         { id: 'v82', en: "Access Control", ch: "存取控制", def: "管理權限。", topic: "進階觀念" },
-        { id: 'v83', en: "Zero Trust Architecture", ch: "零信任架構", def: "對所有請求進行持續驗證。", topic: "進階觀念" },
-        { id: 'v84', en: "Model Registry", ch: "模型註冊表", def: "管理、儲存不同版本模型檔案中心。", topic: "進階觀念" },
-        { id: 'v85', en: "Canary Deployment", ch: "金絲雀部署", def: "先推送給部分使用者測試穩定性。", topic: "進階觀念" },
-        { id: 'v86', en: "Shadow Deployment", ch: "影子部署", def: "運行但不輸出新結果，僅供觀測。", topic: "進階觀念" },
-        { id: 'v87', en: "Auto Prompt Engineer", ch: "自動提示詞工程", def: "模型自動優化另一個模型的提示詞。", topic: "進階觀念" },
-        { id: 'v88', en: "Graph Prompting", ch: "圖譜提示", def: "利用知識圖譜結構化關係增強推理。", topic: "進階觀念" },
-        { id: 'v89', en: "Context Engineering", ch: "上下文工程", def: "科學化結構化提供給模型的內容。", topic: "進階觀念" },
-        { id: 'v90', en: "Semantic Chunking", ch: "語意切塊", def: "依據內容意義完整性進行切分。", topic: "進階觀念" },
-        { id: 'v91', en: "Knowledge Graph", ch: "知識圖譜", def: "以節點與邊表示實體間關係的知識庫。", topic: "進階觀念" },
-        { id: 'v92', en: "MCP", ch: "模型上下文協定", def: "統一模型與資料源串接的標準協議。", topic: "進階觀念" },
-        { id: 'v93', en: "A2A", ch: "代理人間協作", def: "不同 AI Agent 之間傳遞訊息指派任務。", topic: "進階觀念" },
-        { id: 'v94', en: "API Gateway", ch: "API 閘道", def: "管理呼叫的單一進入點。", topic: "進階觀念" },
-        { id: 'v95', en: "Rate Throttling", ch: "速率調解", def: "當請求過多時動態調降速度。", topic: "進階觀念" },
-        { id: 'v96', en: "Failover", ch: "容錯移轉", def: "主要模型失效時自動切換備援。", topic: "進階觀念" },
-        { id: 'v97', en: "Cost Attribution", ch: "成本歸因", def: "準確計算專案消耗費用。", topic: "進階觀念" },
-        { id: 'v98', en: "Audit Log", ch: "稽核日誌", def: "詳細記錄模型調用的執行細節。", topic: "進階觀念" },
-        { id: 'v99', en: "Compliance by Design", ch: "內建合規設計", def: "初期就將法規納入架構設計。", topic: "進階觀念" },
-        { id: 'v100', en: "AI Governance Framework", ch: "AI 治理框架", def: "管理風險與效能的完整體制。", topic: "進階觀念" }
+        { id: 'v83', en: "Zero Trust", ch: "零信任", def: "持續驗證請求。", topic: "進階觀念" },
+        { id: 'v84', en: "Model Registry", ch: "模型註冊表", def: "管理各版本模型。", topic: "進階觀念" },
+        { id: 'v85', en: "Canary", ch: "金絲雀部署", def: "推送部分用戶測試。", topic: "進階觀念" },
+        { id: 'v86', en: "Shadow", ch: "影子部署", def: "運行但不對外輸出結果。", topic: "進階觀念" },
+        { id: 'v87', en: "Auto Prompt", ch: "自動提示詞", def: "模型優化模型提示。", topic: "進階觀念" },
+        { id: 'v88', en: "Graph Prompting", ch: "圖譜提示", def: "利用圖譜關係增強推理。", topic: "進階觀念" },
+        { id: 'v89', en: "Context Engineering", ch: "上下文工程", def: "科學化結構化內容。", topic: "進階觀念" },
+        { id: 'v90', en: "Semantic Chunking", ch: "語意切塊", def: "依據意義完整性切分。", topic: "進階觀念" },
+        { id: 'v91', en: "Knowledge Graph", ch: "知識圖譜", def: "實體間關係知識庫。", topic: "進階觀念" },
+        { id: 'v92', en: "MCP", ch: "模型上下文協定", def: "統一串接標準。", topic: "進階觀念" },
+        { id: 'v93', en: "A2A", ch: "代理人間協作", def: "Agent 互傳訊息。", topic: "進階觀念" },
+        { id: 'v94', en: "API Gateway", ch: "API 閘道", def: "呼叫單一進入點。", topic: "進階觀念" },
+        { id: 'v95', en: "Rate Throttling", ch: "速率調解", def: "動態調降速度。", topic: "進階觀念" },
+        { id: 'v96', en: "Failover", ch: "容錯移轉", def: "自動切換備援。", topic: "進階觀念" },
+        { id: 'v97', en: "Cost Attribution", ch: "成本歸因", def: "計算專案消耗資源。", topic: "進階觀念" },
+        { id: 'v98', en: "Audit Log", ch: "稽核日誌", def: "詳細記錄調用細節。", topic: "進階觀念" },
+        { id: 'v99', en: "Compliance", ch: "合規設計", def: "初期將法規納入。", topic: "進階觀念" },
+        { id: 'v100', en: "Governance Framework", ch: "治理框架", def: "管理風險體制。", topic: "進階觀念" }
     ];
 
     const masterBank = [
-        { id: 'q1', level: "簡易", tag: "定義與原理", q: "生成式 AI (AIGC) 的核心定義為何？", options: ["數據清洗", "創造新內容", "AR硬體", "固定指令"], ans: 1, exp: "正確解答為 (B)創造新內容。" },
-        { id: 'q2', level: "中級", tag: "運作基礎", q: "AIGC 如何達成類似人類創作的效果？", options: ["整合分析模擬邏輯", "複製細胞", "手寫規則", "關鍵字拼接"], ans: 0, exp: "正確解答為 (A)整合分析模擬邏輯。" },
-        { id: 'q3', level: "困難", tag: "機器學習", q: "損失函數 (Loss Function) 的主要作用？", options: ["刪除雜訊", "衡量生成與真實數據誤差", "提升速度", "轉換向量"], ans: 1, exp: "正確解答為 (B)衡量生成與真實數據誤差。" },
-        { id: 'q4', level: "簡易", tag: "開發框架", q: "下列何者「不屬於」常用的深度學習框架？", options: ["TensorFlow", "PyTorch", "Keras", "Microsoft Excel"], ans: 3, exp: "正確解答為 (D)Microsoft Excel。" },
-        { id: 'q5', level: "困難", tag: "模型架構", q: "GAN 依賴哪兩個組件競爭？", options: ["編碼/解碼", "生成/鑑別", "卷積/池化", "注意力/前饋"], ans: 1, exp: "正確解答為 (B)生成/鑑別。" },
-        { id: 'q6', level: "中級", tag: "模型架構", q: "GAN 生成器的最終訓練目標？", options: ["圖片分類", "創造相似資料騙過鑑別器", "剔除異常", "壓縮影像"], ans: 1, exp: "正確解答為 (B)創造相似資料騙過鑑別器。" },
-        { id: 'q7', level: "中級", tag: "圖像生成", q: "將「隨機雜訊」逐步轉化為逼真圖像的模型？", options: ["GAN", "Transformer", "RNN", "SVM"], ans: 0, exp: "正確解答為 (A)GAN。" },
-        { id: 'q8', level: "簡易", tag: "LLM 基石", q: "LLM 卓越的語意理解能力基於何種架構？", options: ["Transformer", "隨機森林", "CNN", "RNN"], ans: 0, exp: "正確解答為 (A)Transformer。" },
-        { id: 'q9', level: "困難", tag: "序列處理", q: "LSTM 相較於傳統 RNN 的最大優勢？", options: ["速度快", "處理長期依賴關係", "無需訓練", "修復畫質"], ans: 1, exp: "正確解答為 (B)處理長期依賴關係。" },
-        { id: 'q10', level: "中級", tag: "專有名詞", q: "RNN 的正確英文全名與中文翻譯？", options: ["Recursive", "Recurrent 循環神經網路", "Random", "Reinforcement"], ans: 1, exp: "正確解答為 (B)Recurrent 循環神經網路。" },
-        { id: 'q11', level: "簡易", tag: "模型特性", q: "模型自信地陳述錯誤事實的現象稱為？", options: ["過擬合", "梯度消失", "幻覺", "資料投毒"], ans: 2, exp: "正確解答為 (C)幻覺。" },
-        { id: 'q12', level: "簡易", tag: "訓練資料", q: "訓練「行銷文案」模型最核心的資料類型？", options: ["圖片", "文字文本", "音訊", "3D數據"], ans: 1, exp: "正確解答為 (B)文字文本。" },
-        { id: 'q13', level: "中級", tag: "技術原理", q: "RAG 技術如何利用外部資訊提升品質？", options: ["覆蓋權重", "作為輸入參考上下文", "僅驗證", "轉化為圖片"], ans: 1, exp: "正確解答為 (B)作為輸入參考上下文。" },
-        { id: 'q14', level: "中級", tag: "工具應用", q: "微軟提供的「文字轉語音 (TTS)」產品？", options: ["Polly", "WaveNet", "Azure AI Speech", "Watson"], ans: 2, exp: "正確解答為 (C)Azure AI Speech。" },
-        { id: 'q15', level: "困難", tag: "效能提升", q: "提升 LLM 理解複雜任務表現的技術關鍵？", options: ["減少資料量", "學習多樣化語言模式", "限制語言", "移除注意力機制"], ans: 1, exp: "正確解答為 (B)學習多樣化語言模式。" },
-        { id: 'q16', level: "中級", tag: "提示工程", q: "引導模型展示中間思考過程的策略 (CoT)？", options: ["零樣本", "思路鏈", "逆向工程", "情感分析"], ans: 1, exp: "正確解答為 (B)思路鏈。" },
-        { id: 'q17', level: "困難", tag: "資料處理", q: "資料前處理中處理缺漏值，「最不適當」的做法？", options: ["平均值填補", "回歸預測", "全數刪除整列", "標記特殊類別"], ans: 2, exp: "正確解答為 (C)全數刪除整列。" },
-        { id: 'q18', level: "中級", tag: "法規監管", q: "歐盟《人工智慧法案》依據什麼標準分級？", options: ["風險程度", "國別", "程式碼開源", "禁止所有個資應用"], ans: 0, exp: "正確解答為 (A)風險程度。" },
-        { id: 'q19', level: "困難", tag: "倫理準則", q: "下列何者不屬於可信賴 AI 的「倫理」要求？", options: ["透明性", "公平性", "實用性", "問責制"], ans: 2, exp: "正確解答為 (C)實用性(追求利潤最大化)。" },
-        { id: 'q20', level: "困難", tag: "進階 RAG", q: "RAG 系統回答遺漏關鍵資訊時，哪項做法最有效？", options: ["增加 Temperature", "實施 Reranking 僅保留 Top 3", "Fine-tuning", "停用 Chunking"], ans: 1, exp: "再排序能確保模型讀到最高品質資料。" },
-        { id: 'q21', level: "困難", tag: "多模態", q: "視覺語言模型處理圖片時分割的區塊稱為？", options: ["Textual Tokens", "Image Patches", "Neural Layers", "Pixel Clusters"], ans: 1, exp: "Image Patches 將圖片視為序列進行處理。" },
-        { id: 'q22', level: "中級", tag: "企業安全", q: "因提示詞不當導致模型吐露系統指令稱為？", options: ["Data Poisoning", "Model Drift", "Prompt Leakage", "Hallucination"], ans: 2, exp: "Prompt Leakage 旨在獲取內部系統指令。" },
-        { id: 'q23', level: "困難", tag: "效能優化", q: "為降低重複發送背景知識產生的 token 費用？", options: ["Context Caching", "Model Quantization", "Batch Inference", "Rate Limit"], ans: 0, exp: "內容快取能儲存頻繁使用的上下文減少費用。" },
-        { id: 'q24', level: "中級", tag: "AI 治理", q: "AI 用於「信用評等」屬於歐盟 AI 法案哪一風險等級？", options: ["不可接受", "高風險", "有限", "最低"], ans: 1, exp: "涉及個人生計、就業的系統列為高風險。" },
-        { id: 'q25', level: "困難", tag: "Agent", q: "負責將目標拆解為子任務的組件稱為？", options: ["Tool Caller", "Planner", "Memory", "Executor"], ans: 1, exp: "Planner 是 Agent 負責策略思考的核心。" },
-        { id: 'q26', level: "中級", tag: "提示工程", q: "要求 AI「一步一步思考」是應用了哪種技巧？", options: ["Few-shot", "Chain-of-Thought", "Injection", "Zero-shot"], ans: 1, exp: "思路鏈誘發模型進行序列化推理。" },
-        { id: 'q27', level: "困難", tag: "運維", q: "測試新版 RAG 而不影響所有用戶採用的部署策略？", options: ["Blue-Green", "Canary Deployment", "Recreate", "Shadow"], ans: 1, exp: "金絲雀部署先開放給小部分用戶測試。" }
+        { id: 'q1', level: "簡易", tag: "原理", q: "生成式 AI (AIGC) 的核心定義為何？", options: ["數據清洗", "創造新內容", "硬體開發", "固定指令"], ans: 1, exp: "創造新內容。" },
+        { id: 'q2', level: "中級", tag: "基礎", q: "AIGC 如何達成模擬創作的效果？", options: ["整合分析模擬邏輯", "複製細胞", "手寫規則", "關鍵字拼接"], ans: 0, exp: "整合分析。" },
+        { id: 'q3', level: "困難", tag: "機器學習", q: "Loss Function 的主要作用？", options: ["刪除雜訊", "衡量誤差", "提升速度", "向量轉換"], ans: 1, exp: "衡量生成與真實數據誤差。" },
+        { id: 'q4', level: "簡易", tag: "框架", q: "下列何者不屬於常用深度學習框架？", options: ["TensorFlow", "PyTorch", "Keras", "Excel"], ans: 3, exp: "Excel 不是框架。" },
+        { id: 'q5', level: "困難", tag: "架構", q: "GAN 依賴哪兩個組件競爭？", options: ["編碼/解碼", "生成/鑑別", "卷積/池化", "前饋"], ans: 1, exp: "生成與鑑別。" },
+        { id: 'q6', level: "中級", tag: "架構", q: "GAN 生成器的訓練目標？", options: ["圖片分類", "騙過鑑別器", "剔除異常", "壓縮"], ans: 1, exp: "騙過鑑別器。" },
+        { id: 'q7', level: "中級", tag: "原理", q: "隨機雜訊轉逼真圖像的模型？", options: ["GAN", "Transformer", "RNN", "SVM"], ans: 0, exp: "GAN。" },
+        { id: 'q8', level: "簡易", tag: "LLM", q: "LLM 理解能力基於何種架構？", options: ["Transformer", "隨機森林", "CNN", "RNN"], ans: 0, exp: "Transformer。" },
+        { id: 'q9', level: "困難", tag: "序列", q: "LSTM 相較傳統 RNN 的優勢？", options: ["速度", "處理長期依賴", "無需訓練", "修復"], ans: 1, exp: "長期依賴。" },
+        { id: 'q10', level: "中級", tag: "名詞", q: "RNN 中文翻譯？", options: ["遞迴", "循環神經網路", "隨機", "強化"], ans: 1, exp: "循環神經網路。" },
+        { id: 'q11', level: "簡易", tag: "特性", q: "模型陳述錯誤事實的現象？", options: ["過擬合", "梯度消失", "幻覺", "投毒"], ans: 2, exp: "幻覺。" },
+        { id: 'q12', level: "簡易", tag: "訓練", q: "訓練文案模型最核心資料？", options: ["圖片", "文本", "音訊", "3D"], ans: 1, exp: "文本。" },
+        { id: 'q13', level: "中級", tag: "技術", q: "RAG 利用外部資訊？", options: ["覆蓋", "參考上下文", "僅驗證", "轉圖片"], ans: 1, exp: "參考上下文。" },
+        { id: 'q14', level: "中級", tag: "工具", q: "Azure 提供的 TTS 產品？", options: ["Polly", "WaveNet", "Azure AI Speech", "Watson"], ans: 2, exp: "Azure AI Speech。" },
+        { id: 'q15', level: "困難", tag: "效能", q: "提升 LLM 複雜任務表現的關鍵？", options: ["減資", "多樣化學習", "限語", "移注意力"], ans: 1, exp: "多樣化模式。" },
+        { id: 'q16', level: "中級", tag: "工程", q: "展示中間思考過程 (CoT)？", options: ["零樣本", "思路鏈", "逆向", "情感"], ans: 1, exp: "思路鏈。" },
+        { id: 'q17', level: "困難", tag: "資料", q: "處理缺漏值最不適當？", options: ["平均填補", "回歸", "全刪整列", "標記"], ans: 2, exp: "全刪整列不當。" },
+        { id: 'q18', level: "中級", tag: "法規", q: "歐盟 AI 法案分級標準？", options: ["風險程度", "國別", "開源", "禁止"], ans: 0, exp: "風險程度。" },
+        { id: 'q19', level: "困難", tag: "倫理", q: "不屬於倫理要求？", options: ["透明", "公平", "利潤最大化", "問責"], ans: 2, exp: "利潤最大化。" },
+        { id: 'q20', level: "困難", tag: "RAG", q: "遺漏關鍵資訊的做法？", options: ["增溫", "再排序 Reranking", "Fine-tune", "停切"], ans: 1, exp: "Reranking。" },
+        { id: 'q21', level: "困難", tag: "多模態", q: "分割圖片區塊稱為？", options: ["Tokens", "Image Patches", "Layers", "Clusters"], ans: 1, exp: "Image Patches。" },
+        { id: 'q22', level: "中級", tag: "安全", q: "洩漏系統指令稱為？", options: ["Poisoning", "Drift", "Prompt Leakage", "Hallucination"], ans: 2, exp: "Prompt Leakage。" },
+        { id: 'q23', level: "困難", tag: "成本", q: "降低重複背景費用？", options: ["Context Caching", "Quantization", "Inference", "Rate"], ans: 0, exp: "Context Caching。" },
+        { id: 'q24', level: "中級", tag: "合規", q: "信用評等風險等級？", options: ["不可接受", "高風險", "有限", "最低"], ans: 1, exp: "高風險。" },
+        { id: 'q25', level: "困難", tag: "Agent", q: "拆解子任務的組件？", options: ["Caller", "Planner", "Memory", "Executor"], ans: 1, exp: "Planner。" },
+        { id: 'q26', level: "中級", tag: "技巧", q: "一步一步思考是？", options: ["Few-shot", "CoT", "Injection", "Zero"], ans: 1, exp: "CoT。" },
+        { id: 'q27', level: "困難", tag: "部署", q: "不影響所有用戶的測試策略？", options: ["Blue-Green", "Canary Deployment", "Recreate", "Shadow"], ans: 1, exp: "金絲雀部署。" }
     ];
 
     const topicNotes = {
-        "模型基礎": `<h3>📚 核心考試項目</h3><table><tr><th>項目</th><th>摘要</th></tr><tr><td>1. 核心原理</td><td>LLM, Transformer, Token</td></tr><tr><td>2. 提示工程</td><td>Prompt & Context Engineering</td></tr></table>`,
-        "風險治理": `<h3>⚖️ 法規與治理</h3><table><tr><th>項目</th><th>解析</th></tr><tr><td>GDPR 罰款</td><td>最高營業額 4%。</td></tr></table>`,
-        "提示工程": `<h3>🚀 進階技術</h3><table><tr><th>技術</th><th>應用</th></tr><tr><td>Reranking</td><td>提升檢索精準度。</td></tr></table>`
+        "模型基礎": "<h3>核心考點</h3><p>LLM, Transformer, Token, Attention。</p>",
+        "風險治理": "<h3>治理</h3><p>GDPR 罰款上限營業額 4%。</p>",
+        "提示工程": "<h3>技巧</h3><p>Reranking, CoT, HyDE。</p>"
     };
 
-    // ================= 核心邏輯腳本 =================
-    let errorStats = JSON.parse(localStorage.getItem('errorStats')) || {}; 
+    // ================= 狀態控制 =================
+    let errorStats = JSON.parse(localStorage.getItem('errorStats')) || {};
     let dailyStats = JSON.parse(localStorage.getItem('dailyStats')) || { date: "", count: 0, scoreSum: 0, exams: 0 };
     let starredVocab = JSON.parse(localStorage.getItem('starredVocab')) || [];
-    let currentQuiz = [];
     let vocabPage = 0;
-    const VOCAB_PER_PAGE = 10;
-    let isChHidden = false;
+    const PAGE_SIZE = 10;
 
-    function toggleMenu() { 
-        const m = document.getElementById('sideMenu'); 
-        m.style.display = (m.style.display==='block')?'none':'block'; 
-    }
+    function toggleMenu() { document.getElementById('sideMenu').style.display = (document.getElementById('sideMenu').style.display==='block')?'none':'block'; }
     
-    function showSection(id) { 
+    function showSection(id) {
         document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active-sec'));
         document.getElementById(id).classList.add('active-sec');
         document.getElementById('sideMenu').style.display = 'none';
-        if(id === 'progress-section') updateProgressUI();
-        if(id === 'vocab-section') renderVocab();
-        if(id === 'review-section') renderReview();
+        if(id==='progress-section') updateProgressUI();
+        if(id==='vocab-section') renderVocab();
+        if(id==='review-section') renderReview();
     }
 
-    function switchTab(sectionName, idx) {
-        const section = document.getElementById(`${sectionName}-section`);
-        section.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
-        section.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(`${sectionName}-${idx}`).style.display = 'block';
-        section.querySelectorAll('.tab-btn')[idx].classList.add('active');
-        if(sectionName === 'vocab' && idx === 1) renderStarred();
-        if(sectionName === 'vocab' && idx === 2) renderTopicNotes();
-        if(sectionName === 'review') renderReview(); 
+    function switchTab(sec, idx) {
+        const s = document.getElementById(`${sec}-section`);
+        s.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+        s.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(`${sec}-${idx}`).style.display = 'block';
+        s.querySelectorAll('.tab-btn')[idx].classList.add('active');
+        if(sec==='vocab' && idx===1) renderStarred();
     }
 
     function updateProgressUI() {
-        const fullBankSize = masterBank.length + vocabBank.length; 
-        const errCount = Object.keys(errorStats).length;
-        const mastered = Math.max(0, fullBankSize - errCount);
-        const p = fullBankSize > 0 ? Math.round((mastered / fullBankSize) * 100) : 0;
-        
+        const total = vocabBank.length + masterBank.length;
+        const errs = Object.keys(errorStats).length;
+        const mastered = Math.max(0, total - errs);
+        const p = Math.round((mastered / total) * 100);
         document.getElementById('progressCircle').style.setProperty('--p', p + '%');
         document.getElementById('progressVal').innerText = p + '%';
         document.getElementById('masteredCount').innerText = mastered;
-        document.getElementById('totalCount').innerText = fullBankSize;
-
-        let today = new Date().toLocaleDateString('zh-TW');
-        document.getElementById('todayDate').innerText = today;
-        if (dailyStats.date !== today) {
-            dailyStats = { date: today, count: 0, scoreSum: 0, exams: 0 };
-        }
+        document.getElementById('totalCount').innerText = total;
         document.getElementById('todayCount').innerText = dailyStats.count;
-        let avg = dailyStats.exams > 0 ? Math.round(dailyStats.scoreSum / dailyStats.exams) : 0;
-        document.getElementById('todayAvgScore').innerText = avg;
+        document.getElementById('todayAvgScore').innerText = dailyStats.exams > 0 ? Math.round(dailyStats.scoreSum / dailyStats.exams) : 0;
     }
 
     function renderVocab() {
         const list = document.getElementById('vocabList');
-        document.getElementById('vocabTotalCount').innerText = vocabBank.length;
-        const start = vocabPage * VOCAB_PER_PAGE;
-        const pageData = vocabBank.slice(start, start + VOCAB_PER_PAGE);
-        list.innerHTML = pageData.map(v => `
+        const data = vocabBank.slice(vocabPage*PAGE_SIZE, (vocabPage+1)*PAGE_SIZE);
+        list.innerHTML = data.map(v => `
             <div class="card vocab-card">
-                <div class="vocab-header">
-                    <div><div class="vocab-en">${v.en}</div><span class="q-tag">#${v.topic}</span></div>
-                    <div><button class="btn-small" onclick="speak('${v.en}')">🔊 發音</button>
-                    <button class="btn-small ${starredVocab.includes(v.id) ? 'starred' : ''}" onclick="toggleStar('${v.id}')">⭐ 收藏</button></div>
-                </div>
-                <div class="vocab-ch" style="font-weight:bold;">${v.ch}</div>
-                <div class="vocab-ch">${v.def}</div>
+                <span class="q-tag">#${v.topic}</span>
+                <div style="font-weight:bold; font-size:18px;">${v.en}</div>
+                <div>${v.ch}</div>
+                <div style="font-size:13px; color:#666">${v.def}</div>
+                <button onclick="toggleStar('${v.id}')">${starredVocab.includes(v.id)?'★ 已收藏':'☆ 收藏'}</button>
             </div>
         `).join('');
-        document.getElementById('pageInfo').innerText = `${vocabPage + 1} / ${Math.ceil(vocabBank.length/VOCAB_PER_PAGE)}`;
+        document.getElementById('pageInfo').innerText = `${vocabPage+1} / 10`;
     }
-
-    function changePage(dir) {
-        vocabPage = Math.max(0, Math.min(Math.ceil(vocabBank.length/VOCAB_PER_PAGE)-1, vocabPage + dir));
-        renderVocab();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+    function changePage(d) { vocabPage = Math.max(0, Math.min(9, vocabPage+d)); renderVocab(); }
+    function toggleStar(id) { 
+        if(starredVocab.includes(id)) starredVocab = starredVocab.filter(i=>i!==id); else starredVocab.push(id);
+        localStorage.setItem('starredVocab', JSON.stringify(starredVocab)); renderVocab();
     }
-
-    function toggleChinese() { isChHidden = !isChHidden; document.body.classList.toggle('hide-chinese', isChHidden); }
-
-    function speak(text) { const ut = new SpeechSynthesisUtterance(text); ut.lang = 'en-US'; speechSynthesis.speak(ut); }
-
-    function toggleStar(id) {
-        if(starredVocab.includes(id)) starredVocab = starredVocab.filter(s => s !== id);
-        else starredVocab.push(id);
-        localStorage.setItem('starredVocab', JSON.stringify(starredVocab));
-        renderVocab(); renderStarred();
-    }
-
     function renderStarred() {
-        const list = document.getElementById('starredList');
-        const starredData = vocabBank.filter(v => starredVocab.includes(v.id));
-        if(starredData.length === 0) { list.innerHTML = "<p style='text-align:center;'>無星號單字。</p>"; return; }
-        list.innerHTML = starredData.map(v => `<div class="card"><b>${v.en}</b><br>${v.ch}<br>${v.def}</div>`).join('');
-    }
-
-    function renderTopicNotes() {
-        const topic = document.getElementById('topicSelect').value;
-        document.getElementById('topicNotesArea').innerHTML = topicNotes[topic] || "<p>暫無內容</p>";
+        document.getElementById('starredList').innerHTML = vocabBank.filter(v=>starredVocab.includes(v.id)).map(v=>`<div class="card"><b>${v.en}</b></div>`).join('') || "無收藏";
     }
 
     function generateQuiz() {
         const count = parseInt(document.getElementById('setCount').value);
         const level = document.getElementById('setLevel').value;
-        const useMock = document.getElementById('srcMock').checked;
-        const useVocab = document.getElementById('srcVocab').checked;
-        let pool = [];
-        if(useMock) pool = pool.concat(masterBank);
-        if(useVocab) {
-            pool = pool.concat(vocabBank.map(v => {
-                let wrongs = vocabBank.filter(x => x.id !== v.id).sort(()=>0.5-Math.random()).slice(0,3).map(x=>x.def);
-                let opts = [v.def, ...wrongs].sort(()=>0.5-Math.random());
-                return { id: 'vq_'+v.id, level: "中級", tag: "觀念", q: `「${v.en}」正確定義？`, options: opts, ans: opts.indexOf(v.def), exp: v.def };
-            }));
-        }
-        currentQuiz = pool.filter(q => q.level === level).sort(() => 0.5 - Math.random()).slice(0, count);
+        const pool = masterBank.filter(q => q.level === level);
+        currentQuiz = pool.sort(() => 0.5 - Math.random()).slice(0, count);
         document.getElementById('quizFilter').style.display = 'none';
         document.getElementById('quizArea').style.display = 'block';
         document.getElementById('questionList').innerHTML = currentQuiz.map((q, i) => `
-            <div class="card"><p><b>Q${i+1}: ${q.q}</b></p>
-            ${q.options.map((o, oi) => `<label class="option-label"><input type="radio" name="q${i}" value="${oi}"> <span>${o}</span></label>`).join('')}</div>
+            <div class="card"><p>Q${i+1}: ${q.q}</p>
+            ${q.options.map((o, oi) => `<label class="option-label"><input type="radio" name="q${i}" value="${oi}"> ${o}</label>`).join('')}</div>
         `).join('');
     }
-
     function gradeExam() {
         let wrong = 0; let html = "";
         currentQuiz.forEach((q, i) => {
             const sel = document.querySelector(`input[name="q${i}"]:checked`);
-            if (!sel || parseInt(sel.value) !== q.ans) {
+            if(!sel || parseInt(sel.value) !== q.ans) {
                 wrong++; errorStats[q.id] = (errorStats[q.id] || 0) + 1;
-                html += `<div class="wrong-ans-box"><b>${q.q}</b><br>✅ 正確: ${q.options[q.ans]}</div>`;
+                html += `<div class="wrong-ans-box">${q.q}<br>✅ 正解: ${q.options[q.ans]}</div>`;
             }
         });
         localStorage.setItem('errorStats', JSON.stringify(errorStats));
-        const score = Math.round(((currentQuiz.length - wrong) / currentQuiz.length) * 100);
-        dailyStats.count += currentQuiz.length; dailyStats.scoreSum += score; dailyStats.exams += 1;
+        dailyStats.count += currentQuiz.length; dailyStats.exams++; dailyStats.scoreSum += Math.round(((currentQuiz.length-wrong)/currentQuiz.length)*100);
         localStorage.setItem('dailyStats', JSON.stringify(dailyStats));
         document.getElementById('quizArea').style.display = 'none';
         document.getElementById('examResult').style.display = 'block';
-        document.getElementById('scoreDisplay').innerText = score;
+        document.getElementById('scoreDisplay').innerText = Math.round(((currentQuiz.length-wrong)/currentQuiz.length)*100) + "分";
         document.getElementById('errExplanations').innerHTML = html || "全對！";
     }
-
     function resetExam() { document.getElementById('examResult').style.display = 'none'; document.getElementById('quizFilter').style.display = 'block'; }
-
     function renderReview() {
         const ids = Object.keys(errorStats);
-        const list = document.getElementById('reviewListNormal');
-        list.innerHTML = ids.length ? "有錯題，點擊刪除已熟練題目。" : "目前無錯題。";
+        document.getElementById('reviewListNormal').innerHTML = masterBank.filter(q=>ids.includes(q.id)).map(q=>`<div class="card">${q.q} (錯 ${errorStats[q.id]} 次) <button onclick="deleteErr('${q.id}')">刪除</button></div>`).join('') || "無錯題";
+    }
+    function deleteErr(id) { delete errorStats[id]; localStorage.setItem('errorStats', JSON.stringify(errorStats)); renderReview(); updateProgressUI(); }
+
+    function renderTopicNotes() {
+        const t = document.getElementById('topicSelect').value;
+        document.getElementById('topicNotesArea').innerHTML = topicNotes[t];
     }
 
-    function deleteError(id) { delete errorStats[id]; localStorage.setItem('errorStats', JSON.stringify(errorStats)); updateProgressUI(); }
-
+    // 終極修復清除功能：強制狀態重置
     function clearAllData() {
-        if(confirm("確定要將所有紀錄歸零嗎？")) {
+        if(confirm("確定全部歸零？")) {
             localStorage.clear();
             errorStats = {};
             dailyStats = { date: "", count: 0, scoreSum: 0, exams: 0 };
             starredVocab = [];
-            // 重置 UI 數字
+            // 立即刷新 UI 變數，不依賴 reload
             updateProgressUI();
-            alert("已成功歸零。");
+            alert("已成功歸零！");
             location.reload(); 
         }
     }
