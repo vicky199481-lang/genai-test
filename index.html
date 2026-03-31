@@ -110,11 +110,11 @@
 
 <section id="progress-section" class="content-section active-sec">
     <div class="tab-bar">
-        <button class="tab-btn active" onclick="switchTab('prog', 0)">完成度</button>
-        <button class="tab-btn" onclick="switchTab('prog', 1)">每日刷題狀況</button>
+        <button class="tab-btn active" onclick="switchTab('progress', 0)">🏆 完成度</button>
+        <button class="tab-btn" onclick="switchTab('progress', 1)">📅 每日刷題狀況</button>
     </div>
 
-    <div id="prog-0" class="tab-content">
+    <div id="progress-0" class="tab-content">
         <div class="card" style="text-align:center">
             <h3 class="snoopy-deco">🏆 整體題庫掌握度</h3>
             <div class="circle-progress" id="progressCircle" style="--p: 0%">
@@ -124,7 +124,7 @@
         </div>
     </div>
 
-    <div id="prog-1" class="tab-content" style="display:none">
+    <div id="progress-1" class="tab-content" style="display:none">
         <div class="card" style="text-align:center">
             <h3 class="snoopy-deco">📅 今日刷題狀況 (<span id="todayDate"></span>)</h3>
             <div style="display:flex; justify-content:space-around; margin-top:20px;">
@@ -144,13 +144,13 @@
 
 <section id="vocab-section" class="content-section">
     <div class="tab-bar">
-        <button class="tab-btn active" onclick="switchTab('voc', 0)">單字卡</button>
-        <button class="tab-btn" onclick="switchTab('voc', 1)">星號註記</button>
-        <button class="tab-btn" onclick="switchTab('voc', 2)">講義</button>
-        <button class="tab-btn" onclick="switchTab('voc', 3)">補充</button>
+        <button class="tab-btn active" onclick="switchTab('vocab', 0)">單字卡</button>
+        <button class="tab-btn" onclick="switchTab('vocab', 1)">星號註記</button>
+        <button class="tab-btn" onclick="switchTab('vocab', 2)">講義</button>
+        <button class="tab-btn" onclick="switchTab('vocab', 3)">補充</button>
     </div>
 
-    <div id="voc-0" class="tab-content">
+    <div id="vocab-0" class="tab-content">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
             <span style="font-size:14px; font-weight:bold; color:var(--primary-dark)">總詞彙量：<span id="vocabTotalCount"></span></span>
             <button class="btn-small" id="toggleChBtn" onclick="toggleChinese()">👁️ 隱藏中文</button>
@@ -163,7 +163,7 @@
         </div>
     </div>
 
-    <div id="voc-1" class="tab-content" style="display:none">
+    <div id="vocab-1" class="tab-content" style="display:none">
         <div class="card">
             <h3 class="snoopy-deco">⭐ 星號重點單字</h3>
             <p style="font-size:13px; color:#888; text-align:center;">獨立顯示所有被你打星號的重點單字。</p>
@@ -171,7 +171,7 @@
         </div>
     </div>
 
-    <div id="voc-2" class="tab-content" style="display:none">
+    <div id="vocab-2" class="tab-content" style="display:none">
         <div class="card">
             <label>選擇主題講義：</label>
             <select id="topicSelect" onchange="renderTopicNotes()">
@@ -183,7 +183,7 @@
         </div>
     </div>
 
-    <div id="voc-3" class="tab-content" style="display:none">
+    <div id="vocab-3" class="tab-content" style="display:none">
         <div class="card">
             <h3 class="snoopy-deco">📎 外部參考連結</h3>
             <p>1. <a href="#" style="color:var(--primary-dark)">金管會金融業導入 AI 指引</a></p>
@@ -241,11 +241,11 @@
 
 <section id="review-section" class="content-section">
     <div class="tab-bar">
-        <button class="tab-btn active" onclick="switchTab('rev', 0)">錯題本</button>
-        <button class="tab-btn" onclick="switchTab('rev', 1)">重點錯題本</button>
+        <button class="tab-btn active" onclick="switchTab('review', 0)">錯題本</button>
+        <button class="tab-btn" onclick="switchTab('review', 1)">重點錯題本</button>
     </div>
 
-    <div id="rev-0" class="tab-content">
+    <div id="review-0" class="tab-content">
         <div class="card">
             <h3 class="snoopy-deco">🎯 錯題本</h3>
             <p style="font-size:13px; color:#888; text-align:center;">收錄考題寶典中答錯的題目（排除重複）。複習完畢點選刪除可提升完成度！</p>
@@ -253,7 +253,7 @@
         </div>
     </div>
 
-    <div id="rev-1" class="tab-content" style="display:none">
+    <div id="review-1" class="tab-content" style="display:none">
         <div class="card">
             <h3 class="snoopy-deco">🔥 重點錯題本</h3>
             <p style="font-size:13px; color:#888; text-align:center;">一旦錯 3 次以上將自動收錄於此，手動刪除將同步刪除「錯題本」題目。</p>
@@ -332,15 +332,18 @@
         if(id === 'review-section') renderReview();
     }
 
-    function switchTab(prefix, idx) {
-        document.querySelectorAll(`#${prefix}-section .tab-content`).forEach(c => c.style.display = 'none');
-        document.querySelectorAll(`#${prefix}-section .tab-btn`).forEach(b => b.classList.remove('active'));
-        document.getElementById(`${prefix}-${idx}`).style.display = 'block';
-        document.querySelectorAll(`#${prefix}-section .tab-btn`)[idx].classList.add('active');
+    // 修復的分頁切換邏輯 (嚴格對齊 ID 名稱)
+    function switchTab(sectionName, idx) {
+        const section = document.getElementById(`${sectionName}-section`);
+        section.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+        section.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         
-        if(prefix === 'voc' && idx === 1) renderStarred();
-        if(prefix === 'voc' && idx === 2) renderTopicNotes();
-        if(prefix === 'rev') renderReview(); 
+        document.getElementById(`${sectionName}-${idx}`).style.display = 'block';
+        section.querySelectorAll('.tab-btn')[idx].classList.add('active');
+        
+        if(sectionName === 'vocab' && idx === 1) renderStarred();
+        if(sectionName === 'vocab' && idx === 2) renderTopicNotes();
+        if(sectionName === 'review') renderReview(); 
     }
 
     // ================= A. 學習進度功能 =================
@@ -460,7 +463,6 @@
             let wrongDefs = vocabBank.filter(x => x.id !== v.id).map(x => x.def).sort(() => 0.5 - Math.random()).slice(0, 3);
             let options = [v.def, ...wrongDefs].sort(() => 0.5 - Math.random());
             let ansIndex = options.indexOf(v.def);
-            // 隨機賦予自動生成的題目一個難易度
             let randomLevel = levels[Math.floor(Math.random() * levels.length)];
             return {
                 id: 'vq_' + v.id, tag: "觀念題: " + v.topic, level: randomLevel,
@@ -484,7 +486,6 @@
             alert("請至少勾選一種出題來源！"); return;
         }
 
-        // 依難易度篩選
         let filteredPool = pool.filter(q => q.level === level);
         
         if(filteredPool.length === 0) {
@@ -493,7 +494,6 @@
 
         currentQuiz = filteredPool.sort(() => 0.5 - Math.random()).slice(0, count);
         
-        // 防呆：如果題庫不夠
         if(currentQuiz.length < count) {
             alert(`⚠️ 提示：選定的來源中，「${level}」難度的題目只有 ${currentQuiz.length} 題，將為您全數列出！`);
         }
@@ -526,9 +526,8 @@
             
             if (userAns !== q.ans) {
                 wrongCount++;
-                errorStats[q.id] = (errorStats[q.id] || 0) + 1; // 記錄錯誤次數
+                errorStats[q.id] = (errorStats[q.id] || 0) + 1; 
                 
-                // 【紅框清楚標示】
                 expHtml += `
                     <div class="wrong-ans-box">
                         <p style="margin:0 0 8px 0; color:var(--text); font-size:15px;"><b>Q: ${q.q}</b></p>
@@ -542,16 +541,13 @@
         
         localStorage.setItem('errorStats', JSON.stringify(errorStats));
         
-        // 計分 (100分制)
         const score = Math.round(((currentQuiz.length - wrongCount) / currentQuiz.length) * 100);
         
-        // 寫入每日刷題狀況
         dailyStats.count += currentQuiz.length;
         dailyStats.scoreSum += score;
         dailyStats.exams += 1;
         localStorage.setItem('dailyStats', JSON.stringify(dailyStats));
         
-        // 顯示結果
         document.getElementById('quizArea').style.display = 'none';
         document.getElementById('examResult').style.display = 'block';
         document.getElementById('scoreDisplay').innerText = score;
@@ -576,10 +572,8 @@
         const listBoss = document.getElementById('reviewListBoss');
         const errorIds = Object.keys(errorStats);
         
-        // 需重新取得動態題庫避免找不到單字題
         const fullBank = [...masterBank, ...generateVocabQuestions()];
         
-        // 透過 ID 進行對應，排除重複
         let uniqueErrors = [];
         let seenIds = new Set();
         fullBank.forEach(q => {
@@ -591,14 +585,12 @@
 
         const bossErrors = uniqueErrors.filter(q => errorStats[q.id] >= 3);
         
-        // 渲染一般錯題本
         if(uniqueErrors.length === 0) {
             listNormal.innerHTML = "<p style='text-align:center; color:#888; margin-top:30px;'>目前沒有錯題紀錄，繼續保持！(‧´｀U</p>";
         } else {
             listNormal.innerHTML = uniqueErrors.map(q => createReviewCard(q)).join('');
         }
 
-        // 渲染重點錯題本
         if(bossErrors.length === 0) {
             listBoss.innerHTML = "<p style='text-align:center; color:#888; margin-top:30px;'>尚未有錯誤達到 3 次以上的重點錯題！</p>";
         } else {
@@ -619,17 +611,16 @@
         `;
     }
 
-    // 刪除按鈕：同步更新錯題本與重點錯題本
     function deleteError(id) {
         if(confirm("確定你已經精熟此題，要將它從錯題本中刪除嗎？")) {
             delete errorStats[id];
             localStorage.setItem('errorStats', JSON.stringify(errorStats));
             renderReview();
-            updateProgressUI(); // 同步提升學習進度的完成度
+            updateProgressUI();
         }
     }
 
-    // 2. 清除紀錄：清除學習紀錄、星號註記及錯題複習
+    // 清除紀錄
     function clearAllData() {
         if(confirm("確定要將所有「學習進度」、「星號註記」及「錯題複習」紀錄清除嗎？")) {
             localStorage.clear();
