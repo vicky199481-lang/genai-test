@@ -3,51 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GenAI 認證全攻略</title>
+    <title>🍵 GenAI 認證全攻略：奶茶暖心版</title>
     <style>
-        :root { --primary: #007AFF; --bg: #f2f2f7; --card: #ffffff; }
-        body { font-family: -apple-system, "微軟正黑體", sans-serif; background: var(--bg); margin: 0; padding-bottom: 30px; overflow-x: hidden; }
-        
-        /* Header & Side Menu */
-        .app-header { background: var(--primary); color: white; display: flex; align-items: center; padding: 12px 15px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .menu-dots { background: none; border: none; color: white; font-size: 26px; cursor: pointer; padding: 0 10px; line-height: 1; }
-        .side-menu { display: none; position: absolute; top: 55px; left: 10px; background: white; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border-radius: 12px; width: 180px; z-index: 1001; overflow: hidden; }
-        .side-menu a { display: block; padding: 15px; color: #333; text-decoration: none; border-bottom: 1px solid #f0f0f0; font-size: 0.95em; transition: background 0.2s; }
-        .side-menu a:active { background: #f0f0f0; }
-        .app-title { flex: 1; text-align: center; margin: 0; font-size: 1.1em; font-weight: bold; margin-right: 40px; }
-
-        /* Content Sections */
-        .content-section { display: none; padding: 15px; animation: fadeIn 0.3s ease; }
-        .active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* Tabs for Vocab */
-        .tab-bar { display: flex; background: #e5e5ea; padding: 4px; border-radius: 10px; margin-bottom: 15px; }
-        .tab-btn { flex: 1; padding: 10px; border: none; background: transparent; border-radius: 8px; font-weight: bold; color: #666; cursor: pointer; }
-        .tab-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-
-        /* Cards Style */
-        .vocab-card, .quiz-card, .error-item, .exam-filter, .result-card { 
-            background: var(--card); border-radius: 14px; padding: 16px; margin-bottom: 15px; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: relative; border-left: 5px solid var(--primary); 
+        /* 🤎 燕麥奶茶配色 (Milk Tea Palette) */
+        :root { 
+            --primary: #C19A6B; /* 泰式奶茶色 (Thai Tea) - 主要色 */
+            --bg: #FFFBF5; /* 暖牛奶白 (Warm Milk) - 背景色 */
+            --card: #ffffff; /* 純白 - 卡片色 */
+            --success: #A9B28B; /* 霧面抹茶 (Misty Matcha) - 成功色 */
+            --error: #E6D0D0; /* 紅茶拿鐵 (Red Tea Latte) - 錯誤色 */
+            --text: #5D4037; /* 深棕色 (Deep Brown) - 字體色 */
+            --accent: #EFEBE9; /* 淺燕麥色 (Light Oat) - 強調色 */
+            --gold: #D4AF37; /* 金色 - 星號色 */
         }
 
-        /* Vocab Features */
-        .star-btn { position: absolute; right: 12px; top: 12px; background: none; border: none; font-size: 22px; color: #ccc; cursor: pointer; padding: 5px; }
-        .star-btn.active { color: #ffcc00; }
-        .speak-btn { background: #f0f0f5; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; margin-left: 8px; }
+        body { 
+            font-family: -apple-system, "微軟正黑體", " rounded", sans-serif; 
+            background: var(--bg); 
+            margin: 0; 
+            padding-bottom: 30px; 
+            color: var(--text);
+            overflow-x: hidden;
+        }
 
-        /* Quiz Options */
-        .option-label { display: block; padding: 12px; border: 1px solid #ddd; border-radius: 10px; margin-top: 10px; cursor: pointer; transition: background 0.2s; font-size: 0.95em; }
-        .option-label:active { background: #eef6ff; }
-        input[type="radio"] { margin-right: 10px; transform: scale(1.2); }
+        /* 🎀 Header & 選單 (Milk Tea Style) */
+        .app-header { 
+            background: var(--card); 
+            color: var(--primary); 
+            display: flex; 
+            align-items: center; 
+            padding: 18px 15px; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            box-shadow: 0 4px 15px rgba(193,154,107,0.08); 
+            border-bottom: 2px solid var(--accent);
+        }
+        .menu-dots { 
+            background: none; 
+            border: none; 
+            color: var(--primary); 
+            font-size: 28px; 
+            cursor: pointer; 
+            padding: 0 10px; 
+            font-weight: bold;
+        }
+        .side-menu { 
+            display: none; 
+            position: absolute; 
+            top: 65px; 
+            left: 10px; 
+            background: var(--card); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            border-radius: 18px; 
+            width: 190px; 
+            z-index: 1001; 
+            overflow: hidden; 
+            border: 1px solid var(--accent);
+        }
+        .side-menu a { 
+            display: block; 
+            padding: 16px 20px; 
+            color: var(--text); 
+            text-decoration: none; 
+            border-bottom: 1px solid var(--accent); 
+            font-size: 0.95em; 
+            transition: background 0.2s; 
+        }
+        .side-menu a:active { background: var(--bg); }
+        .app-title { flex: 1; text-align: center; margin: 0; font-size: 1.15em; font-weight: 800; margin-right: 40px; color: var(--text); }
 
-        /* Buttons */
-        .submit-btn { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: bold; font-size: 1em; margin-top: 10px; cursor: pointer; }
-        .del-btn { background: #ff3b30; color: white; border: none; padding: 6px 12px; border-radius: 6px; float: right; font-size: 0.8em; }
+        /* 🍡 區塊與 Tabs */
+        .content-section { display: none; padding: 15px; }
+        .active { display: block; }
+        .tab-bar { 
+            display: flex; 
+            background: var(--accent); 
+            padding: 5px; 
+            border-radius: 50px; 
+            margin-bottom: 20px; 
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.02); 
+        }
+        .tab-btn { 
+            flex: 1; 
+            padding: 12px; 
+            border: none; 
+            background: transparent; 
+            border-radius: 50px; 
+            font-weight: bold; 
+            color: #999; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            font-size: 0.9em;
+        }
+        .tab-btn.active { 
+            background: var(--card); 
+            color: var(--primary); 
+            box-shadow: 0 4px 12px rgba(193,154,107,0.15); 
+        }
+
+        /* 🤎 奶酪卡片 Style */
+        .vocab-card, .quiz-card, .exam-filter, .result-card, .error-item { 
+            background: var(--card); 
+            border-radius: 20px; /* 大圓角 */
+            padding: 22px; 
+            margin-bottom: 18px; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.03); /* 柔和深陰影 */
+            position: relative; 
+            border: 1px solid rgba(193,154,107,0.05); /* 微弱邊框 */
+            transition: transform 0.2s;
+        }
+        .vocab-card:active, .quiz-card:active { transform: scale(0.98); }
+
+        /* 🌟 單字功能 */
+        .star-btn { position: absolute; right: 18px; top: 18px; background: none; border: none; font-size: 24px; color: #f0f0f0; cursor: pointer; padding: 5px; }
+        .star-btn.active { color: var(--gold); animation: starPop 0.3s ease; }
+        @keyframes starPop { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
+        .speak-btn { background: #fdfdfd; border: 1px solid #eee; border-radius: 50%; width: 35px; height: 35px; cursor: pointer; margin-left: 10px; color: var(--primary); font-size: 1.1em; transition: 0.2s; }
+        .speak-btn:active { background: #eee; }
+
+        /* 🎯 測驗與按鈕 */
+        .option-label { display: block; padding: 16px; border: 1.5px solid #eee; border-radius: 15px; margin-top: 12px; cursor: pointer; transition: 0.2s; font-size: 0.95em; color: var(--text); }
+        .option-label:active { background: var(--accent); border-color: var(--primary); }
+        input[type="radio"] { margin-right: 12px; transform: scale(1.2); accent-color: var(--primary); }
+
+        .submit-btn { 
+            width: 100%; 
+            padding: 18px; 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            border-radius: 50px; 
+            font-weight: bold; 
+            font-size: 1.05em; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            box-shadow: 0 8px 20px rgba(193,154,107,0.2); 
+        }
+        .submit-btn:active { transform: translateY(2px); box-shadow: 0 4px 10px rgba(193,154,107,0.2); }
+        .del-btn { background: var(--accent); color: var(--text); border: none; padding: 8px 16px; border-radius: 50px; float: right; font-size: 0.8em; font-weight: bold; cursor: pointer;}
         
-        select { width: 100%; padding: 12px; margin: 10px 0 20px 0; border-radius: 8px; border: 1px solid #ccc; font-size: 1em; }
-        .result-card h4 { margin-top: 0; color: #333; }
+        select { width: 100%; padding: 15px; margin: 10px 0 25px 0; border-radius: 12px; border: 1.5px solid var(--accent); font-size: 1em; color: var(--text); background: var(--card); color: var(--text); accent-color: var(--primary); }
+        h3, h4 { color: var(--text); font-weight: 800; margin-top: 0; }
+        
+        /* 錯題區裝飾 */
+        .error-item { border-left: 6px solid var(--error); }
     </style>
 </head>
 <body>
@@ -56,244 +156,73 @@
     <header class="app-header">
         <button class="menu-dots" onclick="toggleMenu()">⋮</button>
         <div id="sideMenu" class="side-menu">
-            <a href="javascript:void(0)" onclick="showSection('vocab-section')">📜 專有名詞</a>
+            <a href="javascript:void(0)" onclick="showSection('vocab-section')">📜 核心觀念</a>
             <a href="javascript:void(0)" onclick="showSection('exam-section')">📝 考題寶典</a>
             <a href="javascript:void(0)" onclick="showSection('review-section')">🔄 複習機制</a>
         </div>
-        <h1 class="app-title">GenAI 認證衝刺</h1>
+        <h1 class="app-title">GenAI 考照助手 ☕</h1>
     </header>
 
     <section id="vocab-section" class="content-section active">
         <div class="tab-bar">
-            <button class="tab-btn active" onclick="openVocabTab(event, 'all-vocab')">全部單字</button>
-            <button class="tab-btn" onclick="openVocabTab(event, 'starred-vocab')">⭐ 收藏夾</button>
+            <button class="tab-btn active" onclick="openVocabTab(event, 'all-vocab')">全部觀念 🍪</button>
+            <button class="tab-btn" onclick="openVocabTab(event, 'starred-vocab')">收藏夾 ⭐</button>
         </div>
-        
-        <div id="all-vocab" class="vocab-tab-content active">
-            <div id="vocabList"></div>
-            <div style="text-align:center; color:#999; font-size:0.8em; margin-top:10px;">第 1 / 1 頁</div>
-        </div>
-        
-        <div id="starred-vocab" class="vocab-tab-content" style="display:none;">
-            <div id="starredList"></div>
-        </div>
+        <div id="all-vocab" class="vocab-tab-content active"><div id="vocabList"></div></div>
+        <div id="starred-vocab" class="vocab-tab-content" style="display:none;"><div id="starredList"></div></div>
     </section>
 
     <section id="exam-section" class="content-section">
         <div id="examSetup" class="exam-filter">
-            <h3 style="margin-top:0">🎯 測驗設定</h3>
+            <h3>🎯 測驗設定</h3>
             <label>選取題數：</label>
-            <select id="qCount">
-                <option value="5">5 題</option>
-                <option value="10">10 題</option>
-                <option value="20">20 題</option>
-            </select>
-            
-            <label>難易度：</label>
-            <select id="qLevel">
-                <option value="easy">簡單 (基礎定義)</option>
-                <option value="medium">中級 (應用場景)</option>
-                <option value="hard">困難 (法律與進階)</option>
-            </select>
-            
-            <button class="submit-btn" onclick="generateExam()">開始測驗 / 送出</button>
+            <select id="qCount"><option value="5">5 題</option><option value="10">10 題</option></select>
+            <button class="submit-btn" onclick="generateExam()">開始測驗 🚀</button>
         </div>
-        
         <div id="quizArea" style="display:none;">
             <div id="questionList"></div>
-            <button class="submit-btn" style="background:#28a745" onclick="gradeExam()">提交並評分</button>
+            <button class="submit-btn" style="background:var(--success); color:white" onclick="gradeExam()">送出評分 抹茶🍵</button>
         </div>
-
         <div id="resultArea" class="result-card" style="display:none;">
-            <h4>測驗結果</h4>
-            <div id="scoreDisplay" style="font-size:2.5em; font-weight:bold; color:#007AFF; margin:10px 0;"></div>
+            <h4>測驗結果 ☕</h4>
+            <div id="scoreDisplay" style="font-size:3em; font-weight:900; color:var(--primary);"></div>
             <p id="resultMsg"></p>
-            <button class="submit-btn" onclick="resetExam()">重新設定測驗</button>
+            <button class="submit-btn" onclick="resetExam()">重新測驗 🔄</button>
         </div>
-    </section>
-
-    <section id="review-section" class="content-section">
-        <h3 style="margin-top:0">❌ 錯題複習區</h3>
-        <p style="font-size:0.85em; color:#666;">系統會自動將測驗中答錯的題目記錄在此。</p>
-        <div id="errorList"></div>
     </section>
 </div>
 
 <script>
-    // 1. 單字資料庫 (最多十個)
     const dictionary = [
-        { en: "Transformer", zh: "轉換器", def: "現代大語言模型(LLM)的核心架構，利用自注意力機制平行處理資訊。" },
-        { en: "Token", zh: "標記", def: "AI 處理文字的最小單位。中文一個字可能佔用 1-2 個 Token。" },
-        { en: "Hallucination", zh: "幻覺", def: "AI 產生事實錯誤但語氣顯得非常自信的現象。" },
-        { en: "Fine-tuning", zh: "微調", def: "針對特定領域資料對已訓練好的模型進行二次訓練。" },
-        { en: "Temperature", zh: "溫度參數", def: "控制輸出隨機性。值越高越有創意，值越低越嚴謹。" },
-        { en: "RAG", zh: "檢索增強生成", def: "結合外部資料庫搜尋，解決模型知識過時與幻覺問題。" },
-        { en: "Prompt Engineering", zh: "提示工程", def: "設計與優化輸入給 AI 的指令，以獲得更高品質的回覆。" },
-        { en: "Zero-shot", zh: "零樣本學習", def: "模型在沒有提供任何範例的情況下直接執行任務。" },
-        { en: "Overfitting", zh: "過度擬合", def: "模型過於依賴訓練資料，導致在新資料上的表現變差。" },
-        { en: "Chain-of-Thought", zh: "思維鏈", def: "誘導 AI 一步步思考，顯著提升邏輯與數學推理能力。" }
+        { en: "Hallucination", zh: "幻覺", def: "模型生成內容看似正確實則錯誤的現象。" },
+        { en: "Transformer", zh: "轉換器架構", def: "當代大語言模型(LLM)的核心技術架構。" },
+        { en: "Temperature", zh: "溫度參數", def: "控制輸出隨機性。越低越嚴謹，越高越創意。" },
+        { en: "RAG", zh: "檢索增強生成", def: "結合外部即時資料庫，減少錯誤並更新知識。" }
     ];
 
-    // 2. 模擬題庫 (包含不同難度)
     const questionBank = [
-        { id: 1, q: "關於 AIGC 的敘述，下列何者正確？", options: ["資訊絕對正確", "產出具隨機性與創造力", "就是單純的搜尋引擎", "不需消耗算力"], ans: 1, level: "easy" },
-        { id: 2, q: "哪項技術能最有效解決 LLM 知識無法即時更新的問題？", options: ["提高溫度參數", "RAG", "增加模型層數", "使用英文提示"], ans: 1, level: "medium" },
-        { id: 3, q: "若要請 AI 扮演專業律師，這屬於哪種提示技巧？", options: ["Few-shot", "Persona (角色扮演)", "Zero-shot", "CoT"], ans: 1, level: "easy" },
-        { id: 4, q: "關於台灣生成式 AI 指引，將資料送入模型前應先做？", options: ["加密處理", "去識別化 (移除隱私)", "翻譯成英文", "壓縮檔案"], ans: 1, level: "hard" },
-        { id: 5, q: "Temperature 設定為 0 時，AI 的表現會趨向？", options: ["極具創意", "高度一致且嚴謹", "隨機亂碼", "停止運作"], ans: 1, level: "medium" },
-        { id: 6, q: "讓 AI '一步步思考' 主要能提升什麼？", options: ["生成速度", "推理邏輯", "文字長度", "翻譯準確度"], ans: 1, level: "medium" },
-        { id: 7, q: "下列何者並非 Transformer 架構的核心？", options: ["Self-Attention", "平行處理", "遞迴神經網路(RNN)循環", "Encoder/Decoder"], ans: 2, level: "hard" },
-        { id: 8, q: "企業導入 AI 最擔心的資料安全問題不包含？", options: ["Prompt Injection", "模型幻覺", "資料外洩", "硬碟讀取速度"], ans: 3, level: "easy" }
+        { id: 1, q: "關於 AI 的「幻覺」，下列敘述何者正確？", options: ["AI 喝醉了", "AI 自信地說出錯誤資訊", "AI 拒絕回答"], ans: 1 },
+        { id: 2, q: "哪種技術能讓 AI 連結企業文件來回答問題？", options: ["RAG", "CPU", "GPU"], ans: 0 },
+        { id: 3, q: "Temperature 參數調低會讓 AI 的內容？", options: ["更嚴謹", "更有創意", "更長"], ans: 0 },
+        { id: 4, q: "要降低風險，導入 AI 前應先做？", options: ["資料去識別化", "增加電力", "重新開機"], ans: 0 }
     ];
 
     let starredEn = JSON.parse(localStorage.getItem('starredEn')) || [];
     let errorList = JSON.parse(localStorage.getItem('errorList')) || [];
-    let currentQuestions = [];
 
-    // 選單控制
-    function toggleMenu() {
-        const menu = document.getElementById('sideMenu');
-        menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
-    }
-
-    function showSection(id) {
-        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        toggleMenu();
-        if(id === 'vocab-section') renderVocab();
-        if(id === 'review-section') renderErrors();
-    }
-
-    // 單字功能
-    function renderVocab() {
-        const list = document.getElementById('vocabList');
-        list.innerHTML = dictionary.map(item => `
-            <div class="vocab-card">
-                <button class="star-btn ${starredEn.includes(item.en)?'active':''}" onclick="toggleStar('${item.en}', this)">★</button>
-                <div style="display:flex; align-items:center;">
-                    <b style="color:var(--primary); font-size:1.1em;">${item.en}</b>
-                    <button class="speak-btn" onclick="speak('${item.en}')">🔊</button>
-                </div>
-                <div style="margin:4px 0; font-weight:bold;">${item.zh}</div>
-                <div style="font-size:0.85em; color:#555; border-top:1px solid #eee; padding-top:8px; margin-top:8px;">${item.def}</div>
-            </div>
-        `).join('');
-    }
-
-    function toggleStar(en, btn) {
-        if(starredEn.includes(en)) {
-            starredEn = starredEn.filter(i => i !== en);
-            btn.classList.remove('active');
-        } else {
-            starredEn.push(en);
-            btn.classList.add('active');
-        }
-        localStorage.setItem('starredEn', JSON.stringify(starredEn));
-        renderStarred();
-    }
-
-    function renderStarred() {
-        const list = document.getElementById('starredList');
-        const starredData = dictionary.filter(d => starredEn.includes(d.en));
-        list.innerHTML = starredData.length ? starredData.map(item => `
-            <div class="vocab-card">
-                <b>${item.en}</b> (${item.zh})
-                <p style="font-size:0.85em; margin:5px 0;">${item.def}</p>
-            </div>
-        `).join('') : '<p style="text-align:center;color:#999;margin-top:30px;">目前沒有收藏的單字</p>';
-    }
-
-    function openVocabTab(evt, tabName) {
-        document.querySelectorAll('.vocab-tab-content').forEach(c => c.style.display = 'none');
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(tabName).style.display = 'block';
-        evt.currentTarget.classList.add('active');
-        if(tabName === 'starred-vocab') renderStarred();
-    }
-
-    // 測驗系統
-    function generateExam() {
-        const count = parseInt(document.getElementById('qCount').value);
-        const level = document.getElementById('qLevel').value;
-        
-        // 過濾難度並隨機挑選
-        let pool = questionBank.filter(q => q.level === level);
-        if(pool.length === 0) pool = questionBank; // 如果該難度題數不足則用全體
-        
-        currentQuestions = [...pool].sort(() => 0.5 - Math.random()).slice(0, count);
-        
-        document.getElementById('examSetup').style.display = 'none';
-        document.getElementById('quizArea').style.display = 'block';
-        
-        document.getElementById('questionList').innerHTML = currentQuestions.map((q, idx) => `
-            <div class="quiz-card">
-                <p><b>Q${idx+1}:</b> ${q.q}</p>
-                ${q.options.map((opt, oIdx) => `
-                    <label class="option-label">
-                        <input type="radio" name="q${idx}" value="${oIdx}"> ${opt}
-                    </label>
-                `).join('')}
-            </div>
-        `).join('');
-        window.scrollTo(0,0);
-    }
-
-    function gradeExam() {
-        let score = 0;
-        currentQuestions.forEach((q, idx) => {
-            const selected = document.querySelector(`input[name="q${idx}"]:checked`);
-            if(selected && parseInt(selected.value) === q.ans) {
-                score++;
-            } else {
-                // 答錯加入複習名單
-                if(!errorList.find(e => e.id === q.id)) {
-                    errorList.push(q);
-                }
-            }
-        });
-        localStorage.setItem('errorList', JSON.stringify(errorList));
-
-        const finalScore = Math.round((score / currentQuestions.length) * 100);
-        document.getElementById('quizArea').style.display = 'none';
-        document.getElementById('resultArea').style.display = 'block';
-        document.getElementById('scoreDisplay').innerText = finalScore + " 分";
-        document.getElementById('resultMsg').innerText = finalScore >= 60 ? "及格了！太棒了 🥳" : "沒及格...再去複習機制看看錯題吧！";
-        window.scrollTo(0,0);
-    }
-
-    function resetExam() {
-        document.getElementById('resultArea').style.display = 'none';
-        document.getElementById('examSetup').style.display = 'block';
-    }
-
-    // 複習功能
-    function renderErrors() {
-        const list = document.getElementById('errorList');
-        list.innerHTML = errorList.length ? errorList.map(item => `
-            <div class="error-item">
-                <button class="del-btn" onclick="removeError(${item.id})">刪除</button>
-                <p><b>題目：</b>${item.q}</p>
-                <p style="color:#28a745; font-weight:bold;">正確解答：${item.options[item.ans]}</p>
-            </div>
-        `).join('') : '<p style="text-align:center;color:#999;margin-top:30px;">目前沒有錯題，保持完美！</p>';
-    }
-
-    function removeError(id) {
-        errorList = errorList.filter(e => e.id !== id);
-        localStorage.setItem('errorList', JSON.stringify(errorList));
-        renderErrors();
-    }
-
-    function speak(txt) {
-        const synth = window.speechSynthesis;
-        const utter = new SpeechSynthesisUtterance(txt);
-        utter.lang = 'en-US';
-        synth.speak(utter);
-    }
-
-    // 初始渲染
+    function toggleMenu() { const m = document.getElementById('sideMenu'); m.style.display = (m.style.display === 'block') ? 'none' : 'block'; }
+    function showSection(id) { document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); toggleMenu(); if(id === 'vocab-section') renderVocab(); if(id === 'review-section') renderErrors(); }
+    function renderVocab() { document.getElementById('vocabList').innerHTML = dictionary.map(i => `<div class="vocab-card"><button class="star-btn ${starredEn.includes(i.en)?'active':''}" onclick="toggleStar('${i.en}', this)">★</button><div style="display:flex; align-items:center;"><b style="color:var(--primary); font-size:1.15em;">${i.en}</b><button class="speak-btn" onclick="speak('${i.en}')">🔊</button></div><div style="margin:4px 0; font-weight:bold; color:var(--text);">${i.zh}</div><p style="font-size:0.85em; color:#777; border-top:1px dashed #eee; padding-top:8px; margin-top:8px;">${i.def}</p></div>`).join(''); }
+    function toggleStar(en, btn) { if(starredEn.includes(en)) starredEn = starredEn.filter(i => i !== en); else starredEn.push(en); localStorage.setItem('starredEn', JSON.stringify(starredEn)); btn.classList.toggle('active'); }
+    function openVocabTab(evt, name) { document.querySelectorAll('.vocab-tab-content').forEach(c => c.style.display = 'none'); document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.getElementById(name).style.display = 'block'; evt.currentTarget.classList.add('active'); if(name === 'starred-vocab') renderStarred(); }
+    function renderStarred() { const d = dictionary.filter(i => starredEn.includes(i.en)); document.getElementById('starredList').innerHTML = d.length ? d.map(i => `<div class="vocab-card"><b>${i.en}</b> (${i.zh})</div>`).join('') : '<p style="text-align:center;color:#999;padding:20px;">尚無收藏 ⭐</p>'; }
+    function generateExam() { const count = parseInt(document.getElementById('qCount').value); currentQuestions = [...questionBank].sort(() => 0.5 - Math.random()).slice(0, count); document.getElementById('examSetup').style.display = 'none'; document.getElementById('quizArea').style.display = 'block'; document.getElementById('questionList').innerHTML = currentQuestions.map((q, idx) => `<div class="quiz-card"><p><b>Q${idx+1}:</b> ${q.q}</p>${q.options.map((o, oi) => `<label class="option-label"><input type="radio" name="q${idx}" value="${oi}"> ${o}</label>`).join('')}</div>`).join(''); window.scrollTo(0,0); }
+    function gradeExam() { let score = 0; currentQuestions.forEach((q, idx) => { const s = document.querySelector(`input[name="q${idx}"]:checked`); if(s && parseInt(s.value) === q.ans) score++; else if(!errorList.find(e => e.id === q.id)) errorList.push(q); }); localStorage.setItem('errorList', JSON.stringify(errorList)); const f = Math.round((score/currentQuestions.length)*100); document.getElementById('quizArea').style.display='none'; document.getElementById('resultArea').style.display='block'; document.getElementById('scoreDisplay').innerText = f + " 分"; document.getElementById('resultMsg').innerText = f >= 60 ? "及格了！暖心暖胃 🥳☕" : "沒及格...再去複習機制看看錯題吧！🍵"; window.scrollTo(0,0); }
+    function resetExam() { document.getElementById('resultArea').style.display='none'; document.getElementById('examSetup').style.display='block'; }
+    function renderErrors() { document.getElementById('errorList').innerHTML = errorList.length ? errorList.map(e => `<div class="error-item"><button class="del-btn" onclick="removeError(${e.id})">刪除</button><p><b>題：</b>${e.q}</p><p style="color:var(--success)">解答: ${e.options[e.ans]}</p></div>`).join('') : '<p style="text-align:center;color:#999;padding:20px;">暫無錯題 🍪</p>'; }
+    function removeError(id) { errorList = errorList.filter(e => e.id !== id); localStorage.setItem('errorList', JSON.stringify(errorList)); renderErrors(); }
+    function speak(txt) { window.speechSynthesis.speak(new SpeechSynthesisUtterance(txt)); }
     renderVocab();
 </script>
-
 </body>
 </html>
