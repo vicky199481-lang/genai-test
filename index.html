@@ -3,226 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🍵 GenAI 認證全攻略：奶茶暖心版</title>
+    <title>🍵 GenAI 考照助手：專業進化版</title>
     <style>
-        /* 🤎 燕麥奶茶配色 (Milk Tea Palette) */
         :root { 
-            --primary: #C19A6B; /* 泰式奶茶色 (Thai Tea) - 主要色 */
-            --bg: #FFFBF5; /* 暖牛奶白 (Warm Milk) - 背景色 */
-            --card: #ffffff; /* 純白 - 卡片色 */
-            --success: #A9B28B; /* 霧面抹茶 (Misty Matcha) - 成功色 */
-            --error: #E6D0D0; /* 紅茶拿鐵 (Red Tea Latte) - 錯誤色 */
-            --text: #5D4037; /* 深棕色 (Deep Brown) - 字體色 */
-            --accent: #EFEBE9; /* 淺燕麥色 (Light Oat) - 強調色 */
-            --gold: #D4AF37; /* 金色 - 星號色 */
+            --primary: #C19A6B; 
+            --bg: #FFFBF5; 
+            --card: #ffffff; 
+            --success: #A9B28B; 
+            --error: #D9534F; /* 警告紅 */
+            --text: #5D4037; 
+            --accent: #EFEBE9;
         }
 
-        body { 
-            font-family: -apple-system, "微軟正黑體", " rounded", sans-serif; 
-            background: var(--bg); 
-            margin: 0; 
-            padding-bottom: 30px; 
-            color: var(--text);
-            overflow-x: hidden;
-        }
+        body { font-family: -apple-system, "微軟正黑體", sans-serif; background: var(--bg); margin: 0; color: var(--text); }
+        
+        /* Header */
+        .app-header { background: var(--card); display: flex; align-items: center; padding: 15px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-bottom: 2px solid var(--accent); }
+        .menu-dots { background: none; border: none; color: var(--primary); font-size: 28px; cursor: pointer; padding: 0 10px; }
+        
+        /* Side Menu */
+        .side-menu { display: none; position: absolute; top: 60px; left: 10px; background: var(--card); box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 15px; width: 200px; z-index: 1001; overflow: hidden; }
+        .side-menu a { display: block; padding: 15px 20px; color: var(--text); text-decoration: none; border-bottom: 1px solid var(--accent); }
 
-        /* 🎀 Header & 選單 (Milk Tea Style) */
-        .app-header { 
-            background: var(--card); 
-            color: var(--primary); 
-            display: flex; 
-            align-items: center; 
-            padding: 18px 15px; 
-            position: sticky; 
-            top: 0; 
-            z-index: 1000; 
-            box-shadow: 0 4px 15px rgba(193,154,107,0.08); 
-            border-bottom: 2px solid var(--accent);
-        }
-        .menu-dots { 
-            background: none; 
-            border: none; 
-            color: var(--primary); 
-            font-size: 28px; 
-            cursor: pointer; 
-            padding: 0 10px; 
-            font-weight: bold;
-        }
-        .side-menu { 
-            display: none; 
-            position: absolute; 
-            top: 65px; 
-            left: 10px; 
-            background: var(--card); 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
-            border-radius: 18px; 
-            width: 190px; 
-            z-index: 1001; 
-            overflow: hidden; 
-            border: 1px solid var(--accent);
-        }
-        .side-menu a { 
-            display: block; 
-            padding: 16px 20px; 
-            color: var(--text); 
-            text-decoration: none; 
-            border-bottom: 1px solid var(--accent); 
-            font-size: 0.95em; 
-            transition: background 0.2s; 
-        }
-        .side-menu a:active { background: var(--bg); }
-        .app-title { flex: 1; text-align: center; margin: 0; font-size: 1.15em; font-weight: 800; margin-right: 40px; color: var(--text); }
-
-        /* 🍡 區塊與 Tabs */
+        /* Sections */
         .content-section { display: none; padding: 15px; }
         .active { display: block; }
-        .tab-bar { 
-            display: flex; 
-            background: var(--accent); 
-            padding: 5px; 
-            border-radius: 50px; 
-            margin-bottom: 20px; 
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.02); 
-        }
-        .tab-btn { 
-            flex: 1; 
-            padding: 12px; 
-            border: none; 
-            background: transparent; 
-            border-radius: 50px; 
-            font-weight: bold; 
-            color: #999; 
-            cursor: pointer; 
-            transition: 0.3s; 
-            font-size: 0.9em;
-        }
-        .tab-btn.active { 
-            background: var(--card); 
-            color: var(--primary); 
-            box-shadow: 0 4px 12px rgba(193,154,107,0.15); 
-        }
-
-        /* 🤎 奶酪卡片 Style */
-        .vocab-card, .quiz-card, .exam-filter, .result-card, .error-item { 
-            background: var(--card); 
-            border-radius: 20px; /* 大圓角 */
-            padding: 22px; 
-            margin-bottom: 18px; 
-            box-shadow: 0 8px 25px rgba(0,0,0,0.03); /* 柔和深陰影 */
-            position: relative; 
-            border: 1px solid rgba(193,154,107,0.05); /* 微弱邊框 */
-            transition: transform 0.2s;
-        }
-        .vocab-card:active, .quiz-card:active { transform: scale(0.98); }
-
-        /* 🌟 單字功能 */
-        .star-btn { position: absolute; right: 18px; top: 18px; background: none; border: none; font-size: 24px; color: #f0f0f0; cursor: pointer; padding: 5px; }
-        .star-btn.active { color: var(--gold); animation: starPop 0.3s ease; }
-        @keyframes starPop { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
-        .speak-btn { background: #fdfdfd; border: 1px solid #eee; border-radius: 50%; width: 35px; height: 35px; cursor: pointer; margin-left: 10px; color: var(--primary); font-size: 1.1em; transition: 0.2s; }
-        .speak-btn:active { background: #eee; }
-
-        /* 🎯 測驗與按鈕 */
-        .option-label { display: block; padding: 16px; border: 1.5px solid #eee; border-radius: 15px; margin-top: 12px; cursor: pointer; transition: 0.2s; font-size: 0.95em; color: var(--text); }
-        .option-label:active { background: var(--accent); border-color: var(--primary); }
-        input[type="radio"] { margin-right: 12px; transform: scale(1.2); accent-color: var(--primary); }
-
-        .submit-btn { 
-            width: 100%; 
-            padding: 18px; 
-            background: var(--primary); 
-            color: white; 
-            border: none; 
-            border-radius: 50px; 
-            font-weight: bold; 
-            font-size: 1.05em; 
-            cursor: pointer; 
-            transition: 0.3s; 
-            box-shadow: 0 8px 20px rgba(193,154,107,0.2); 
-        }
-        .submit-btn:active { transform: translateY(2px); box-shadow: 0 4px 10px rgba(193,154,107,0.2); }
-        .del-btn { background: var(--accent); color: var(--text); border: none; padding: 8px 16px; border-radius: 50px; float: right; font-size: 0.8em; font-weight: bold; cursor: pointer;}
         
-        select { width: 100%; padding: 15px; margin: 10px 0 25px 0; border-radius: 12px; border: 1.5px solid var(--accent); font-size: 1em; color: var(--text); background: var(--card); color: var(--text); accent-color: var(--primary); }
-        h3, h4 { color: var(--text); font-weight: 800; margin-top: 0; }
+        /* Progress Dashboard Style */
+        .progress-container { text-align: center; padding: 20px; }
+        .circle-progress { width: 120px; height: 120px; border-radius: 50%; background: conic-gradient(var(--primary) var(--p, 0%), #eee 0); display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; position: relative; }
+        .circle-progress::after { content: ""; width: 100px; height: 100px; background: var(--card); border-radius: 50%; position: absolute; }
+        .progress-text { position: relative; z-index: 1; font-size: 1.5em; font-weight: bold; color: var(--primary); }
         
-        /* 錯題區裝飾 */
-        .error-item { border-left: 6px solid var(--error); }
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .stat-box { background: var(--accent); padding: 15px; border-radius: 15px; }
+
+        /* Tag Style */
+        .q-tag { display: inline-block; background: #FFDAB9; color: #8B4513; font-size: 0.75em; padding: 2px 8px; border-radius: 50px; margin-bottom: 8px; font-weight: bold; }
+
+        /* Card Style */
+        .card { background: var(--card); border-radius: 20px; padding: 20px; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); position: relative; }
+        
+        /* Error List Red Highlight */
+        .error-warning { color: var(--error); font-weight: 900; border: 2px solid var(--error); padding: 5px 10px; border-radius: 10px; display: inline-block; margin-bottom: 10px; }
+
+        .tab-bar { display: flex; background: var(--accent); padding: 5px; border-radius: 50px; margin-bottom: 15px; }
+        .tab-btn { flex: 1; padding: 10px; border: none; background: transparent; border-radius: 50px; cursor: pointer; color: #888; }
+        .tab-btn.active { background: var(--card); color: var(--primary); font-weight: bold; }
+
+        .btn-main { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 50px; font-weight: bold; font-size: 1em; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-<div class="main-wrapper">
-    <header class="app-header">
-        <button class="menu-dots" onclick="toggleMenu()">⋮</button>
-        <div id="sideMenu" class="side-menu">
-            <a href="javascript:void(0)" onclick="showSection('vocab-section')">📜 核心觀念</a>
-            <a href="javascript:void(0)" onclick="showSection('exam-section')">📝 考題寶典</a>
-            <a href="javascript:void(0)" onclick="showSection('review-section')">🔄 複習機制</a>
-        </div>
-        <h1 class="app-title">GenAI 考照助手 ☕</h1>
-    </header>
+<header class="app-header">
+    <button class="menu-dots" onclick="toggleMenu()">⋮</button>
+    <div id="sideMenu" class="side-menu">
+        <a href="javascript:void(0)" onclick="showSection('progress-section')">📊 學習進度</a>
+        <a href="javascript:void(0)" onclick="showSection('vocab-section')">📜 核心觀念</a>
+        <a href="javascript:void(0)" onclick="showSection('exam-section')">📝 考題寶典</a>
+        <a href="javascript:void(0)" onclick="showSection('review-section')">🔄 複習機制</a>
+    </div>
+    <div style="flex:1; text-align:center; font-weight:bold;">GenAI 助手 ☕</div>
+</header>
 
-    <section id="vocab-section" class="content-section active">
-        <div class="tab-bar">
-            <button class="tab-btn active" onclick="openVocabTab(event, 'all-vocab')">全部觀念 🍪</button>
-            <button class="tab-btn" onclick="openVocabTab(event, 'starred-vocab')">收藏夾 ⭐</button>
-        </div>
-        <div id="all-vocab" class="vocab-tab-content active"><div id="vocabList"></div></div>
-        <div id="starred-vocab" class="vocab-tab-content" style="display:none;"><div id="starredList"></div></div>
-    </section>
+<section id="progress-section" class="content-section">
+    <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchProgTab(0)">目標達成率</button>
+        <button class="tab-btn" onclick="switchProgTab(1)">每日刷題計數</button>
+    </div>
 
-    <section id="exam-section" class="content-section">
-        <div id="examSetup" class="exam-filter">
-            <h3>🎯 測驗設定</h3>
-            <label>選取題數：</label>
-            <select id="qCount"><option value="5">5 題</option><option value="10">10 題</option></select>
-            <button class="submit-btn" onclick="generateExam()">開始測驗 🚀</button>
+    <div id="prog-sheet-0" class="prog-sheet active">
+        <div class="card progress-container">
+            <h3>總體練習進度</h3>
+            <div class="circle-progress" id="progressCircle" style="--p: 0%">
+                <div class="progress-text" id="progressVal">0%</div>
+            </div>
+            <p>已掌握題數：<span id="masteredCount">0</span> / <span id="totalCount">0</span></p>
         </div>
-        <div id="quizArea" style="display:none;">
-            <div id="questionList"></div>
-            <button class="submit-btn" style="background:var(--success); color:white" onclick="gradeExam()">送出評分 抹茶🍵</button>
+    </div>
+
+    <div id="prog-sheet-1" class="prog-sheet" style="display:none;">
+        <div class="card">
+            <h3>今日戰績 📈</h3>
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <small>今日練習</small>
+                    <div style="font-size: 1.5em; font-weight: bold;" id="todayCount">0 題</div>
+                </div>
+                <div class="stat-box">
+                    <small>平均分數</small>
+                    <div style="font-size: 1.5em; font-weight: bold;" id="avgScore">0 分</div>
+                </div>
+            </div>
         </div>
-        <div id="resultArea" class="result-card" style="display:none;">
-            <h4>測驗結果 ☕</h4>
-            <div id="scoreDisplay" style="font-size:3em; font-weight:900; color:var(--primary);"></div>
-            <p id="resultMsg"></p>
-            <button class="submit-btn" onclick="resetExam()">重新測驗 🔄</button>
-        </div>
-    </section>
-</div>
+    </div>
+</section>
+
+<section id="exam-section" class="content-section">
+    <div id="quizArea">
+        <div id="questionList"></div>
+        <button class="btn-main" onclick="gradeExam()">送出評分</button>
+    </div>
+</section>
+
+<section id="review-section" class="content-section">
+    <h3>❌ 錯題複習 (紅字警告)</h3>
+    <div id="errorList"></div>
+</section>
+
+<section id="vocab-section" class="content-section">
+    <div id="vocabList"></div>
+</section>
 
 <script>
-    const dictionary = [
-        { en: "Hallucination", zh: "幻覺", def: "模型生成內容看似正確實則錯誤的現象。" },
-        { en: "Transformer", zh: "轉換器架構", def: "當代大語言模型(LLM)的核心技術架構。" },
-        { en: "Temperature", zh: "溫度參數", def: "控制輸出隨機性。越低越嚴謹，越高越創意。" },
-        { en: "RAG", zh: "檢索增強生成", def: "結合外部即時資料庫，減少錯誤並更新知識。" }
-    ];
-
+    // 題庫擴充：增加標籤 (tags)
     const questionBank = [
-        { id: 1, q: "關於 AI 的「幻覺」，下列敘述何者正確？", options: ["AI 喝醉了", "AI 自信地說出錯誤資訊", "AI 拒絕回答"], ans: 1 },
-        { id: 2, q: "哪種技術能讓 AI 連結企業文件來回答問題？", options: ["RAG", "CPU", "GPU"], ans: 0 },
-        { id: 3, q: "Temperature 參數調低會讓 AI 的內容？", options: ["更嚴謹", "更有創意", "更長"], ans: 0 },
-        { id: 4, q: "要降低風險，導入 AI 前應先做？", options: ["資料去識別化", "增加電力", "重新開機"], ans: 0 }
+        { id: 1, tag: "模型原理", q: "關於 AI 的「幻覺」，下列敘述何者正確？", options: ["AI 喝醉了", "AI 自信地說出錯誤資訊", "AI 拒絕回答"], ans: 1 },
+        { id: 2, tag: "技術架項", q: "哪種技術能讓 AI 連結企業文件來回答問題？", options: ["RAG", "CPU", "GPU"], ans: 0 },
+        { id: 3, tag: "參數調整", q: "Temperature 參數調低會讓 AI 的內容？", options: ["更嚴謹", "更有創意", "更長"], ans: 0 },
+        { id: 4, tag: "法律倫理", q: "要降低風險，導入 AI 前應先做？", options: ["資料去識別化", "增加電力", "重新開機"], ans: 0 }
     ];
 
-    let starredEn = JSON.parse(localStorage.getItem('starredEn')) || [];
-    let errorList = JSON.parse(localStorage.getItem('errorList')) || [];
+    let errorStats = JSON.parse(localStorage.getItem('errorStats')) || {}; // 紀錄每題錯幾次
+    let dailyLog = JSON.parse(localStorage.getItem('dailyLog')) || { date: "", count: 0, totalScore: 0, times: 0 };
 
     function toggleMenu() { const m = document.getElementById('sideMenu'); m.style.display = (m.style.display === 'block') ? 'none' : 'block'; }
-    function showSection(id) { document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); toggleMenu(); if(id === 'vocab-section') renderVocab(); if(id === 'review-section') renderErrors(); }
-    function renderVocab() { document.getElementById('vocabList').innerHTML = dictionary.map(i => `<div class="vocab-card"><button class="star-btn ${starredEn.includes(i.en)?'active':''}" onclick="toggleStar('${i.en}', this)">★</button><div style="display:flex; align-items:center;"><b style="color:var(--primary); font-size:1.15em;">${i.en}</b><button class="speak-btn" onclick="speak('${i.en}')">🔊</button></div><div style="margin:4px 0; font-weight:bold; color:var(--text);">${i.zh}</div><p style="font-size:0.85em; color:#777; border-top:1px dashed #eee; padding-top:8px; margin-top:8px;">${i.def}</p></div>`).join(''); }
-    function toggleStar(en, btn) { if(starredEn.includes(en)) starredEn = starredEn.filter(i => i !== en); else starredEn.push(en); localStorage.setItem('starredEn', JSON.stringify(starredEn)); btn.classList.toggle('active'); }
-    function openVocabTab(evt, name) { document.querySelectorAll('.vocab-tab-content').forEach(c => c.style.display = 'none'); document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.getElementById(name).style.display = 'block'; evt.currentTarget.classList.add('active'); if(name === 'starred-vocab') renderStarred(); }
-    function renderStarred() { const d = dictionary.filter(i => starredEn.includes(i.en)); document.getElementById('starredList').innerHTML = d.length ? d.map(i => `<div class="vocab-card"><b>${i.en}</b> (${i.zh})</div>`).join('') : '<p style="text-align:center;color:#999;padding:20px;">尚無收藏 ⭐</p>'; }
-    function generateExam() { const count = parseInt(document.getElementById('qCount').value); currentQuestions = [...questionBank].sort(() => 0.5 - Math.random()).slice(0, count); document.getElementById('examSetup').style.display = 'none'; document.getElementById('quizArea').style.display = 'block'; document.getElementById('questionList').innerHTML = currentQuestions.map((q, idx) => `<div class="quiz-card"><p><b>Q${idx+1}:</b> ${q.q}</p>${q.options.map((o, oi) => `<label class="option-label"><input type="radio" name="q${idx}" value="${oi}"> ${o}</label>`).join('')}</div>`).join(''); window.scrollTo(0,0); }
-    function gradeExam() { let score = 0; currentQuestions.forEach((q, idx) => { const s = document.querySelector(`input[name="q${idx}"]:checked`); if(s && parseInt(s.value) === q.ans) score++; else if(!errorList.find(e => e.id === q.id)) errorList.push(q); }); localStorage.setItem('errorList', JSON.stringify(errorList)); const f = Math.round((score/currentQuestions.length)*100); document.getElementById('quizArea').style.display='none'; document.getElementById('resultArea').style.display='block'; document.getElementById('scoreDisplay').innerText = f + " 分"; document.getElementById('resultMsg').innerText = f >= 60 ? "及格了！暖心暖胃 🥳☕" : "沒及格...再去複習機制看看錯題吧！🍵"; window.scrollTo(0,0); }
-    function resetExam() { document.getElementById('resultArea').style.display='none'; document.getElementById('examSetup').style.display='block'; }
-    function renderErrors() { document.getElementById('errorList').innerHTML = errorList.length ? errorList.map(e => `<div class="error-item"><button class="del-btn" onclick="removeError(${e.id})">刪除</button><p><b>題：</b>${e.q}</p><p style="color:var(--success)">解答: ${e.options[e.ans]}</p></div>`).join('') : '<p style="text-align:center;color:#999;padding:20px;">暫無錯題 🍪</p>'; }
-    function removeError(id) { errorList = errorList.filter(e => e.id !== id); localStorage.setItem('errorList', JSON.stringify(errorList)); renderErrors(); }
-    function speak(txt) { window.speechSynthesis.speak(new SpeechSynthesisUtterance(txt)); }
-    renderVocab();
+    
+    function showSection(id) { 
+        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        toggleMenu();
+        if(id === 'progress-section') updateProgressUI();
+        if(id === 'review-section') renderErrors();
+        if(id === 'exam-section') startQuiz();
+    }
+
+    // 學習進度分頁切換
+    function switchProgTab(idx) {
+        document.querySelectorAll('.prog-sheet').forEach(s => s.style.display = 'none');
+        document.querySelectorAll('#progress-section .tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('prog-sheet-' + idx).style.display = 'block';
+        document.querySelectorAll('#progress-section .tab-btn')[idx].classList.add('active');
+    }
+
+    function updateProgressUI() {
+        const total = questionBank.length;
+        const errorKeys = Object.keys(errorStats).length;
+        const mastered = Math.max(0, total - errorKeys);
+        const percent = Math.round((mastered / total) * 100);
+        
+        document.getElementById('progressCircle').style.setProperty('--p', percent + '%');
+        document.getElementById('progressVal').innerText = percent + '%';
+        document.getElementById('masteredCount').innerText = mastered;
+        document.getElementById('totalCount').innerText = total;
+
+        // 今日數據
+        const today = new Date().toLocaleDateString();
+        if(dailyLog.date !== today) {
+            dailyLog = { date: today, count: 0, totalScore: 0, times: 0 };
+        }
+        document.getElementById('todayCount').innerText = dailyLog.count + " 題";
+        const avg = dailyLog.times > 0 ? Math.round(dailyLog.totalScore / dailyLog.times) : 0;
+        document.getElementById('avgScore').innerText = avg + " 分";
+    }
+
+    function startQuiz() {
+        document.getElementById('questionList').innerHTML = questionBank.map((q, idx) => `
+            <div class="card">
+                <span class="q-tag"># ${q.tag}</span>
+                <p><b>Q${idx+1}:</b> ${q.q}</p>
+                ${q.options.map((o, oi) => `<label style="display:block; margin:10px 0;"><input type="radio" name="q${idx}" value="${oi}"> ${o}</label>`).join('')}
+            </div>
+        `).join('');
+    }
+
+    function gradeExam() {
+        let score = 0;
+        questionBank.forEach((q, idx) => {
+            const selected = document.querySelector(`input[name="q${idx}"]:checked`);
+            if (selected && parseInt(selected.value) === q.ans) {
+                score++;
+            } else {
+                // 錯題紀錄 + 累計次數
+                errorStats[q.id] = (errorStats[q.id] || 0) + 1;
+            }
+        });
+
+        // 儲存今日戰績
+        dailyLog.count += questionBank.length;
+        dailyLog.totalScore += (score / questionBank.length) * 100;
+        dailyLog.times += 1;
+        localStorage.setItem('dailyLog', JSON.stringify(dailyLog));
+        localStorage.setItem('errorStats', JSON.stringify(errorStats));
+        
+        alert(`測驗結束！得分：${Math.round((score/questionBank.length)*100)}`);
+        showSection('progress-section');
+    }
+
+    function renderErrors() {
+        const list = document.getElementById('errorList');
+        const errors = questionBank.filter(q => errorStats[q.id]);
+        
+        list.innerHTML = errors.length ? errors.map(q => `
+            <div class="card">
+                ${errorStats[q.id] >= 2 ? `<div class="error-warning">⚠️ 嚴重弱點：已錯 ${errorStats[q.id]} 次</div>` : ''}
+                <p><b>[${q.tag}]</b> ${q.q}</p>
+                <p style="color:var(--success); font-weight:bold;">正確答案：${q.options[q.ans]}</p>
+            </div>
+        `).join('') : '<p style="text-align:center; padding:20px;">目前沒有錯題，繼續保持！☕</p>';
+    }
+
+    showSection('progress-section'); // 預設進入進度頁面
 </script>
 </body>
 </html>
