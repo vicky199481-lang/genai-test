@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>史努比的生成式 AI 考照助手</title>
+    <title>☕ 史努比的生成式 AI 考照助手 </title>
     <style>
         /* 視覺與介面風格：日系、奶茶色調 */
         :root { 
-            --primary: #BCA38F; 
-            --primary-dark: #8D6E63; 
-            --bg: #FAF6F0; 
+            --primary: #BCA38F; /* 奶茶棕 */
+            --primary-dark: #8D6E63; /* 深咖色 */
+            --bg: #FAF6F0; /* 奶油白背景 */
             --card: #FFFFFF; 
-            --success: #A3B18A; 
-            --error: #E07A5F; 
-            --text: #5C4D43; 
-            --accent: #EFE6DD; 
+            --success: #A3B18A; /* 抹茶綠 */
+            --error: #E07A5F; /* 焦糖橘紅 (錯題紅框) */
+            --text: #5C4D43; /* 深褐色文字 */
+            --accent: #EFE6DD; /* 淺奶茶色 */
         }
         
         body { 
@@ -39,49 +39,61 @@
             border-bottom: 2px solid var(--accent);
         }
         .menu-dots { background: none; border: none; color: var(--primary-dark); font-size: 24px; cursor: pointer; padding: 0 10px; }
-        .snoopy-title { flex:1; text-align:center; font-weight:bold; font-size: 18px; color: var(--primary-dark); letter-spacing: 1px; }
-        .btn-clear { background: var(--accent); border: none; padding: 6px 12px; border-radius: 20px; font-size: 12px; color: var(--text); cursor: pointer; font-weight: bold; }
+        .snoopy-title { flex:1; text-align:center; font-weight:bold; font-size: 16px; color: var(--primary-dark); }
+        .btn-clear { background: var(--accent); border: none; padding: 6px 12px; border-radius: 20px; font-size: 12px; color: var(--text); cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .btn-clear:hover { background: #e0d4c8; }
         
-        /* 選單 */
+        /* 左上角選單 */
         .side-menu { display: none; position: absolute; top: 55px; left: 10px; background: var(--card); box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 15px; width: 180px; z-index: 1001; overflow: hidden; }
         .side-menu a { display: block; padding: 12px 15px; color: var(--text); text-decoration: none; border-bottom: 1px dashed var(--accent); font-size: 14px; transition: 0.3s; font-weight: bold; }
         .side-menu a:hover { background: var(--accent); }
 
-        /* 分頁切換 */
+        /* 分頁切換 (Tabs) */
         .tab-bar { display: flex; background: var(--accent); padding: 5px; border-radius: 50px; margin: 10px 0; overflow-x: auto; white-space: nowrap; }
         .tab-btn { flex: 1; padding: 8px 12px; border: none; background: transparent; border-radius: 50px; cursor: pointer; font-size: 13px; color: var(--primary-dark); transition: 0.3s; }
         .tab-btn.active { background: var(--card); font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
 
+        /* 內容區塊 */
         .content-section { display: none; padding: 15px; }
         .active-sec { display: block; }
-        .card { background: var(--card); border-radius: 20px; padding: 18px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(188, 163, 143, 0.1); border: 1px solid #FAF6F0; position: relative; overflow: hidden; }
-        
-        /* 裝飾性插圖元件 */
-        .snoopy-house-icon { width: 60px; height: 60px; margin: 10px auto; display: block; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 20 L80 50 L80 80 L20 80 L20 50 Z" fill="none" stroke="%238D6E63" stroke-width="3"/><path d="M20 50 L80 50" fill="none" stroke="%238D6E63" stroke-width="2"/><circle cx="50" cy="15" r="5" fill="%23E07A5F"/></svg>') no-repeat center; }
+        .card { background: var(--card); border-radius: 20px; padding: 18px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(188, 163, 143, 0.1); border: 1px solid #FAF6F0; transition: all 0.3s ease; }
         
         /* 圓形進度條 */
         .circle-progress { width: 120px; height: 120px; border-radius: 50%; background: conic-gradient(var(--primary) var(--p, 0%), var(--accent) 0); display: flex; align-items: center; justify-content: center; margin: 20px auto; position: relative; }
         .circle-progress::after { content: ""; width: 95px; height: 95px; background: var(--card); border-radius: 50%; position: absolute; }
         .progress-text { position: relative; z-index: 1; font-size: 24px; font-weight: bold; color: var(--primary-dark); }
 
-        /* 按鈕與輸入 */
-        select { width: 100%; padding: 12px; border-radius: 12px; border: 2px solid var(--accent); margin: 5px 0 15px; background: var(--card); color: var(--text); outline: none; }
-        .btn-main { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 50px; font-weight: bold; font-size: 15px; cursor: pointer; margin-top: 10px; box-shadow: 0 4px 10px rgba(188, 163, 143, 0.3); }
-        .btn-small { background: var(--accent); color: var(--text); border: none; padding: 6px 12px; border-radius: 15px; font-size: 12px; cursor: pointer; font-weight:bold; }
+        /* 輸入框與按鈕 */
+        select, input[type="text"] { width: 100%; padding: 12px; border-radius: 12px; border: 2px solid var(--accent); margin: 5px 0 15px; background: var(--card); color: var(--text); outline: none; box-sizing: border-box; font-family: inherit; font-size:14px; }
+        .btn-main { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 50px; font-weight: bold; font-size: 15px; cursor: pointer; margin-top: 10px; transition: 0.2s; box-shadow: 0 4px 10px rgba(188, 163, 143, 0.3); }
+        .btn-main:active { transform: scale(0.98); }
+        .btn-small { background: var(--accent); color: var(--text); border: none; padding: 6px 12px; border-radius: 15px; font-size: 12px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 5px; font-weight:bold; }
+        .btn-small:hover { background: #e0d4c8; }
         
-        /* 單字卡 */
-        .vocab-card { border-left: 6px solid var(--primary); }
+        /* B. 單字卡 (懸浮立體質感) */
+        .vocab-card { display: flex; flex-direction: column; gap: 10px; position: relative; border-left: 6px solid var(--primary); background: #fff; }
         .vocab-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(188, 163, 143, 0.3); }
-        .vocab-en { font-size: 19px; font-weight: bold; color: var(--primary-dark); }
+        .vocab-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px dashed var(--accent); padding-bottom: 10px; }
+        .vocab-en { font-size: 19px; font-weight: bold; color: var(--primary-dark); margin-bottom: 2px; }
+        .vocab-ch { font-size: 14px; color: #888; transition: 0.3s; line-height: 1.5; }
         .hide-chinese .vocab-ch { filter: blur(6px); opacity: 0.3; user-select: none; }
         
-        .wrong-ans-box { border: 2px solid var(--error); padding: 15px; border-radius: 12px; margin-bottom: 15px; background: #FFF5F2; }
+        /* 考題寶典 UI */
+        .q-tag { display: inline-block; background: var(--accent); color: var(--primary-dark); font-size: 11px; padding: 4px 12px; border-radius: 50px; margin-bottom: 10px; font-weight: bold; }
+        .option-label { display: block; background: var(--bg); padding: 12px; border-radius: 12px; margin: 8px 0; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
+        .option-label:hover { background: var(--accent); }
+        input[type="radio"]:checked + span { font-weight: bold; color: var(--primary-dark); }
         
+        /* 紅框清楚標示 */
+        .wrong-ans-box { background: var(--bg); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 2px solid var(--error); box-shadow: 0 4px 10px rgba(224, 122, 95, 0.15); }
+        
+        /* Pagination */
+        .pagination { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+        
+        /* Snoopy 可愛元素 */
         .snoopy-deco { text-align: center; margin: 10px 0; color: var(--primary-dark); font-size: 18px; font-weight: bold; }
-        
-        /* 插圖點綴 */
-        .illust-dog { width: 40px; height: 40px; float: right; opacity: 0.6; }
 
+        /* 講義表格風格 */
         table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
         th, td { border: 1px solid var(--accent); padding: 10px; text-align: left; }
         th { background: var(--accent); color: var(--primary-dark); }
@@ -97,7 +109,7 @@
         <a href="javascript:void(0)" onclick="showSection('exam-section')">考題寶典</a>
         <a href="javascript:void(0)" onclick="showSection('review-section')">錯題複習</a>
     </div>
-    <div class="snoopy-title">Snoopy AI 考照助手 🐾</div>
+    <div class="snoopy-title"> 生成式AI考照助手</div>
     <button class="btn-clear" onclick="clearAllData()">清除紀錄</button>
 </header>
 
@@ -109,29 +121,28 @@
 
     <div id="progress-0" class="tab-content">
         <div class="card" style="text-align:center">
-            <div class="snoopy-house-icon"></div>
-            <h3 class="snoopy-deco">整體題庫掌握度</h3>
+            <h3 class="snoopy-deco">🏆 整體題庫掌握度</h3>
             <div class="circle-progress" id="progressCircle" style="--p: 0%">
                 <div class="progress-text" id="progressVal">0%</div>
             </div>
-            <p style="font-size:14px; color:#666;">已精熟：<span id="masteredCount" style="font-weight:bold; color:var(--primary-dark);">0</span> / <span id="totalCount">0</span> 題</p>
+            <p style="font-size:14px; color:#666;">(扣除錯題後的精熟比例)<br>已精熟：<span id="masteredCount" style="font-weight:bold; color:var(--primary-dark);">0</span> / <span id="totalCount">0</span> 題</p>
         </div>
     </div>
 
     <div id="progress-1" class="tab-content" style="display:none">
         <div class="card" style="text-align:center">
-            <h3 class="snoopy-deco">今日刷題戰報 🐾</h3>
+            <h3 class="snoopy-deco">📅 今日刷題狀況 (<span id="todayDate"></span>)</h3>
             <div style="display:flex; justify-content:space-around; margin-top:20px;">
                 <div>
                     <div style="font-size:30px; font-weight:bold; color:var(--primary-dark);" id="todayCount">0</div>
-                    <div style="font-size:12px; color:#888;">累計題數</div>
+                    <div style="font-size:12px; color:#888;">做了幾題</div>
                 </div>
                 <div>
                     <div style="font-size:30px; font-weight:bold; color:var(--success);" id="todayAvgScore">0</div>
                     <div style="font-size:12px; color:#888;">平均分數</div>
                 </div>
             </div>
-            <div style="margin-top:20px; opacity:0.5; font-size:12px;">每天跨日後將自動重新計算</div>
+            <p style="margin-top:20px; font-size:13px; color:#999;">※ 自動記錄並於每天跨日累積重置</p>
         </div>
     </div>
 </section>
@@ -147,12 +158,12 @@
     <div id="vocab-0" class="tab-content">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
             <span style="font-size:14px; font-weight:bold; color:var(--primary-dark)">總詞彙量：<span id="vocabTotalCount"></span></span>
-            <button class="btn-small" onclick="toggleChinese()">👁️ 隱藏中文</button>
+            <button class="btn-small" id="toggleChBtn" onclick="toggleChinese()">👁️ 隱藏中文</button>
         </div>
         <div id="vocabList"></div>
         <div class="pagination">
             <button class="btn-small" onclick="changePage(-1)">◀ 上一頁</button>
-            <span id="pageInfo" style="font-size:14px; font-weight:bold; color: var(--primary-dark);"></span>
+            <span id="pageInfo" style="font-size:14px; font-weight:bold; align-self:center; color: var(--primary-dark);"></span>
             <button class="btn-small" onclick="changePage(1)">下一頁 ▶</button>
         </div>
     </div>
@@ -160,6 +171,7 @@
     <div id="vocab-1" class="tab-content" style="display:none">
         <div class="card">
             <h3 class="snoopy-deco">⭐ 星號重點單字</h3>
+            <p style="font-size:13px; color:#888; text-align:center;">獨立顯示所有被你打星號的重點單字。</p>
             <div id="starredList" style="margin-top: 15px;"></div>
         </div>
     </div>
@@ -172,7 +184,7 @@
                 <option value="風險治理">風險治理與法規解析</option>
                 <option value="提示工程">進階技術與提示工程</option>
             </select>
-            <div id="topicNotesArea"></div>
+            <div id="topicNotesArea" style="margin-top: 15px;"></div>
         </div>
     </div>
 
@@ -181,7 +193,8 @@
             <h3 class="snoopy-deco">📎 外部參考連結</h3>
             <p>1. <a href="#" style="color:var(--primary-dark)">金管會金融業導入 AI 指引</a></p>
             <p>2. <a href="#" style="color:var(--primary-dark)">OpenAI Prompt Engineering 官方指南</a></p>
-            <div style="text-align:center; margin-top:30px; opacity:0.3;">🐾 🐾 🐾</div>
+            <p>3. 相關法規與政策懶人包</p>
+            <div class="snoopy-deco" style="margin-top:30px;"> 🐾...</div>
         </div>
     </div>
 </section>
@@ -191,31 +204,43 @@
         <h3 class="snoopy-deco">📝 測驗設定</h3>
         <label>選擇題數</label>
         <select id="setCount">
-            <option value="5">5 題</option><option value="10">10 題</option>
-            <option value="15">15 題</option><option value="20">20 題</option>
+            <option value="5">5 題</option>
+            <option value="10">10 題</option>
+            <option value="15">15 題</option>
+            <option value="20">20 題</option>
         </select>
+        
         <label>難易度</label>
         <select id="setLevel">
-            <option value="簡易">簡易</option><option value="中級" selected>中級</option><option value="困難">困難</option>
+            <option value="簡易">簡易</option>
+            <option value="中級" selected>中級</option>
+            <option value="困難">困難</option>
         </select>
+
+        <label>雙向出題來源 (可複選)</label>
         <div style="margin-bottom: 15px;">
             <label style="display:block;"><input type="checkbox" id="srcMock" checked> 模擬題庫</label>
-            <label style="display:block;"><input type="checkbox" id="srcVocab" checked> 核心觀念自動出題</label>
+            <label style="display:block;"><input type="checkbox" id="srcVocab" checked> 核心觀念 (自動生成觀念選擇題)</label>
         </div>
-        <button class="btn-main" onclick="generateQuiz()">🐾 開始測驗</button>
+        <button class="btn-main" onclick="generateQuiz()">🐾 送出</button>
     </div>
 
     <div id="quizArea" style="display:none">
         <div id="questionList"></div>
-        <button class="btn-main" onclick="gradeExam()">✅ 送出評分</button>
+        <button class="btn-main" onclick="gradeExam()">✅ 送出</button>
     </div>
 
     <div id="examResult" class="card" style="display:none; text-align:center;">
         <h2 style="color:var(--primary-dark);">測驗結果</h2>
-        <div style="font-size: 50px; font-weight: bold; color: var(--primary);" id="scoreDisplay"></div>
+        <div style="font-size: 55px; font-weight: bold; color: var(--primary); margin: 5px 0; text-shadow: 2px 2px 0px var(--accent);" id="scoreDisplay"></div>
         <div id="scoreMessage" style="font-weight:bold; margin-bottom:15px;"></div>
-        <button class="btn-main" onclick="resetExam()">🔄 再測一次</button>
+        
+        <p style="background:var(--accent); display:inline-block; padding:5px 15px; border-radius:20px; font-size:14px;">
+            錯誤題數：<span id="errCountDisplay" style="color:var(--error); font-weight:bold;"></span> 題
+        </p>
+        
         <div id="errExplanations" style="text-align:left; margin-top:20px;"></div>
+        <button class="btn-main" onclick="resetExam()">🔄 再測一次</button>
     </div>
 </section>
 
@@ -224,13 +249,28 @@
         <button class="tab-btn active" onclick="switchTab('review', 0)">錯題本</button>
         <button class="tab-btn" onclick="switchTab('review', 1)">重點錯題本</button>
     </div>
-    <div id="review-0" class="tab-content"><div id="reviewListNormal"></div></div>
-    <div id="review-1" class="tab-content" style="display:none"><div id="reviewListBoss"></div></div>
+
+    <div id="review-0" class="tab-content">
+        <div class="card">
+            <h3 class="snoopy-deco">🎯 錯題本</h3>
+            <p style="font-size:13px; color:#888; text-align:center;">收錄考題寶典中答錯的題目（排除重複）。複習完畢點選刪除可提升完成度！</p>
+            <div id="reviewListNormal"></div>
+        </div>
+    </div>
+
+    <div id="review-1" class="tab-content" style="display:none">
+        <div class="card">
+            <h3 class="snoopy-deco">🔥 重點錯題本</h3>
+            <p style="font-size:13px; color:#888; text-align:center;">一旦錯 3 次以上將自動收錄於此，手動刪除將同步刪除「錯題本」題目。</p>
+            <div id="reviewListBoss"></div>
+        </div>
+    </div>
 </section>
 
 <script>
-    // ---------------- 資料庫區 ----------------
+    // ================= 1. 資料庫區 (100 個單字、27 題考題) =================
     let vocabBank = [
+        // --- 基礎與應用 (50題) ---
         { id: 'v1', en: "LLM", ch: "大型語言模型", def: "基於巨量資料訓練，具備理解與生成能力的深度學習模型。", topic: "基礎觀念" },
         { id: 'v2', en: "Token", ch: "標記 / 權杖", def: "模型處理文字的最小單位，可能是單字、詞或字元。", topic: "基礎觀念" },
         { id: 'v3', en: "Context Window", ch: "上下文窗口", def: "模型單次對話中能處理的最大 Token 範圍。", topic: "基礎觀念" },
@@ -281,6 +321,7 @@
         { id: 'v48', en: "Usage Quota", ch: "使用額度", def: "系統設定的調用次數或流量上限。", topic: "應用開發" },
         { id: 'v49', en: "Rate Limit", ch: "速率限制", def: "單位時間內允許發送的最大請求數，用以保護系統。", topic: "應用開發" },
         { id: 'v50', en: "Governance", ch: "治理", def: "針對 AI 的政策、標準與流程進行全面管理。", topic: "風險治理" },
+        // --- 高階技術與觀念 (50題) ---
         { id: 'v51', en: "Attention Head", ch: "注意力頭", def: "Transformer 中平行處理不同子空間資訊的組件。", topic: "進階觀念" },
         { id: 'v52', en: "Positional Encoding", ch: "位置編碼", def: "為 Token 加入序列位置資訊，解決模型無順序感問題。", topic: "進階觀念" },
         { id: 'v53', en: "Long-context Degradation", ch: "長文本效能衰減", def: "隨著上下文增加，模型對早期資訊的提取能力下降。", topic: "進階觀念" },
@@ -353,58 +394,74 @@
         { id: 'q17', level: "困難", tag: "資料處理", q: "資料前處理中處理缺漏值，「最不適當」的做法？", options: ["平均值填補", "回歸預測", "全數刪除整列", "標記特殊類別"], ans: 2, exp: "正確解答為 (C)全數刪除整列。" },
         { id: 'q18', level: "中級", tag: "法規監管", q: "歐盟《人工智慧法案》依據什麼標準分級？", options: ["風險程度", "國別", "程式碼開源", "禁止所有個資應用"], ans: 0, exp: "正確解答為 (A)風險程度。" },
         { id: 'q19', level: "困難", tag: "倫理準則", q: "下列何者不屬於可信賴 AI 的「倫理」要求？", options: ["透明性", "公平性", "實用性(追求利潤最大化)", "問責制"], ans: 2, exp: "正確解答為 (C)實用性(追求利潤最大化)。" },
-        { id: 'q20', level: "困難", tag: "進階 RAG", q: "當 RAG 系統檢索出大量參考文件，但模型回答受限於 Context Window 時，哪項做法最有效？", options: ["增加 Temperature", "實施 Reranking 僅保留 Top 3", "Fine-tuning", "停用 Chunking"], ans: 1, exp: "Reranking 能將相關度最高的片段排在前面，確保模型讀到最高品質資料。" },
-        { id: 'q21', level: "困難", tag: "多模態技術", q: "視覺語言模型在處理圖片時，會將圖片分割成固定大小的區塊稱為？", options: ["Textual Tokens", "Image Patches", "Neural Layers", "Pixel Clusters"], ans: 1, exp: "Image Patches 將圖片視為序列，轉換為 Embedding 後與文字 Token 一起處理。" },
-        { id: 'q22', level: "中級", tag: "企業安全", q: "AI 誤將內部政策洩露給未授權用戶，這種攻擊現象稱為？", options: ["Data Poisoning", "Model Drift", "Prompt Leakage", "Hallucination"], ans: 2, exp: "Prompt Leakage 旨在獲取模型的系統提示或隱藏內容。" },
-        { id: 'q23', level: "困難", tag: "效能優化", q: "為了降低重複發送「背景知識」產生的費用，應優先考慮？", options: ["Context Caching", "Model Quantization", "Batch Inference", "Rate Limit"], ans: 0, exp: "內容快取 (Caching) 能儲存頻繁使用的上下文，減少重複運算費用。" },
-        { id: 'q24', level: "中級", tag: "AI 合規", q: "AI 應用於「信用評等」或「履歷篩選」屬於 EU AI Act 哪一風險等級？", options: ["不可接受", "高風險", "有限風險", "最低風險"], ans: 1, exp: "涉及個人生計與就業的決策系統被列為高風險。" },
-        { id: 'q25', level: "困難", tag: "Agent 架構", q: "負責將使用者目標拆解為子任務的組件稱為？", options: ["Tool Caller", "Planner", "Memory", "Executor"], ans: 1, exp: "Planner 負責策略思考與任務分發。" },
-        { id: 'q26', level: "中級", tag: "提示工程", q: "要求 AI「一步一步思考」是應用了哪種提示技巧？", options: ["Few-shot", "Chain-of-Thought (CoT)", "Injection", "Zero-shot"], ans: 1, exp: "思路鏈誘發模型進行序列推理，提升邏輯任務準確率。" },
-        { id: 'q27', level: "困難", tag: "模型運維", q: "測試新版 RAG 檢索演算法而不影響所有用戶，應採用？", options: ["Blue-Green", "Canary Deployment", "Recreate", "Shadow"], ans: 1, exp: "金絲雀部署先開放給小部分用戶測試穩定性。" }
+        { id: 'q20', level: "困難", tag: "進階 RAG 優化", q: "當 RAG 系統檢索出大量參考文件，但模型回答卻受限於 Context Window 而遺漏關鍵資訊時，下列哪項做法最能有效解決？", options: ["增加 Temperature 數值", "實施 Reranking (再排序) 僅保留 Top 3", "將所有文件進行 Fine-tuning", "停用資料切塊 (Chunking)"], ans: 1, exp: "再排序能將最相關的片段排在最前面，確保模型在有限的窗口內讀到最高品質的資料，避免「Lost in the Middle」現象。" },
+        { id: 'q21', level: "困難", tag: "多模態技術細節", q: "視覺語言模型（VLM）在處理圖片時，會將圖片分割成固定大小的區塊進行向量化，這些區塊在技術上稱為？", options: ["Textual Tokens", "Image Patches", "Neural Layers", "Pixel Clusters"], ans: 1, exp: "現代模型（如 ViT 架構）將圖片視為序列，切成 Patches 後轉換為 Embedding，使其能與文字 Token 一起處理。" },
+        { id: 'q22', level: "中級", tag: "企業安全與資安", q: "某銀行助理 AI 誤將內部利率政策洩露給未授權用戶，這種因提示詞設計不當導致模型吐露系統指令或私密設定的現象稱為？", options: ["Data Poisoning", "Model Drift", "Prompt Leakage", "Hallucination"], ans: 2, exp: "提示詞洩漏是提示注入攻擊的一種，旨在獲取模型的 System Prompt 或隱藏的上下文資訊。" },
+        { id: 'q23', level: "困難", tag: "成本與效能優化", q: "企業在導入長對話客服機器人時，為了降低每次發送重複「背景知識」產生的 token 費用，應優先考慮哪種技術？", options: ["Context Caching (內容快取)", "Model Quantization", "Batch Inference", "Increasing Rate Limit"], ans: 0, exp: "內容快取允許 API 供應商儲存頻繁使用的上下文（如說明書、法規），減少重複運算的費用與延遲。" },
+        { id: 'q24', level: "中級", tag: "AI 治理與合規", q: "根據歐盟 AI 法案 (EU AI Act)，若 AI 系統被用於「信用評等」或「履歷自動篩選」，這類應用屬於哪一個風險等級？", options: ["不可接受風險 (Unacceptable)", "高風險 (High Risk)", "有限風險 (Limited)", "最低風險 (Minimal)"], ans: 1, exp: "涉及個人生計、教育、就業與基本權利的 AI 決策系統，皆被列為「高風險」，需符合嚴格的審查與透明度規範。" },
+        { id: 'q25', level: "困難", tag: "Agent 代理架構", q: "在多代理協作 (Multi-agent) 架構中，負責接收使用者目標並將其拆解為子任務的組件通常稱為？", options: ["Tool Caller", "Planner (規劃器)", "Memory Module", "Executor"], ans: 1, exp: "Planner 是 Agent 的大腦，負責策略思考與任務分發，是實現複雜自動化流程的核心。" },
+        { id: 'q26', level: "中級", tag: "提示工程進階", q: "當 AI 無法正確處理複雜的邏輯推理時，要求 AI「先深呼吸並一步一步思考」是應用了哪種提示技巧？", options: ["Few-shot Prompting", "Chain-of-Thought (CoT)", "Context Injection", "Zero-shot Learning"], ans: 1, exp: "思路鏈 (CoT) 誘發模型進行序列化推理，顯著提升數學與邏輯任務的準確率。" },
+        { id: 'q27', level: "困難", tag: "模型部署與運維", q: "為了在不影響所有用戶的情況下測試新版本的 RAG 檢索演算法，應採用哪種部署策略？", options: ["Blue-Green Deployment", "Canary Deployment (金絲雀部署)", "Recreate Deployment", "Shadow Deployment"], ans: 1, exp: "金絲雀部署先開放給 5-10% 的用戶，觀察穩定後再逐步擴散，適合用於測試不確定的 AI 生成結果。" }
     ];
 
+    // ================= 將補充講義完美融入 HTML =================
     const topicNotes = {
         "模型基礎": `
-            <h3>📚 核心考試項目</h3>
+            <h3>📚 核心考試項目 (Core Exam Domains)</h3>
             <table>
-                <tr><th>項目</th><th>重點摘要</th></tr>
-                <tr><td>1. 生成式 AI 原理</td><td>LLM, Transformer, Token, Attention</td></tr>
-                <tr><td>2. 提示工程</td><td>Prompt & Context Engineering</td></tr>
-                <tr><td>3. 場景設計</td><td>業務導入、侷限性評估</td></tr>
-                <tr><td>4. RAG 架構</td><td>檢索增強生成架構</td></tr>
-                <tr><td>5. 幻覺控管</td><td>Hallucination 緩解策略</td></tr>
+                <tr><th>項目</th><th>重點內容摘要</th></tr>
+                <tr><td>1. 生成式 AI 核心原理</td><td>LLM, Transformer, Token, Attention</td></tr>
+                <tr><td>2. 提示工程與上下文</td><td>Prompt Engineering & Context Engineering</td></tr>
+                <tr><td>3. 應用場景設計</td><td>業務場景導入、模型侷限性評估</td></tr>
+                <tr><td>4. RAG 架構</td><td>檢索增強生成架構與運作</td></tr>
+                <tr><td>5. 幻覺與風險控管</td><td>Hallucination 辨識與緩解策略</td></tr>
+                <tr><td>6. 資料治理與法規</td><td>隱私、資安、個資法、歐盟 AI 法案</td></tr>
+                <tr><td>7. 自動化整合</td><td>GenAI 與自動化工作流整合、No-code</td></tr>
+                <tr><td>8. Agentic AI</td><td>多代理協作 (Multi-agent)</td></tr>
+                <tr><td>9. 模型部署與 MLOps</td><td>API 調用、運行監控</td></tr>
+                <tr><td>10. AI 倫理與治理</td><td>責任 AI、透明度、公平性、問責制</td></tr>
             </table>
-            <h3>🛠️ 工具分類</h3>
+            
+            <h3 style="margin-top:20px;">🛠️ AI 工具與框架總覽</h3>
             <table>
-                <tr><th>分類</th><th>代表工具</th></tr>
-                <tr><td>通用模型</td><td>ChatGPT / GPT-4</td></tr>
-                <tr><td>多模態</td><td>Gemini</td></tr>
-                <tr><td>長文分析</td><td>Claude / NotebookLM</td></tr>
-                <tr><td>搜尋混合</td><td>Perplexity</td></tr>
+                <tr><th>分類</th><th>代表工具</th><th>核心功能</th></tr>
+                <tr><td>通用模型</td><td>ChatGPT / GPT-4</td><td>通用生成、Agent 框架核心</td></tr>
+                <tr><td>多模態處理</td><td>Gemini</td><td>多模態、長上下文處理</td></tr>
+                <tr><td>長文分析</td><td>Claude</td><td>長文分析、低幻覺傾向</td></tr>
+                <tr><td>知識管理</td><td>NotebookLM</td><td>企業知識整理 × RAG 示範</td></tr>
+                <tr><td>搜尋架構</td><td>Perplexity</td><td>搜尋 × 生成混合架構</td></tr>
+                <tr><td>開發框架</td><td>LangChain / LlamaIndex</td><td>RAG 與 Agent 框架</td></tr>
+                <tr><td>儲存與檢索</td><td>Pinecone / FAISS</td><td>語意檢索核心 (向量資料庫)</td></tr>
             </table>
         `,
         "風險治理": `
-            <h3>⚖️ 法規與治理</h3>
+            <h3>⚖️ 法規與 AI 治理知識點</h3>
             <table>
                 <tr><th>項目</th><th>細節解析</th></tr>
-                <tr><td>GDPR 罰款</td><td>最高 2,000 萬歐元或營業額 4% (取高)。</td></tr>
-                <tr><td>通報時限</td><td>知悉資料洩漏後 72 小時內。</td></tr>
-                <tr><td>AI 治理</td><td>重視問責制與可解釋性。</td></tr>
+                <tr><td><b>GDPR 罰款上限</b></td><td>最高 2,000 萬歐元或全球年營業額 4% (取其高者)。</td></tr>
+                <tr><td><b>GDPR 洩漏通報</b></td><td>知悉後 72 小時內。</td></tr>
+                <tr><td><b>AI 治理問責</b></td><td>(Accountability) 確保有人對 AI 決策負責，需具備可解釋性。</td></tr>
+                <tr><td><b>資料前處理</b></td><td>面對缺漏值，最不適當的做法是「全數刪除整列」。</td></tr>
             </table>
+            <p style="margin-top:10px; font-size:14px;">導入生成式 AI 需嚴格注意：<b>資料外洩風險</b>、<b>幻覺 (Hallucination)</b>、<b>偏見與公平性</b>、以及<b>智財權 (版權) 侵權</b>問題。</p>
         `,
         "提示工程": `
-            <h3>🚀 進階技術</h3>
+            <h3>🚀 進階技術與多模態</h3>
             <table>
-                <tr><th>技術</th><th>應用價值</th></tr>
-                <tr><td>Query Transformation</td><td>模糊問題轉精準詞，提升召回。</td></tr>
-                <tr><td>Reranking</td><td>對檢索片段重排序，提升精準。</td></tr>
-                <tr><td>Context Caching</td><td>快取重複背景資料，降低成本。</td></tr>
-                <tr><td>Prompt Firewall</td><td>攔截注入攻擊與越獄行為。</td></tr>
+                <tr><th>考點名稱</th><th>技術細節與應用價值</th></tr>
+                <tr><td><b>Query Transformation</b></td><td>使用 HyDE 將模糊問題轉換為精準檢索詞，提升資料完整度。</td></tr>
+                <tr><td><b>Reranking (再排序)</b></td><td>使用 Cross-encoder 重新評分檢索片段，大幅提升精準度。</td></tr>
+                <tr><td><b>Recursive Retrieval</b></td><td>針對長表或非結構化數據採遞迴檢索。</td></tr>
+                <tr><td><b>Cross-modal Attention</b></td><td>讓模型學習文字與圖像像素的關聯，實現「對圖說話」。</td></tr>
+                <tr><td><b>Image Patching</b></td><td>圖像進入模型前會被切成固定大小的方塊並轉為 Token。</td></tr>
+                <tr><td><b>PII Masking</b></td><td>自動遮蔽身分證字號等資訊，符合資安合規。</td></tr>
+                <tr><td><b>Prompt Firewall</b></td><td>部署於輸入端，即時攔截注入攻擊或越獄。</td></tr>
+                <tr><td><b>Context Caching</b></td><td>針對系統指令進行快取，降低 API 延遲與成本。</td></tr>
             </table>
         `
     };
 
-    // ---------------- 狀態變數 ----------------
+    // ================= 狀態變數 =================
     let errorStats = JSON.parse(localStorage.getItem('errorStats')) || {}; 
     let dailyStats = JSON.parse(localStorage.getItem('dailyStats')) || { date: "", count: 0, scoreSum: 0, exams: 0 };
     let starredVocab = JSON.parse(localStorage.getItem('starredVocab')) || [];
@@ -413,7 +470,7 @@
     const VOCAB_PER_PAGE = 10;
     let isChHidden = false;
 
-    // ---------------- 導覽與切換控制 ----------------
+    // ================= 導覽與切換控制 =================
     function toggleMenu() { 
         const m = document.getElementById('sideMenu'); 
         m.style.display = (m.style.display==='block')?'none':'block'; 
@@ -442,7 +499,7 @@
         if(sectionName === 'review') renderReview(); 
     }
 
-    // ---------------- A. 學習進度 ----------------
+    // ================= A. 學習進度功能 =================
     function updateProgressUI() {
         const fullBankSize = masterBank.length + vocabBank.length; 
         const errCount = Object.keys(errorStats).length;
@@ -460,42 +517,54 @@
             dailyStats = { date: today, count: 0, scoreSum: 0, exams: 0 };
             localStorage.setItem('dailyStats', JSON.stringify(dailyStats));
         }
+
         document.getElementById('todayCount').innerText = dailyStats.count;
         let avg = dailyStats.exams > 0 ? Math.round(dailyStats.scoreSum / dailyStats.exams) : 0;
         document.getElementById('todayAvgScore').innerText = avg;
     }
 
-    // ---------------- B. 核心觀念 ----------------
+    // ================= B. 核心觀念功能 =================
     function renderVocab() {
         const list = document.getElementById('vocabList');
         document.getElementById('vocabTotalCount').innerText = vocabBank.length;
+        
         const start = vocabPage * VOCAB_PER_PAGE;
-        const pageData = vocabBank.slice(start, start + VOCAB_PER_PAGE);
+        const end = start + VOCAB_PER_PAGE;
+        const pageData = vocabBank.slice(start, end);
         
         list.innerHTML = pageData.map(v => `
             <div class="card vocab-card">
                 <div class="vocab-header">
-                    <div><div class="vocab-en">${v.en}</div><span class="q-tag">#${v.topic}</span></div>
-                    <div style="display:flex; gap: 8px;"><button class="btn-small" onclick="speak('${v.en}')">🔊 發音</button>
-                    <button class="btn-small ${starredVocab.includes(v.id) ? 'starred' : ''}" onclick="toggleStar('${v.id}')">⭐ 收藏</button></div>
+                    <div>
+                        <div class="vocab-en">${v.en}</div>
+                        <span class="q-tag">#${v.topic}</span>
+                    </div>
+                    <div style="display:flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                        <button class="btn-small" onclick="speak('${v.en}')">🔊 英文發音</button>
+                        <button class="btn-small star-btn ${starredVocab.includes(v.id) ? 'starred' : ''}" style="color:var(--text); font-size:12px; font-weight:bold;" onclick="toggleStar('${v.id}')">⭐ 星號收藏</button>
+                    </div>
                 </div>
-                <div class="vocab-ch" style="font-weight:bold; color:var(--primary-dark);">${v.ch}</div>
+                <div class="vocab-ch" style="font-weight:bold; color:var(--primary-dark); font-size:15px;">${v.ch}</div>
                 <div class="vocab-ch">${v.def}</div>
             </div>
         `).join('');
+        
         document.getElementById('pageInfo').innerText = `${vocabPage + 1} / ${Math.ceil(vocabBank.length/VOCAB_PER_PAGE)}`;
     }
 
     function changePage(dir) {
         const maxPage = Math.ceil(vocabBank.length/VOCAB_PER_PAGE) - 1;
-        vocabPage = Math.max(0, Math.min(maxPage, vocabPage + dir));
+        vocabPage += dir;
+        if(vocabPage < 0) vocabPage = 0;
+        if(vocabPage > maxPage) vocabPage = maxPage;
         renderVocab();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function toggleChinese() {
         isChHidden = !isChHidden;
-        document.body.classList.toggle('hide-chinese', isChHidden);
+        if(isChHidden) document.body.classList.add('hide-chinese');
+        else document.body.classList.remove('hide-chinese');
     }
 
     function speak(text) {
@@ -505,8 +574,11 @@
     }
 
     function toggleStar(id) {
-        if(starredVocab.includes(id)) starredVocab = starredVocab.filter(s => s !== id);
-        else starredVocab.push(id);
+        if(starredVocab.includes(id)) {
+            starredVocab = starredVocab.filter(s => s !== id);
+        } else {
+            starredVocab.push(id);
+        }
         localStorage.setItem('starredVocab', JSON.stringify(starredVocab));
         renderVocab();
         renderStarred();
@@ -515,93 +587,209 @@
     function renderStarred() {
         const list = document.getElementById('starredList');
         const starredData = vocabBank.filter(v => starredVocab.includes(v.id));
-        if(starredData.length === 0) { list.innerHTML = "<p style='text-align:center;'>無收藏單字。</p>"; return; }
-        list.innerHTML = starredData.map(v => `<div class="card vocab-card"><b>${v.en}</b><br>${v.ch}<br><small>${v.def}</small></div>`).join('');
+        
+        if(starredData.length === 0) {
+            list.innerHTML = "<p style='text-align:center; color:#888;'>目前沒有星號註記單字。</p>";
+            return;
+        }
+        
+        list.innerHTML = starredData.map(v => `
+            <div class="card vocab-card">
+                <div class="vocab-header">
+                    <span class="vocab-en">${v.en}</span>
+                    <button class="btn-small" onclick="toggleStar('${v.id}')">取消星號</button>
+                </div>
+                <div class="vocab-ch"><b>${v.ch}</b><br>${v.def}</div>
+            </div>
+        `).join('');
     }
 
     function renderTopicNotes() {
         const topic = document.getElementById('topicSelect').value;
-        document.getElementById('topicNotesArea').innerHTML = topicNotes[topic] || "";
+        document.getElementById('topicNotesArea').innerHTML = topicNotes[topic] || "<p>暫無內容</p>";
     }
 
-    // ---------------- C. 考題寶典 ----------------
-    function generateVocabQuiz() {
+    // ================= C. 考題寶典功能 =================
+    function generateVocabQuestions() {
+        const levels = ["簡易", "中級", "困難"];
         return vocabBank.map(v => {
-            let wrongs = vocabBank.filter(x => x.id !== v.id).sort(() => 0.5 - Math.random()).slice(0, 3).map(x => x.def);
-            let opts = [v.def, ...wrongs].sort(() => 0.5 - Math.random());
-            return { id: 'vq_'+v.id, level: "中級", tag: "觀念", q: `「${v.en}」的正確定義？`, options: opts, ans: opts.indexOf(v.def), exp: v.def };
+            let wrongDefs = vocabBank.filter(x => x.id !== v.id).map(x => x.def).sort(() => 0.5 - Math.random()).slice(0, 3);
+            let options = [v.def, ...wrongDefs].sort(() => 0.5 - Math.random());
+            let ansIndex = options.indexOf(v.def);
+            let randomLevel = levels[Math.floor(Math.random() * levels.length)];
+            return {
+                id: 'vq_' + v.id, tag: "觀念題: " + v.topic, level: randomLevel,
+                q: `關於「${v.en} (${v.ch})」的定義，下列何者正確？`,
+                options: options, ans: ansIndex, exp: `【正確定義】${v.def}`
+            };
         });
     }
 
     function generateQuiz() {
         const count = parseInt(document.getElementById('setCount').value);
         const level = document.getElementById('setLevel').value;
-        let pool = [];
-        if(document.getElementById('srcMock').checked) pool = pool.concat(masterBank);
-        if(document.getElementById('srcVocab').checked) pool = pool.concat(generateVocabQuiz());
+        const useMock = document.getElementById('srcMock').checked;
+        const useVocab = document.getElementById('srcVocab').checked;
         
-        let filtered = pool.filter(q => q.level === level);
-        if(filtered.length === 0) { alert("此難度目前無題目。"); return; }
-        currentQuiz = filtered.sort(() => 0.5 - Math.random()).slice(0, count);
+        let pool = [];
+        if(useMock) pool = pool.concat(masterBank);
+        if(useVocab) pool = pool.concat(generateVocabQuestions());
+        
+        if(pool.length === 0) {
+            alert("請至少勾選一種出題來源！"); return;
+        }
+
+        let filteredPool = pool.filter(q => q.level === level);
+        
+        if(filteredPool.length === 0) {
+            alert(`目前來源中沒有「${level}」的題目，請更換設定！`); return;
+        }
+
+        currentQuiz = filteredPool.sort(() => 0.5 - Math.random()).slice(0, count);
+        
+        if(currentQuiz.length < count) {
+            alert(`⚠️ 提示：選定的來源中，「${level}」難度的題目只有 ${currentQuiz.length} 題，將為您全數列出！`);
+        }
         
         document.getElementById('quizFilter').style.display = 'none';
+        document.getElementById('examResult').style.display = 'none';
         document.getElementById('quizArea').style.display = 'block';
-        document.getElementById('questionList').innerHTML = currentQuiz.map((q, i) => `
-            <div class="card"><p><b>Q${i+1}: ${q.q}</b></p>
-            ${q.options.map((o, oi) => `<label class="option-label"><input type="radio" name="q${i}" value="${oi}"> <span>${o}</span></label>`).join('')}</div>
+        
+        const list = document.getElementById('questionList');
+        list.innerHTML = currentQuiz.map((q, i) => `
+            <div class="card">
+                <span class="q-tag">${q.tag} (${q.level})</span>
+                <p style="font-weight:bold; font-size:16px;">Q${i+1}: ${q.q}</p>
+                ${q.options.map((o, oi) => `
+                    <label class="option-label">
+                        <input type="radio" name="q${i}" value="${oi}"> <span>${o}</span>
+                    </label>
+                `).join('')}
+            </div>
         `).join('');
     }
 
     function gradeExam() {
-        let wrong = 0; let html = "";
+        let wrongCount = 0;
+        let expHtml = "";
+
         currentQuiz.forEach((q, i) => {
             const sel = document.querySelector(`input[name="q${i}"]:checked`);
-            if(!sel || parseInt(sel.value) !== q.ans) {
-                wrong++; errorStats[q.id] = (errorStats[q.id] || 0) + 1;
-                html += `<div class="wrong-ans-box"><b>${q.q}</b><br>❌ 你的選擇: ${sel ? q.options[sel.value] : '未答'}<br>✅ 正解: ${q.options[q.ans]}<br><small>💡 ${q.exp}</small></div>`;
+            const userAns = sel ? parseInt(sel.value) : -1;
+            
+            if (userAns !== q.ans) {
+                wrongCount++;
+                errorStats[q.id] = (errorStats[q.id] || 0) + 1; 
+                
+                expHtml += `
+                    <div class="wrong-ans-box">
+                        <p style="margin:0 0 8px 0; color:var(--text); font-size:15px;"><b>Q: ${q.q}</b></p>
+                        <p style="margin:0; font-size:14px; color:var(--error); font-weight:bold;">❌ 你的答案：${userAns === -1 ? "未作答" : q.options[userAns]}</p>
+                        <p style="margin:5px 0; font-size:14px; color:var(--success); font-weight:bold;">✅ 正確答案：${q.options[q.ans]}</p>
+                        <div style="margin:10px 0 0 0; font-size:13px; color:var(--primary-dark); background:#fff; padding:10px; border-radius:8px;">💡 <b>詳細解析：</b><br>${q.exp}</div>
+                    </div>
+                `;
             }
         });
+        
         localStorage.setItem('errorStats', JSON.stringify(errorStats));
-        const score = Math.round(((currentQuiz.length - wrong) / currentQuiz.length) * 100);
-        dailyStats.count += currentQuiz.length; dailyStats.scoreSum += score; dailyStats.exams += 1;
+        
+        const score = Math.round(((currentQuiz.length - wrongCount) / currentQuiz.length) * 100);
+        
+        dailyStats.count += currentQuiz.length;
+        dailyStats.scoreSum += score;
+        dailyStats.exams += 1;
         localStorage.setItem('dailyStats', JSON.stringify(dailyStats));
         
         document.getElementById('quizArea').style.display = 'none';
         document.getElementById('examResult').style.display = 'block';
         document.getElementById('scoreDisplay').innerText = score;
-        document.getElementById('errExplanations').innerHTML = html;
+        document.getElementById('errCountDisplay').innerText = wrongCount;
+        
+        let msg = document.getElementById('scoreMessage');
+        if(score === 100) { msg.innerText = "🎉 太棒了！完美全對！"; msg.style.color = "var(--success)"; }
+        else if(score >= 80) { msg.innerText = "👍 表現不錯！繼續保持！"; msg.style.color = "var(--primary-dark)"; }
+        else { msg.innerText = "💪 還需要多加練習喔！去看看詳細解析吧！"; msg.style.color = "var(--error)"; }
+
+        document.getElementById('errExplanations').innerHTML = expHtml || "<p style='text-align:center; color:var(--success); font-weight:bold; margin-top:20px;'>全部答對！沒有錯誤題目需要檢討，超棒的！</p>";
     }
 
-    function resetExam() { 
+    function resetExam() {
         document.getElementById('examResult').style.display = 'none';
         document.getElementById('quizFilter').style.display = 'block';
     }
 
-    // ---------------- D. 錯題複習 ----------------
+    // ================= D. 錯題複習功能 =================
     function renderReview() {
-        const ids = Object.keys(errorStats);
-        const full = [...masterBank, ...generateVocabQuiz()].filter(q => ids.includes(q.id));
-        const normal = document.getElementById('reviewListNormal');
-        const boss = document.getElementById('reviewListBoss');
+        const listNormal = document.getElementById('reviewListNormal');
+        const listBoss = document.getElementById('reviewListBoss');
+        const errorIds = Object.keys(errorStats);
         
-        const card = (q) => `<div class="card" style="border-top:4px solid var(--primary);">
-            <button class="btn-small" style="float:right;" onclick="deleteError('${q.id}')">刪除</button>
-            <p><b>${q.q}</b> (錯 ${errorStats[q.id]} 次)</p>
-            <p>✅ ${q.options[q.ans]}</p></div>`;
+        const fullBank = [...masterBank, ...generateVocabQuestions()];
+        
+        let uniqueErrors = [];
+        let seenIds = new Set();
+        fullBank.forEach(q => {
+            if(errorIds.includes(q.id) && !seenIds.has(q.id)) {
+                uniqueErrors.push(q);
+                seenIds.add(q.id);
+            }
+        });
 
-        normal.innerHTML = full.map(q => card(q)).join('') || "無紀錄。";
-        boss.innerHTML = full.filter(q => errorStats[q.id] >= 3).map(q => card(q)).join('') || "無魔王題。";
+        const bossErrors = uniqueErrors.filter(q => errorStats[q.id] >= 3);
+        
+        if(uniqueErrors.length === 0) {
+            listNormal.innerHTML = "<p style='text-align:center; color:#888; margin-top:30px;'>目前沒有錯題紀錄，繼續保持！</p>";
+        } else {
+            listNormal.innerHTML = uniqueErrors.map(q => createReviewCard(q)).join('');
+        }
+
+        if(bossErrors.length === 0) {
+            listBoss.innerHTML = "<p style='text-align:center; color:#888; margin-top:30px;'>尚未有錯誤達到 3 次以上的重點錯題！</p>";
+        } else {
+            listBoss.innerHTML = bossErrors.map(q => createReviewCard(q, true)).join('');
+        }
+    }
+
+    function createReviewCard(q, isBoss = false) {
+        let borderColor = isBoss ? "var(--error)" : "var(--primary)";
+        return `
+            <div class="card" style="position:relative; border-top: 4px solid ${borderColor};">
+                <button class="btn-small" style="position:absolute; right:15px; top:15px; background:#ffeeee; color:var(--error); font-weight:bold;" onclick="deleteError('${q.id}')">🗑️ 刪除</button>
+                <span class="q-tag" style="background:${isBoss ? '#ffeeee' : 'var(--accent)'}; color:${isBoss ? 'var(--error)' : 'var(--primary-dark)'};">累積錯 ${errorStats[q.id]} 次</span>
+                <p><b>${q.q}</b></p>
+                <p style="color:var(--success);font-size:14px; font-weight:bold;">正確答案：${q.options[q.ans]}</p>
+                <p style="font-size:13px; color:#777; background:var(--bg); padding:10px; border-radius:8px;">💡 詳細解析：<br>${q.exp}</p>
+            </div>
+        `;
     }
 
     function deleteError(id) {
-        if(confirm("確定移除？")) { delete errorStats[id]; localStorage.setItem('errorStats', JSON.stringify(errorStats)); renderReview(); updateProgressUI(); }
+        if(confirm("確定你已經精熟此題，要將它從錯題本中刪除嗎？")) {
+            delete errorStats[id];
+            localStorage.setItem('errorStats', JSON.stringify(errorStats));
+            renderReview();
+            updateProgressUI();
+        }
     }
 
+    // 清除紀錄
     function clearAllData() {
-        if(confirm("確定全部重置？")) { localStorage.clear(); location.reload(); }
+        if(confirm("確定要將所有「學習進度」、「星號註記」及「錯題複習」紀錄清除嗎？")) {
+            localStorage.clear();
+            errorStats = {};
+            dailyStats = { date: "", count: 0, scoreSum: 0, exams: 0 };
+            starredVocab = [];
+            alert("已清除所有紀錄。");
+            location.reload();
+        }
     }
 
-    window.onload = () => { updateProgressUI(); renderTopicNotes(); };
+    // 初始化頁面
+    window.onload = () => {
+        updateProgressUI();
+        renderTopicNotes();
+    };
 </script>
 </body>
 </html>
